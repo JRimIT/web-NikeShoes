@@ -1,0 +1,24 @@
+.app-container{
+    .main-container{
+        .app-content{
+            .list-for-men{
+                font-size: 20px;
+                font-weight: 500;
+                display: flex;
+                justify-content: center;
+                padding-bottom: 20px;
+                span{
+                    border: 1px solid black;
+                    padding: 10px;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    &:hover{
+                        background-color: black;
+                        color: white;
+                        transition: all 1s;
+                    }
+                }
+            }
+        }
+    }
+}
