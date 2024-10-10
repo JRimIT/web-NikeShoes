@@ -3,17 +3,25 @@ import App from "../App";
 import HomePage from "../components/Home/HomePage";
 import HomePageMen from "../components/Home/HomeMen/HomePageMen";
 import HomePageWoman from "../components/Home/HomeWomen/HomePageWoman";
+import UserChatbox from '../components/Chatbox/UserChatbox';
+import AdminChatbox from '../components/Chatbox/AdminChatbox';
 
 const LayOut = () => {
   return (
     <>
       <Routes>
-        {/*Route nested: Cha con lồng nhau  */}
+        {/* Nested Routes */}
         <Route path="/" element={<App />}>
-          <Route index element={<HomePage></HomePage>}></Route>
-          <Route path="/men" element={<HomePageMen></HomePageMen>}></Route>
-          <Route path="/women" element={<HomePageWoman></HomePageWoman>}></Route>
+          <Route index element={<HomePage />} />
+          <Route path="/men" element={<HomePageMen />} />
+          <Route path="/women" element={<HomePageWoman />} />
         </Route>
+
+        {/* Dynamic route for User with userId */}
+        <Route path="/user/:userId" element={<UserChatbox />} />
+
+        {/* Admin route */}
+        <Route path="/admin" element={<AdminChatbox userId="admin" />} />
       </Routes>
     </>
   );
