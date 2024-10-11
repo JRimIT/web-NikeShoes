@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "../App";
-import HomePage from "../components/Home/HomePage";
-import HomePageMen from "../components/Home/HomeMen/HomePageMen";
-import HomePageWoman from "../components/Home/HomeWomen/HomePageWoman";
+import HomePage from "../pages/Home/HomePage";
+import HomePageMen from "../pages/Home/HomeMen/HomePageMen";
+import HomePageWoman from "../pages/Home/HomeWomen/HomePageWoman";
 
 const LayOut = () => {
   return (
