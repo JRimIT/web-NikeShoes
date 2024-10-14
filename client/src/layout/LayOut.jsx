@@ -22,8 +22,8 @@ const LayOut = () => {
           <Route path="products-men/:category" element={<ProductListPageMen />} />
           <Route path="/products-women" element={<ProductListPageWomen/>}></Route>
           <Route path="products-women/:category" element={<ProductListPageWomen />} />
-          {/* <Route path="/login" element={<Login/>} />
-          <Route path="/register" element={<Register />} /> */}
+          <Route path="/login" element={<Login/>} />
+          <Route path="/register" element={<Register />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
         </Route>
       </Routes>
