@@ -14,7 +14,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST'],
   },
 });
@@ -23,7 +23,7 @@ const io = new Server(server, {
 handleSocket(io);
 
 // Sử dụng routes cho sản phẩm (middleware đúng)
-app.use('/api/products', productRoutes);
+app.use('/products', productRoutes);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
