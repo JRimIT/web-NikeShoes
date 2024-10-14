@@ -1,10 +1,10 @@
 .navbar {
   .container-fluid {
     .navbar-brand {
-        width: fit-content;
-        margin: 0;
+      width: fit-content;
+      margin: 0;
+
       .logo {
-        // border: 2px solid;
         width: 15%;
         margin-left: 30px;
       }
@@ -12,19 +12,18 @@
   }
 
   .navbar-nav {
-    font-family: Arial, Helvetica, sans-serif;
-
     display: flex;
     margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;
 
     .nav-link {
-      font-weight: bold !important;
+      font-weight: bold;
       border-radius: 40px;
-      display: flex;  
       margin-right: 10px;
       font-size: 20px;
+
       &:hover {
-        background-color: grey;
+        background-color: darkgray;
       }
     }
   }
@@ -38,14 +37,12 @@
       width: 40px;
       height: 40px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      // height: 50%;
-      // width: 20%;
+      justify-content: center;
       cursor: pointer;
 
       &:hover {
-        background-color: grey;
+        background-color: darkgray;
         color: white;
       }
 
@@ -61,9 +58,9 @@
   display: flex;
   justify-content: flex-end;
   height: 40px;
+
   .container-login {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
     gap: 10px;
     margin-right: 20px;
@@ -71,9 +68,56 @@
 
     &:hover {
       border: 1px solid;
-      width: fit-content;
       padding: 5px;
       border-radius: 20px;
     }
+  }
+}
+
+.dropdown {
+  position: relative;
+
+  .mega-dropdown {
+    display: none;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    width: 800px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+
+    .mega-dropdown-content {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .mega-dropdown-column {
+      width: 23%;
+    }
+
+    .dropdown-title {
+      font-weight: bold;
+      padding: 10px 0;
+      color: black;
+      text-decoration: none;
+    }
+
+    .dropdown-item {
+      padding: 10px 0;
+      color: gray;
+
+      &:hover {
+        color: black;
+      }
+    }
+  }
+
+  &:hover .mega-dropdown {
+    display: block;
+    opacity: 1;
   }
 }
