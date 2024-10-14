@@ -1,0 +1,41 @@
+.product-page {
+  display: flex;
+}
+
+.sidebar {
+  flex: 1;
+  max-width: 250px;
+}
+
+.product-list-container {
+  flex: 3;
+  padding-left: 20px;
+}
+
+.product-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.product-card {
+  width: calc(33.333% - 20px);
+  border: 1px solid #ddd;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: left;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.product-price {
+  font-weight: bold;
+}
