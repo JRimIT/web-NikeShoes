@@ -5,8 +5,6 @@ import { Outlet, Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-
-
 function App() {
   return (
     <>
@@ -27,6 +25,7 @@ function App() {
 
       </div>
     </>
+    
   );
 }
 

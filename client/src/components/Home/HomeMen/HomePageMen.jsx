@@ -26,7 +26,7 @@ function HomePageMen() {
           <div>
             <h3>Move, Shop, Customise & Celebrate With Us</h3>
             <p>
-              No matter what you feel like doing today, It’s better as a Member.
+              No matter what you feel like doing today, It's better as a Member.
             </p>
           </div>
           <div>
@@ -49,7 +49,7 @@ function HomePageMen() {
             <p>Nike Football</p>
             <h1>GEAR UP FOR SOCCER</h1>
             <p>
-              If you don’t feel the grind in every kick, you’re not chasing the
+              If you don't feel the grind in every kick, you're not chasing the
               game hard enough.
             </p>
 
