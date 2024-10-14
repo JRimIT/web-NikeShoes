@@ -2,7 +2,11 @@ import logo from "./logo.svg";
 import "./App.css";
 import Header from "./components/header/Header";
 import { Outlet, Link } from "react-router-dom";
+<<<<<<< HEAD
 import "bootstrap/dist/css/bootstrap.min.css";
+=======
+import 'bootstrap/dist/css/bootstrap.min.css';
+>>>>>>> 8e31bede87ae69ca75dc91e6114fb9f7761e43c1
 
 function App() {
   return (
@@ -21,6 +25,7 @@ function App() {
         </div>
       </div>
     </>
+    
   );
 }
 
