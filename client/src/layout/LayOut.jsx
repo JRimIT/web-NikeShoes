@@ -5,6 +5,7 @@ import HomePageMen from "../components/Home/HomeMen/HomePageMen";
 import HomePageWoman from "../components/Home/HomeWomen/HomePageWoman";
 import UserChatbox from '../components/Chatbox/UserChatbox';
 import AdminChatbox from '../components/Chatbox/AdminChatbox';
+import Dashboard from "../components/userDashboard/pages/Dashboard";
 
 const LayOut = () => {
   return (
@@ -15,6 +16,7 @@ const LayOut = () => {
           <Route index element={<HomePage />} />
           <Route path="/men" element={<HomePageMen />} />
           <Route path="/women" element={<HomePageWoman />} />
+          <Route path="userDashboard/*" element={<Dashboard />}></Route>
         </Route>
 
         {/* Dynamic route for User with userId */}
@@ -22,6 +24,7 @@ const LayOut = () => {
 
         {/* Admin route */}
         <Route path="/admin" element={<AdminChatbox userId="admin" />} />
+        
       </Routes>
     </>
   );

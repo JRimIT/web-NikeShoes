@@ -1,0 +1,14 @@
+// Dashboard.scss
+.dashboard {
+    display: flex;
+  }
+  
+  .sidebar-container {
+    width: 250px;
+  }
+  
+  .content-container {
+    flex: 1;
+    padding: 2rem;
+  }
+  

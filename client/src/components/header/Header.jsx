@@ -18,8 +18,9 @@ const Header = () => {
    
     <div className="head">
         <div className="container-login">
-            <span>Sign In</span>
-            <FaUser />
+        <Link to='/userDashboard' className="link">
+          Sign In <FaUser /> {/* Biểu tượng người dùng */}
+        </Link>
         </div>
     </div>
 
