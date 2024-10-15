@@ -3,16 +3,23 @@
   import Form from "react-bootstrap/Form";
   import Nav from "react-bootstrap/Nav";
   import Navbar from "react-bootstrap/Navbar";
-  import { IoMdSearch } from "react-icons/io";
+  import { useState } from "react";
   import './Header.scss';
   import { NavLink, Link, useNavigate } from "react-router-dom";
   import { IoBagHandleOutline } from "react-icons/io5";
   import { FaUser } from "react-icons/fa";
   import { FaHeart } from "react-icons/fa";
-
+  import SearchBar from "./SearchBar";
   import logo from '../../pic/Logo.jpg'
 
   const Header = () => {
+    const [products, setProducts] = useState([]); // State để lưu kết quả tìm kiếm
+
+  // Hàm xử lý kết quả tìm kiếm từ SearchBar
+  const handleSearchResults = (searchResults) => {
+    setProducts(searchResults); // Cập nhật state với sản phẩm tìm kiếm được
+    console.log(searchResults); // Kiểm tra kết quả tìm kiếm
+  };
     return (
       <>
     
@@ -138,17 +145,7 @@
               </span>
               
               
-              <Form className="d-flex">
-                  <Form.Control
-                  type="search"
-                  placeholder="Search"
-                  className="me-2 rounded-pill"
-                  aria-label="Search"
-                  />
-
-                  <Button className="rounded-circle btn btn-dark"><IoMdSearch className="w-100% "/>
-                  </Button>
-              </Form>
+              <SearchBar onSearchResults={handleSearchResults} />
 
             </div>
           </Navbar.Collapse>

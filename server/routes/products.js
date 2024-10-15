@@ -38,6 +38,61 @@ router.get('/', (req, res) => {
   });
 });
 
+// Route để tìm kiếm sản phẩm theo tên hoặc category, fuzzy search và suggestion
+router.get('/search', (req, res) => {
+  const searchTerm = req.query.term; // Từ khóa tìm kiếm từ query params
+  if (!searchTerm) {
+    return res.status(400).json({ message: 'Search term is required' });
+  }
+
+  // Sử dụng LIKE để tìm kiếm mờ (fuzzy search) trên cả name và category
+  const query = `
+    SELECT * FROM products
+    WHERE name LIKE ? OR category LIKE ?
+  `;
+  const queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
+
+  db.query(query, queryParams, (error, results) => {
+    if (error) {
+      return res.status(500).json({ message: 'Error fetching products' });
+    }
+    res.json({ products: results });
+  });
+});
+
+// Route để tìm gợi ý (suggestion) khi nhập từ khóa
+router.get('/suggestions', (req, res) => {
+  const searchTerm = req.query.term;
+  
+  if (!searchTerm) {
+    return res.status(400).json({ message: 'Search term is required' });
+  }
+
+  // Sử dụng câu truy vấn để lấy cả id và name
+  const query = `
+    SELECT DISTINCT product_id AS id, name FROM products
+    WHERE name LIKE ? OR category LIKE ? LIMIT 5
+  `;
+  const queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
+
+  db.query(query, queryParams, (error, results) => {
+    if (error) {
+      return res.status(500).json({ message: 'Error fetching suggestions' });
+    }
+
+    // Map lại kết quả để trả về cả id và name
+    const suggestions = results.map((result) => ({
+      id: result.id,  // Đảm bảo trả về cả id
+      name: result.name
+    }));
+    
+    res.json({ suggestions });
+  });
+});
+
+
+
+
 // Route để lấy thông tin chi tiết sản phẩm theo ID
 router.get('/:id', (req, res) => {
   const productId = req.params.id;
