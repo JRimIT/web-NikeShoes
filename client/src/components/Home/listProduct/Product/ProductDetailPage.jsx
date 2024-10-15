@@ -84,7 +84,7 @@ const ProductDetailPage = () => {
         <button className="add-to-cart">Add to Cart</button>
         <button className="wishlist">
         Favourite
-        <FaHeart icon={ FaHeart} /> 
+        <FaHeart className="icon" icon={ FaHeart} /> 
         </button>
       </div>
     </div>

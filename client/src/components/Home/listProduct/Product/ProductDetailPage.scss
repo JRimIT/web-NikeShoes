@@ -222,7 +222,7 @@ $transition: all 0.3s ease;
     }
   }
 
-  .wishlist {
+  .wishlist{
     background-color: $primary-color;
     color: white;
     border: none;
@@ -238,6 +238,10 @@ $transition: all 0.3s ease;
     &:hover {
       background-color: $hover-color;
     }
+  }
+
+  .icon {
+    margin-left: 5px;
   }
 }
 
