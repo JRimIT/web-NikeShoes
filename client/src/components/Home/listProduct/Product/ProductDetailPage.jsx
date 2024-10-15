@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './ProductDetailPage.scss'; // Ensure to import the CSS
+import './ProductDetailPage.scss';
+import { FaHeart } from "react-icons/fa";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -37,20 +38,6 @@ const ProductDetailPage = () => {
   return (
     <div className="product-detail-container">
       <div className="image-gallery">
-        {/* <div className="thumbnail-images">
-          {colorList.map((url, index) => (
-            <img
-              key={index}
-              src={url}
-              alt={`Color ${index + 1}`}
-              className={`thumbnail ${selectedColor === url ? 'selected' : ''}`}
-              onClick={() => {
-                setSelectedColor(url);
-                setProduct((prev) => ({ ...prev, primary_image: url })); // Change primary image to selected color image
-              }}
-            />
-          ))}
-        </div> */}
         <div className="main-image">
           <img src={selectedColor || product.primary_image} alt={product.name} />
         </div>  
@@ -58,8 +45,8 @@ const ProductDetailPage = () => {
 
       <div className="product-info">
         <h4>{product.pro_message_list}</h4>
-        <h4>{product.name}</h4>
-        <h4>{product.category}</h4>
+        <h5>{product.name}</h5>
+        <h5>{product.category}</h5>
         <p className="price">
           {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
         </p>
@@ -95,6 +82,10 @@ const ProductDetailPage = () => {
           ))}
         </div>
         <button className="add-to-cart">Add to Cart</button>
+        <button className="wishlist">
+        Favourite
+        <FaHeart icon={ FaHeart} /> 
+        </button>
       </div>
     </div>
   );

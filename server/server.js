@@ -25,7 +25,7 @@ db.connect((err) => {
 });
 
 app.get('/products', (req, res) => {
-  const category = req.query.category;
+  const category = req.query.category;  
   let query;
   const queryParams = [];
 
