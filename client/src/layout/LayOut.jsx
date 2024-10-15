@@ -5,8 +5,6 @@ import HomePageMen from "../components/Home/HomeMen/HomePageMen";
 import HomePageWoman from "../components/Home/HomeWomen/HomePageWoman";
 import ProductListPageMen from "../components/Home/listProduct/men/ProductListPageMen";
 import ProductListPageWomen from "../components/Home/listProduct/women/ProductListPageWomen";
-import Login from "../components/login/Login";
-import Register from "../components/login/Register";
 import ProductDetailPage from "../components/Home/listProduct/Product/ProductDetailPage";
 
 const LayOut = () => {
@@ -22,8 +20,8 @@ const LayOut = () => {
           <Route path="products-men/:category" element={<ProductListPageMen />} />
           <Route path="/products-women" element={<ProductListPageWomen/>}></Route>
           <Route path="products-women/:category" element={<ProductListPageWomen />} />
-          <Route path="/login" element={<Login/>} />
-          <Route path="/register" element={<Register />} />
+          {/* <Route path="/login" element={<Login/>} /> */}
+          {/* <Route path="/register" element={<Register />} /> */}
           <Route path="/products/:id" element={<ProductDetailPage />} />
         </Route>
       </Routes>
