@@ -1,28 +1,46 @@
-// Define color variables for better theming
-$background-color: #ffffff; // Main background color
-$text-color: #333; // Main text color
-$primary-color: #ff4d00; // Primary action color
-$secondary-color: #f5f5f5; // Secondary color for backgrounds and borders
-$hover-color: #ff7f33; // Hover color for buttons
+$background-color: #f8f9fa;
+$text-color: #333;
+$primary-color: grey;
+$secondary-color: #f1f3f5;
+$hover-color: black;
+$border-radius: 12px;
+$box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+$transition: all 0.3s ease;
 
-.product-detail-container {
+// Mixins
+@mixin flex-center {
   display: flex;
-  gap: 40px;
-  padding: 20px;
-  max-width: 1200px;
-  margin: auto;
-  background-color: $background-color;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  font-family: 'Arial', sans-serif;
-  transition: all 0.3s ease;
+  align-items: center;
+  justify-content: center;
+}
 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 10px;
+@mixin hover-effect {
+  transition: $transition;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
   }
 }
 
+// Product detail container
+.product-detail-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  transition: $transition;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 20px;
+  }
+}
+
+// Image gallery
 .image-gallery {
   flex: 1;
   display: flex;
@@ -31,44 +49,66 @@ $hover-color: #ff7f33; // Hover color for buttons
 
   .main-image {
     width: 100%;
-    max-width: 500px; // Fixed width for the main image
-    border-radius: 12px;
+    max-width: 500px;
+    border-radius: $border-radius;
     overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: $box-shadow;
     margin-bottom: 20px;
+    @include hover-effect;
 
     img {
       width: 100%;
       height: auto;
-      transition: transform 0.3s;
+      transition: transform 0.5s ease;
+
+      &:hover {
+        transform: scale(1.05);
+      }
     }
   }
 
   .thumbnail-images {
     display: flex;
-    gap: 10px;
+    gap: 15px;
     overflow-x: auto;
     padding: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: $primary-color $secondary-color;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $secondary-color;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $primary-color;
+      border-radius: 20px;
+    }
 
     .thumbnail {
-      min-width: 60px;
-      height: 60px;
+      min-width: 70px;
+      height: 70px;
       border-radius: 8px;
       cursor: pointer;
       border: 2px solid transparent;
-      transition: border-color 0.3s, transform 0.2s;
+      transition: $transition;
+      object-fit: cover;
 
       &:hover {
-        transform: scale(1.05); // Slight zoom effect on hover
+        transform: scale(1.1);
       }
 
       &.selected {
-        border-color: $primary-color; // Selected thumbnail border color
+        border-color: $primary-color;
       }
     }
   }
 }
 
+// Product info
 .product-info {
   flex: 1;
   display: flex;
@@ -83,70 +123,85 @@ $hover-color: #ff7f33; // Hover color for buttons
 
   h4 {
     font-size: 1.2rem;
-    color: #777;
+    color: brown;
+    margin: 0;
   }
 
   .price {
-    font-size: 1.8rem;
-    color: $text-color;
+    font-size: 2rem;
+    color: $primary-color;
     font-weight: bold;
-    margin: 5px 0;
+    margin: 10px 0;
   }
 
-  .product-description {
-    color: #555;
-    line-height: 1.5;
+  .product-description,
+  .product-description-country {
+    color: black;
+    line-height: 1.8;
+    font-size: 1.2rem;
+    text-align: justify;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   }
 
   h3 {
-    margin: 15px 0 10px;
+    margin: 20px 0 10px;
     font-size: 1.5rem;
     color: $text-color;
   }
 
   .size-selection {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
 
-    .size-box {
-      border: 1px solid #ccc;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.2s, color 0.2s;
-      min-width: 70px;
-      text-align: center;
-      font-size: 1rem;
+  .size-box {
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: $transition;
+    text-align: center;
+    font-size: 1rem;
+    background: none;
+    width: 100%;
+    height: 100%;
+    min-height: 44px;
 
-      &:hover {
-        background-color: $secondary-color; // Background on hover
-      }
+    &:hover {
+      background-color: $secondary-color;
+    }
 
-      &.selected {
-        background-color: $primary-color;
-        color: white;
-      }
+    &.selected {
+      background-color: $primary-color;
+      color: white;
+      border-color: $primary-color;
     }
   }
 
   .color-selection {
     display: flex;
     gap: 15px;
-    margin-top: 10px;
+    flex-wrap: wrap;
+  }
 
-    .color-swatch {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: border 0.2s;
-      background-size: cover;
+  .color-swatch {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: $transition;
+    background-size: cover;
 
-      &.selected {
-        border-color: $primary-color; // Selected swatch border color
-      }
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &.selected {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px #fff, 0 0 0 4px $primary-color;
     }
   }
 
@@ -154,16 +209,54 @@ $hover-color: #ff7f33; // Hover color for buttons
     background-color: $primary-color;
     color: white;
     border: none;
-    padding: 15px;
+    padding: 15px 25px;
     border-radius: 8px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: $transition;
     text-align: center;
+    margin-top: 20px;
+    @include hover-effect;
 
     &:hover {
-      background-color: $hover-color; // Darken on hover
-      transform: translateY(-2px); // Slight lift on hover
+      background-color: $hover-color;
     }
+  }
+
+  .wishlist {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: $transition;
+    text-align: center;
+    margin-top: 20px;
+    @include hover-effect;
+
+    &:hover {
+      background-color: $hover-color;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .product-detail-container {
+    margin: 20px auto;
+  }
+
+  .image-gallery .main-image {
+    max-width: 100%;
+  }
+
+  .product-info h1 {
+    font-size: 2rem;
+  }
+
+  .product-info .price {
+    font-size: 1.8rem;
   }
 }
