@@ -51,22 +51,6 @@ const ProductDetailPage = () => {
           {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
         </p>
 
-        <p className="product-description">{product.description}</p>
-
-        <p className="product-description-country">{product.product_descriptionCountryOrigin}</p>
-
-        <h3>Select Size</h3>
-        <div className="size-selection">
-          {sizeList.map((size, index) => (
-            <div
-              key={index}
-              className={`size-box ${selectedSize === size ? 'selected' : ''}`}
-              onClick={() => setSelectedSize(size)}
-            >
-              {size}
-            </div>
-          ))}
-        </div>
         <h3>Select Color</h3>
         <div className="color-selection">
           {colorList.map((color, index) => (
@@ -81,11 +65,31 @@ const ProductDetailPage = () => {
             />
           ))}
         </div>
+
+        <h3>Select Size</h3>
+        <div className="size-selection">
+          {sizeList.map((size, index) => (
+            <div
+              key={index}
+              className={`size-box ${selectedSize === size ? 'selected' : ''}`}
+              onClick={() => setSelectedSize(size)}
+            >
+              {size}
+            </div>
+          ))}
+        </div>
+        
         <button className="add-to-cart">Add to Cart</button>
         <button className="wishlist">
         Favourite
         <FaHeart className="icon" icon={ FaHeart} /> 
         </button>
+
+        <p className="product-description">{product.description}</p>
+
+        <p className="product-description-country">{product.product_descriptionCountryOrigin}</p>
+
+        
       </div>
     </div>
   );
