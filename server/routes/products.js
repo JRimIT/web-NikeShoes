@@ -38,19 +38,19 @@ router.get('/', (req, res) => {
   });
 });
 
-// Route để tìm kiếm sản phẩm theo tên hoặc category, fuzzy search và suggestion
+// Route để tìm kiếm sản phẩm theo name, category, và pro_message_list
 router.get('/search', (req, res) => {
   const searchTerm = req.query.term; // Từ khóa tìm kiếm từ query params
   if (!searchTerm) {
     return res.status(400).json({ message: 'Search term is required' });
   }
 
-  // Sử dụng LIKE để tìm kiếm mờ (fuzzy search) trên cả name và category
+  // Sử dụng LIKE để tìm kiếm mờ (fuzzy search) trên cả name, category và pro_message_list
   const query = `
     SELECT * FROM products
-    WHERE name LIKE ? OR category LIKE ?
+    WHERE name LIKE ? OR category LIKE ? OR pro_message_list LIKE ?
   `;
-  const queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
+  const queryParams = [`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`];
 
   db.query(query, queryParams, (error, results) => {
     if (error) {
@@ -59,6 +59,7 @@ router.get('/search', (req, res) => {
     res.json({ products: results });
   });
 });
+
 
 // Route để tìm gợi ý (suggestion) khi nhập từ khóa
 router.get('/suggestions', (req, res) => {
@@ -87,6 +88,31 @@ router.get('/suggestions', (req, res) => {
     }));
     
     res.json({ suggestions });
+  });
+});
+
+// Route để tìm sản phẩm theo category và searchTerm, bao gồm pro_message_list
+router.get('/products', (req, res) => {
+  const { category, searchTerm } = req.query;
+
+  let query = 'SELECT * FROM products WHERE 1=1';
+  const queryParams = [];
+
+  if (category) {
+    query += ' AND category = ?';
+    queryParams.push(category);
+  }
+
+  if (searchTerm) {
+    query += ' AND (name LIKE ? OR category LIKE ? OR pro_message_list LIKE ?)';
+    queryParams.push(`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`);
+  }
+
+  db.query(query, queryParams, (error, results) => {
+    if (error) {
+      return res.status(500).json({ message: 'Error fetching products' });
+    }
+    res.json({ products: results, totalCount: results.length });
   });
 });
 

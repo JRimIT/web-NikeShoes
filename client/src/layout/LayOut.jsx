@@ -11,6 +11,7 @@ import ProductDetailPage from "../components/Home/listProduct/Product/ProductDet
 import UserChatbox from '../components/Chatbox/UserChatbox';
 import AdminChatbox from '../components/Chatbox/AdminChatbox';
 import Dashboard from "../components/userDashboard/pages/Dashboard";
+import ProductSearch from "../components/Home/listProduct/Product/ProductSearch";
 
 const LayOut = () => {
   return (
@@ -25,8 +26,10 @@ const LayOut = () => {
           <Route path="products-men/:category" element={<ProductListPageMen />} />
           <Route path="/products-women" element={<ProductListPageWomen/>}></Route>
           <Route path="products-women/:category" element={<ProductListPageWomen />} />
+          
           {/* <Route path="/login" element={<Login/>} />
           <Route path="/register" element={<Register />} /> */}
+          <Route path="/products/search" element={<ProductSearch />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
         </Route>
 
