@@ -11,6 +11,7 @@ const ProductDetailPage = () => {
   const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [isFavourite, setIsFavourite] = useState(false);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -28,6 +29,36 @@ const ProductDetailPage = () => {
     fetchProductDetails();
   }, [id]);
 
+  const handleAddToCart = () => {
+    if (!selectedSize || !selectedColor) {
+      alert('Please select a size and a color.');
+      return;
+    }
+    
+    // Prepare the data to be added to the cart
+    const cartItem = {
+      productId: product.id,
+      name: product.name,
+      size: selectedSize,
+      color: selectedColor,
+      price: product.price,
+      image: product.primary_image,
+    };
+
+    // You can replace this with an API call to add the item to the cart
+    console.log('Adding to cart:', cartItem);
+    alert(`${product.name} has been added to your cart!`);
+  };
+
+  const handleToggleFavourite = () => {
+    setIsFavourite(prev => !prev);
+
+    // You can replace this with an API call to save the favourite status
+    const favouriteStatus = !isFavourite ? 'added to' : 'removed from';
+    console.log(`Product ${favouriteStatus} favourites: ${product.name}`);
+    alert(`Product has been ${favouriteStatus} favourites!`);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -40,7 +71,7 @@ const ProductDetailPage = () => {
       <div className="image-gallery">
         <div className="main-image">
           <img src={selectedColor || product.primary_image} alt={product.name} />
-        </div>  
+        </div>
       </div>
 
       <div className="product-info">
@@ -79,17 +110,14 @@ const ProductDetailPage = () => {
           ))}
         </div>
         
-        <button className="add-to-cart">Add to Cart</button>
-        <button className="wishlist">
-        Favourite
-        <FaHeart className="icon" icon={ FaHeart} /> 
+        <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
+        <button className="wishlist" onClick={handleToggleFavourite}>
+          {isFavourite ? 'Unfavourite' : 'Favourite'} 
+          <FaHeart className={`icon ${isFavourite ? 'favourited' : ''}`} /> 
         </button>
 
         <p className="product-description">{product.description}</p>
-
         <p className="product-description-country">{product.product_descriptionCountryOrigin}</p>
-
-        
       </div>
     </div>
   );
