@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Route để tìm kiếm sản phẩm theo tên hoặc category
 router.get('/', (req, res) => {
-  const category = req.query.category;
+  const { category, pro_message_list } = req.query;
   let query;
   const queryParams = [];
 
@@ -24,15 +24,20 @@ router.get('/', (req, res) => {
         WHERE category LIKE ?`;
       queryParams.push(`%${category}%`);
     }
-  } else {
-    query = 'SELECT * FROM products WHERE category LIKE ? AND category NOT LIKE ?';
-    queryParams.push('%Men%', '%Women%');
+  }
+
+  if (pro_message_list) {
+    // Nếu có điều kiện tìm theo pro_message_list
+    query = `SELECT * FROM products WHERE pro_message_list LIKE ?`;
+    queryParams.push(`%${pro_message_list}%`);
   }
 
   db.query(query, queryParams, (error, results) => {
     if (error) {
+      console.error('Database query error:', error);
       return res.status(500).json({ message: 'Error fetching products' });
     }
+
     const totalCount = results.length;
     res.json({ totalCount, products: results });
   });
@@ -59,7 +64,6 @@ router.get('/search', (req, res) => {
     res.json({ products: results });
   });
 });
-
 
 // Route để tìm gợi ý (suggestion) khi nhập từ khóa
 router.get('/suggestions', (req, res) => {
@@ -115,9 +119,6 @@ router.get('/products', (req, res) => {
     res.json({ products: results, totalCount: results.length });
   });
 });
-
-
-
 
 // Route để lấy thông tin chi tiết sản phẩm theo ID
 router.get('/:id', (req, res) => {

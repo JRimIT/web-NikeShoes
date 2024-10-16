@@ -7,9 +7,9 @@ import ProductListPageMen from "../components/Home/listProduct/men/ProductListPa
 import ProductListPageWomen from "../components/Home/listProduct/women/ProductListPageWomen";
 import ProductDetailPage from "../components/Home/listProduct/Product/ProductDetailPage";
 import ProductFeaturedPage from "../components/Home/listProduct/featured/ProductFeaturedPage";
-import UserChatbox from '../components/Chatbox/UserChatbox';
-import AdminChatbox from '../components/Chatbox/AdminChatbox';
-import Dashboard from "../components/userDashboard/pages/Dashboard";
+// import UserChatbox from '../components/Chatbox/UserChatbox';
+// import AdminChatbox from '../components/Chatbox/AdminChatbox';
+// import Dashboard from "../components/userDashboard/pages/Dashboard";
 import ProductSearch from "../components/Home/listProduct/Product/ProductSearch";
 
 const LayOut = () => {
@@ -34,10 +34,10 @@ const LayOut = () => {
         </Route>
 
         {/* Dynamic route for User with userId */}
-        <Route path="/user/:userId" element={<UserChatbox />} />
+        {/* <Route path="/user/:userId" element={<UserChatbox />} /> */}
 
         {/* Admin route */}
-        <Route path="/admin" element={<AdminChatbox userId="admin" />} />
+        {/* <Route path="/admin" element={<AdminChatbox userId="admin" />} /> */}
         
       </Routes>
     </>
