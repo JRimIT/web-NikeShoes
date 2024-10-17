@@ -1,0 +1,80 @@
+.category-navbar {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100; /* Set a z-index lower than the dropdown but higher than the cart */
+
+  h1 {
+    margin: 0;
+    margin-left: 20px;
+    font-size: 1.5rem; /* Keeping the original size as per your request */
+    color: #333;
+  }
+
+  .category-controls {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+
+    .toggle-filters-btn {
+      background-color: transparent;
+      border: none;
+      font-size: 1rem;
+      color: #000;
+      cursor: pointer;
+      margin-right: 20px;
+      transition: color 0.3s;
+
+      &:hover {
+        color: #007bff; /* Color on hover */
+      }
+    }
+
+    .sort-by {
+      position: relative;
+
+      .sort-button {
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        color: #000;
+        display: flex;
+        align-items: center;
+
+        .arrow {
+          margin-left: 5px; /* Spacing between text and arrow */
+        }
+      }
+
+      .dropdown-options {
+        position: absolute;
+        top: 100%; /* Position the dropdown below the button */
+        right: 0; /* Align to the right of the button */
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        z-index: 200; /* Ensure dropdown stays on top of category-navbar */
+        padding: 5px 0;
+        min-width: 150px; /* Minimum width for the dropdown */
+        max-width: 100%; /* Prevent dropdown from exceeding the button width */
+        overflow: hidden; 
+        white-space: nowrap;
+      }
+
+      div {
+        padding: 10px 15px; /* Increased padding for better spacing */
+        cursor: pointer;
+        color: #000;
+
+        &:hover {
+          background-color: #f0f0f0; /* Background color on hover */
+        }
+      }
+    }
+  }
+}

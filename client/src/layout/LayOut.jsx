@@ -16,21 +16,27 @@ import Bar from "../pages/admin/bar";
 import Pie from "../pages/admin/pie";
 import Line from "../pages/admin/line";
 import { ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';import ProductListPageMen from "../components/Home/listProduct/men/ProductListPageMen";
+import ProductListPageWomen from "../components/Home/listProduct/women/ProductListPageWomen";
+import ProductDetailPage from "../components/Home/listProduct/Product/ProductDetailPage";
+
 const LayOut = () => {
   return (
     <>
       <Routes>
         {/*Route nested: Cha con lồng nhau  */}
         <Route path="/" element={<App />}>
-          <Route index element={<HomePage></HomePage>}></Route>
-          <Route path="/men" element={<HomePageMen></HomePageMen>}></Route>
-          <Route
-            path="/women"
-            element={<HomePageWoman></HomePageWoman>}
-          ></Route>
+          <Route index element={<HomePage/>}></Route>
+          <Route path="/men" element={<HomePageMen/>}></Route>
+          <Route path="/women" element={<HomePageWoman/>}></Route>
+          <Route path="/products-men" element={<ProductListPageMen/>}></Route>
+          <Route path="products-men/:category" element={<ProductListPageMen />} />
+          <Route path="/products-women" element={<ProductListPageWomen/>}></Route>
+          <Route path="products-women/:category" element={<ProductListPageWomen />} />
+          {/* <Route path="/login" element={<Login/>} /> */}
+          {/* <Route path="/register" element={<Register />} /> */}
+          <Route path="/products/:id" element={<ProductDetailPage />} />
         </Route>
-
         <Route path="admins" element={<Admin />}>
           <Route path="dashBoard" element={<DashBoard />} />
           <Route path="team" element={<Team />} />
