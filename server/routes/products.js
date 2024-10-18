@@ -68,14 +68,15 @@ router.get('/search', (req, res) => {
 // Route để tìm gợi ý (suggestion) khi nhập từ khóa
 router.get('/suggestions', (req, res) => {
   const searchTerm = req.query.term;
-  
+
   if (!searchTerm) {
     return res.status(400).json({ message: 'Search term is required' });
   }
 
-  // Sử dụng câu truy vấn để lấy cả id và name
+  // Sử dụng câu truy vấn để lấy id, name, price và image
   const query = `
-    SELECT DISTINCT product_id AS id, name FROM products
+    SELECT DISTINCT product_id AS id, name, price, primary_image AS image
+    FROM products
     WHERE name LIKE ? OR category LIKE ? LIMIT 5
   `;
   const queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
@@ -85,15 +86,18 @@ router.get('/suggestions', (req, res) => {
       return res.status(500).json({ message: 'Error fetching suggestions' });
     }
 
-    // Map lại kết quả để trả về cả id và name
+    // Map lại kết quả để trả về id, name, price và image
     const suggestions = results.map((result) => ({
-      id: result.id,  // Đảm bảo trả về cả id
-      name: result.name
+      id: result.id,      // ID sản phẩm
+      name: result.name,  // Tên sản phẩm
+      price: result.price,  // Giá sản phẩm
+      image: result.image  // Ảnh sản phẩm
     }));
-    
+
     res.json({ suggestions });
   });
 });
+
 
 // Route để tìm sản phẩm theo category và searchTerm, bao gồm pro_message_list
 router.get('/products', (req, res) => {

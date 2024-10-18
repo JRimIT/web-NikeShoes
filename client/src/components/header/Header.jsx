@@ -66,13 +66,13 @@
                     <NavLink className="dropdown-item" to="/products-men/Men's Trail-Running Shoes">Trail-Running</NavLink>
                   </div>
                   <div className="mega-dropdown-column">
-                    <NavLink className="dropdown-title" to="/shopbysport">Shop By Sports</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/running">Running</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/football">Football</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/baseball">Baseball</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/training-and-gym">Training And Gym</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/tennis">Tennis</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/skateboarding">Skateboarding</NavLink>
+                    <NavLink className="dropdown-title" >Shop By Sports</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Men's%20Road%20Running%20Shoes">Running</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Football">Football</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Basketball">Basketball</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Men's%20Workout%20Shoes">Training And Gym</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Men's%20Hard%20Court%20Tennis%20Shoes">Tennis</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Skate">Skateboarding</NavLink>
                   </div>
                   <div className="mega-dropdown-column">
                     <NavLink className="dropdown-title" to="/products-men/Men">Others</NavLink>
@@ -111,13 +111,13 @@
                     <NavLink className="dropdown-item" to="/products-women/Women's Road Racing Shoes">Racing</NavLink>
                   </div>
                   <div className="mega-dropdown-column">
-                    <NavLink className="dropdown-title" to="/shopbysport">Shop By Sports</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/running">Running</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/football">Football</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/baseball">Baseball</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/training-and-gym">Training And Gym</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/tennis">Tennis</NavLink>
-                    <NavLink className="dropdown-item" to="/shopbysport/skateboarding">Skateboarding</NavLink>
+                    <NavLink className="dropdown-title" >Shop By Sports</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women/Women's%20Road%20Running%20Shoes">Running</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Football">Football</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women/Basketball">Basketball</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women/Women's%20Workout%20Shoes">Training And Gym</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women/Women's%20Hard%20Court%20Tennis%20Shoes">Tennis</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women/Skate">Skateboarding</NavLink>
                   </div>
                   <div className="mega-dropdown-column">
                     <NavLink className="dropdown-title" to="/products-women/Women">Others</NavLink>
