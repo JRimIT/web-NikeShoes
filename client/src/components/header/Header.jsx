@@ -39,24 +39,24 @@
               <div className="mega-dropdown">
                 <div className="mega-dropdown-content">
                   <div className="mega-dropdown-column">
-                    <NavLink className="dropdown-title" to="/products">New & Featured</NavLink>
-                    <NavLink className="dropdown-item" to="/products/Sustainable Materials">Sustainable Materials</NavLink>
-                    <NavLink className="dropdown-item" to="/products/Bestseller">Bestsellers</NavLink>
-                    <NavLink className="dropdown-item" to="/products/Promo Exclusion">Promo Exclusion</NavLink>
-                    <NavLink className="dropdown-item" to="/products/Just In">Just In</NavLink>
+                    <NavLink className="dropdown-title">Featured (M&W)</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men-featured/Bestseller">Bestsellers</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men-featured/Sustainable Materials">Sustainable Materials</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men-featured/Just In">Just In</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men-featured/Promo Exclusion">Promo Exclusion</NavLink>
                   </div>
                   <div className="mega-dropdown-column">
                     <NavLink className="dropdown-title" to="/products-men/Men">Shoes</NavLink>
                     <NavLink className="dropdown-item" to="/products-men/Football">Football</NavLink>
-                    <NavLink className="dropdown-item" to="/products-men/Men's Road Running Shoes">Road Running</NavLink>
                     <NavLink className="dropdown-item" to="/products-men/Basketball">Basketball</NavLink>
-                    <NavLink className="dropdown-item" to="/products-men/Men's Hard Court Tennis Shoes">Tennis</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Men's Road Running Shoes">Road Running</NavLink>
                     <NavLink className="dropdown-item" to="/products-men/Golf">Golf</NavLink>
-                    <NavLink className="dropdown-item" to="/products-men/Men's Workout Shoes">Workout</NavLink>
-                    <NavLink className="dropdown-item" to="/products-men/Athletics">Athletics</NavLink>
-                    <NavLink className="dropdown-item" to="/products-men/Men's Road Racing Shoes">Racing</NavLink>
-                    <NavLink className="dropdown-item" to="/products-men/Men's Trail-Running Shoes">Trail-Running</NavLink>
                     <NavLink className="dropdown-item" to="/products-men/Skate">Skate Shoes</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Athletics">Athletics</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Men's Hard Court Tennis Shoes">Tennis</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Men's Road Racing Shoes">Racing</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Men's Workout Shoes">Workout</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Men's Trail-Running Shoes">Trail-Running</NavLink>
                   </div>
                   <div className="mega-dropdown-column">
                     <NavLink className="dropdown-title" to="/shopbysport">Shop By Sports</NavLink>
@@ -84,11 +84,11 @@
               <div className="mega-dropdown">
                 <div className="mega-dropdown-content">
                   <div className="mega-dropdown-column">
-                    <NavLink className="dropdown-title" to="/products-women">New & Featured</NavLink>
-                    <NavLink className="dropdown-item" to="/products-women/Sustainable Materials">Sustainable Materials</NavLink>
-                    <NavLink className="dropdown-item" to="/products-women/Bestseller">Bestsellers</NavLink>
-                    <NavLink className="dropdown-item" to="/products-women/Promo Exclusion">Promo Exclusion</NavLink>
-                    <NavLink className="dropdown-item" to="/products-women/Just In">Just In</NavLink>
+                    <NavLink className="dropdown-title">Featured (M&W)</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women-featured/Bestseller">Bestsellers</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women-featured/Sustainable Materials">Sustainable Materials</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women-featured/Just In">Just In</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women-featured/Promo Exclusion">Promo Exclusion</NavLink>
                   </div>
                   <div className="mega-dropdown-column">
                     <NavLink className="dropdown-title" to="/products-women/Women">Shoes</NavLink>
@@ -96,12 +96,12 @@
                     <NavLink className="dropdown-item" to="/products-women/Basketball">Basketball</NavLink>
                     <NavLink className="dropdown-item" to="/products-women/Women's Road Running Shoes">Road Running</NavLink>
                     <NavLink className="dropdown-item" to="/products-women/Golf">Golf</NavLink>
+                    <NavLink className="dropdown-item" to="/products-women/Skate">Skate Shoes</NavLink>
                     <NavLink className="dropdown-item" to="/products-women/Women's Hard Court Tennis Shoes">Tennis</NavLink>
                     <NavLink className="dropdown-item" to="/products-women/Athletics">Athletics</NavLink>
                     <NavLink className="dropdown-item" to="/products-women/Women's Workout Shoes">Workout</NavLink>
                     <NavLink className="dropdown-item" to="/products-women/Women's Trail-Running Shoes">Trail-Running</NavLink>
                     <NavLink className="dropdown-item" to="/products-women/Women's Road Racing Shoes">Racing</NavLink>
-                    <NavLink className="dropdown-item" to="/products-women/Skate">Skate Shoes</NavLink>
                   </div>
                   <div className="mega-dropdown-column">
                     <NavLink className="dropdown-title" to="/shopbysport">Shop By Sports</NavLink>
