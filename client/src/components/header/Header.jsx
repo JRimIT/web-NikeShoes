@@ -6,8 +6,8 @@
   import { IoMdSearch } from "react-icons/io";
   import './Header.scss';
   import { NavLink, Link, useNavigate } from "react-router-dom";
-  import { IoBagHandleOutline } from "react-icons/io5";
-  import { FaUser } from "react-icons/fa";
+  import { IoBagHandleOutline, IoBagCheck } from "react-icons/io5";
+  import { FaCreditCard, FaUser } from "react-icons/fa";
   import { FaHeart } from "react-icons/fa";
 
   import logo from '../../pic/Logo.jpg'
@@ -136,7 +136,17 @@
                   <IoBagHandleOutline className="w-100 icon "/>
                   
               </span>
-              
+              <span className="icon-bag rounded-circle">
+                <NavLink className="nav-link" to="/orders">
+                  <IoBagCheck className="w-100 icon"/>
+                </NavLink>
+              </span>
+              <span className="icon-bag rounded-circle">
+                <NavLink className="nav-link" to="/payment">
+                  <FaCreditCard className="w-100 icon"/>
+                </NavLink>
+              </span>
+
               
               <Form className="d-flex">
                   <Form.Control
