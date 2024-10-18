@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Router } from "react-router-dom";
 import App from "../App";
 import HomePage from "../components/Home/HomePage";
 import HomePageMen from "../components/Home/HomeMen/HomePageMen";
@@ -11,10 +11,12 @@ import ProductFeaturedPage from "../components/Home/listProduct/featured/Product
 // import AdminChatbox from '../components/Chatbox/AdminChatbox';
 // import Dashboard from "../components/userDashboard/pages/Dashboard";
 import ProductSearch from "../components/Home/listProduct/Product/ProductSearch";
+import ScrollToTop from "./ScrollToTop";
 
 const LayOut = () => {
   return (
     <>
+      
       <Routes>
         {/* Nested Routes */}
         <Route path="/" element={<App />}>
@@ -32,6 +34,7 @@ const LayOut = () => {
           <Route path="/products/search" element={<ProductSearch />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
         </Route>
+        
 
         {/* Dynamic route for User with userId */}
         {/* <Route path="/user/:userId" element={<UserChatbox />} /> */}
@@ -40,6 +43,7 @@ const LayOut = () => {
         {/* <Route path="/admin" element={<AdminChatbox userId="admin" />} /> */}
         
       </Routes>
+      
     </>
   );
 };
