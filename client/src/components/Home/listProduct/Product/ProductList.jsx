@@ -24,7 +24,7 @@ const ProductList = ({ category, onTotalProductsChange }) => {
   }, [category]);
 
   const handleProductClick = (id) => {
-    navigate(`/products/${id}`); // Make sure you're using the correct ID here
+    navigate(`/products/${id}`); 
   };
 
   return (
