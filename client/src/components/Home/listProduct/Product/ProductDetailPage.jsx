@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './ProductDetailPage.scss';
 import { FaHeart } from "react-icons/fa";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -12,6 +14,7 @@ const ProductDetailPage = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [isFavourite, setIsFavourite] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -29,48 +32,76 @@ const ProductDetailPage = () => {
     fetchProductDetails();
   }, [id]);
 
-  const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      alert('Please select a size and a color.');
+  const handleAddToCart = async () => {
+    if (!product) {
+      toast.error('Product details not available.');
       return;
     }
     
-    // Prepare the data to be added to the cart
-    const cartItem = {
-      productId: product.id,
-      name: product.name,
-      size: selectedSize,
-      color: selectedColor,
-      price: product.price,
-      image: product.primary_image,
-    };
-
-    // You can replace this with an API call to add the item to the cart
-    console.log('Adding to cart:', cartItem);
-    alert(`${product.name} has been added to your cart!`);
+    if (!selectedSize || !selectedColor) {
+      toast.error('Please select both size and color.');
+      return;
+    }
+  
+    try {
+      const { data } = await axios.post('http://localhost:5000/add-to-cart', {
+        userId: 3,
+        productId: product.product_id,
+        size: selectedSize,
+        color: selectedColor,
+        quantity,
+      });
+      toast.success(data.message); // Show success notification
+    } catch (error) {
+      console.error('Error adding to cart:', error.response?.data || error);
+      toast.error('Failed to add product to cart.');
+    }
   };
 
-  const handleToggleFavourite = () => {
-    setIsFavourite(prev => !prev);
+  const handleToggleFavourite = async () => {
+    if (!product) {
+      toast.error('Product details not available.');
+      return;
+    }
 
-    // You can replace this with an API call to save the favourite status
-    const favouriteStatus = !isFavourite ? 'added to' : 'removed from';
-    console.log(`Product ${favouriteStatus} favourites: ${product.name}`);
-    alert(`Product has been ${favouriteStatus} favourites!`);
+    if (!selectedSize || !selectedColor) {
+      toast.error('Please select both size and color.');
+      return;
+    }
+  
+    try {
+      const { data } = await axios.post('http://localhost:5000/add-to-wishlist', {
+        userId: 3,
+        productId: product.product_id,
+        size: selectedSize,
+        color: selectedColor,
+        quantity,
+      });
+      toast.success(data.message); // Hiển thị thông báo thành công
+      setIsFavourite(!isFavourite); // Cập nhật trạng thái yêu thích
+    } catch (error) {
+      console.error('Error adding to wishlist:', error.response?.data || error);
+      toast.error(`Failed to add product to wishlist: ${error.response?.data?.message || error.message}`);
+    }
   };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  // Split sizes and colors
-  const sizeList = product?.size ? product.size.split(';').map((size) => size.trim()) : [];
-  const colorList = product?.list_color ? product.list_color.split(';').map((color) => color.trim()) : [];
+  if (!product) return <div>Product not found.</div>;
+
+  const sizeList = product.size ? product.size.split(';').map((s) => s.trim()) : [];
+  const colorList = product.list_color ? product.list_color.split(';').map((c) => c.trim()) : [];
 
   return (
     <div className="product-detail-container">
+      <ToastContainer /> {/* Add ToastContainer to render notifications */}
       <div className="image-gallery">
         <div className="main-image">
-          <img src={selectedColor || product.primary_image} alt={product.name} />
+          <img 
+            src={selectedColor || product.primary_image || '/default-image.jpg'} 
+            alt={product.name || 'Product Image'} 
+          />
         </div>
       </div>
 
@@ -88,10 +119,10 @@ const ProductDetailPage = () => {
             <div
               key={index}
               className={`color-swatch ${selectedColor === color ? 'selected' : ''}`}
-              style={{ backgroundImage: `url(${color})` }} // Use color as background image
+              style={{ backgroundImage: `url(${color})` }}
               onClick={() => {
                 setSelectedColor(color);
-                setProduct((prev) => ({ ...prev, primary_image: color })); // Change primary image to selected color image
+                setProduct((prev) => ({ ...prev, primary_image: color })); // Update primary image
               }}
             />
           ))}
@@ -109,7 +140,7 @@ const ProductDetailPage = () => {
             </div>
           ))}
         </div>
-        
+
         <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
         <button className="wishlist" onClick={handleToggleFavourite}>
           {isFavourite ? 'Unfavourite' : 'Favourite'} 
