@@ -134,12 +134,13 @@ $transition: all 0.3s ease;
     margin: 10px 0;
   }
 
-  .product-description, .product-description-country {
+  .product-description,
+  .product-description-country {
     color: black;
     line-height: 1.8;
     font-size: 1.2rem;
     text-align: justify;
-    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   }
 
   h3 {
@@ -222,7 +223,7 @@ $transition: all 0.3s ease;
     }
   }
 
-  .wishlist{
+  .wishlist {
     background-color: $primary-color;
     color: white;
     border: none;

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import './ProductDetailPage.scss';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import "./ProductDetailPage.scss";
 import { FaHeart } from "react-icons/fa";
 
 const ProductDetailPage = () => {
@@ -15,11 +15,13 @@ const ProductDetailPage = () => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/products/${id}`);
+        const response = await axios.get(
+          `http://localhost:5000/products/${id}`
+        );
         setProduct(response.data);
       } catch (err) {
-        console.error('Error fetching product details:', err);
-        setError('Error fetching product details');
+        console.error("Error fetching product details:", err);
+        setError("Error fetching product details");
       } finally {
         setLoading(false);
       }
@@ -32,15 +34,22 @@ const ProductDetailPage = () => {
   if (error) return <div>{error}</div>;
 
   // Split sizes and colors
-  const sizeList = product?.size ? product.size.split(';').map((size) => size.trim()) : [];
-  const colorList = product?.list_color ? product.list_color.split(';').map((color) => color.trim()) : [];
+  const sizeList = product?.size
+    ? product.size.split(";").map((size) => size.trim())
+    : [];
+  const colorList = product?.list_color
+    ? product.list_color.split(";").map((color) => color.trim())
+    : [];
 
   return (
     <div className="product-detail-container">
       <div className="image-gallery">
         <div className="main-image">
-          <img src={selectedColor || product.primary_image} alt={product.name} />
-        </div>  
+          <img
+            src={selectedColor || product.primary_image}
+            alt={product.name}
+          />
+        </div>
       </div>
 
       <div className="product-info">
@@ -48,7 +57,10 @@ const ProductDetailPage = () => {
         <h5>{product.name}</h5>
         <h5>{product.category}</h5>
         <p className="price">
-          {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+          {new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(product.price)}
         </p>
 
         <h3>Select Color</h3>
@@ -56,7 +68,9 @@ const ProductDetailPage = () => {
           {colorList.map((color, index) => (
             <div
               key={index}
-              className={`color-swatch ${selectedColor === color ? 'selected' : ''}`}
+              className={`color-swatch ${
+                selectedColor === color ? "selected" : ""
+              }`}
               style={{ backgroundImage: `url(${color})` }} // Use color as background image
               onClick={() => {
                 setSelectedColor(color);
@@ -81,8 +95,8 @@ const ProductDetailPage = () => {
         
         <button className="add-to-cart">Add to Cart</button>
         <button className="wishlist">
-        Favourite
-        <FaHeart className="icon" icon={ FaHeart} /> 
+          Favourite
+          <FaHeart className="icon" icon={FaHeart} />
         </button>
 
         <p className="product-description">{product.description}</p>
