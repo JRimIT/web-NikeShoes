@@ -7,6 +7,7 @@ const productRoutes = require('./routes/products'); // Import đúng router
 const handleSocket = require('./sockets/chatSocket');
 const cartRoutes = require('./routes/cart');
 const wishlistRoutes = require('./routes/wishlist');
+const reviewRoutes = require('./routes/review');
 
 const app = express();
 app.use(cors());
@@ -28,6 +29,7 @@ handleSocket(io);
 app.use('/products', productRoutes);
 app.use('/', cartRoutes); 
 app.use('/', wishlistRoutes);
+app.use('/', reviewRoutes);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

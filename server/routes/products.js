@@ -35,7 +35,7 @@ router.get('/', (req, res) => {
   db.query(query, queryParams, (error, results) => {
     if (error) {
       console.error('Database query error:', error);
-      return res.status(500).json({ message: 'Error fetching products' });
+      return res.status(500).json({ message: 'Error fetching products.' });
     }
 
     const totalCount = results.length;
@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
 router.get('/search', (req, res) => {
   const searchTerm = req.query.term; // Từ khóa tìm kiếm từ query params
   if (!searchTerm) {
-    return res.status(400).json({ message: 'Search term is required' });
+    return res.status(400).json({ message: 'Search term is required.' });
   }
 
   // Sử dụng LIKE để tìm kiếm mờ (fuzzy search) trên cả name, category và pro_message_list
@@ -59,7 +59,7 @@ router.get('/search', (req, res) => {
 
   db.query(query, queryParams, (error, results) => {
     if (error) {
-      return res.status(500).json({ message: 'Error fetching products' });
+      return res.status(500).json({ message: 'Error fetching products.' });
     }
     res.json({ products: results });
   });
@@ -70,7 +70,7 @@ router.get('/suggestions', (req, res) => {
   const searchTerm = req.query.term;
   
   if (!searchTerm) {
-    return res.status(400).json({ message: 'Search term is required' });
+    return res.status(400).json({ message: 'Search term is required.' });
   }
 
   // Sử dụng câu truy vấn để lấy cả id và name
@@ -82,7 +82,7 @@ router.get('/suggestions', (req, res) => {
 
   db.query(query, queryParams, (error, results) => {
     if (error) {
-      return res.status(500).json({ message: 'Error fetching suggestions' });
+      return res.status(500).json({ message: 'Error fetching suggestions.' });
     }
 
     // Map lại kết quả để trả về cả id và name
@@ -114,7 +114,7 @@ router.get('/products', (req, res) => {
 
   db.query(query, queryParams, (error, results) => {
     if (error) {
-      return res.status(500).json({ message: 'Error fetching products' });
+      return res.status(500).json({ message: 'Error fetching products.' });
     }
     res.json({ products: results, totalCount: results.length });
   });
@@ -127,10 +127,10 @@ router.get('/:id', (req, res) => {
   const query = 'SELECT * FROM products WHERE product_id = ?'; // product_id là tên cột đúng
   db.query(query, [productId], (error, results) => {
     if (error) {
-      return res.status(500).json({ message: 'Error fetching product details' });
+      return res.status(500).json({ message: 'Error fetching product details.' });
     }
     if (results.length === 0) {
-      return res.status(404).json({ message: 'Product not found' });
+      return res.status(404).json({ message: 'Product not found.' });
     }
     res.json(results[0]); // Trả về sản phẩm đầu tiên tìm thấy
   });

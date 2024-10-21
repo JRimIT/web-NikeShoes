@@ -1,0 +1,206 @@
+$background-color: #ffffff;
+$text-color: #333;
+$primary-color: #6c757d;
+$secondary-color: #f1f3f5;
+$hover-color: #495057;
+$accent-color: #d33918;
+$border-radius: 16px;
+$box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+$transition: all 0.3s ease-in-out;
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin hover-effect {
+  transition: $transition;
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Main review container
+.review-container {
+  margin-top: 50px;
+  padding: 40px;
+  background-color: $background-color;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+
+  h2 {
+    font-size: 2rem;
+    color: $text-color;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: $primary-color;
+      border-radius: 10px;
+    }
+  }
+
+  .review-item {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    border-radius: $border-radius;
+    background-color: $secondary-color;
+    transition: $transition;
+
+    &:hover {
+      background-color: lighten($secondary-color, 5%);
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: #e0e0e0;
+      object-fit: cover;
+    }
+
+    .review-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .reviewer-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .reviewer-name {
+          font-weight: bold;
+          font-size: 1.1rem;
+          color: $text-color;
+        }
+
+        .review-date {
+          font-size: 0.9rem;
+          color: grey;
+        }
+      }
+
+      .review-text {
+        font-size: 1rem;
+        line-height: 1.6;
+        text-align: justify;
+        font-family: 'Georgia', serif;
+        color: $text-color;
+      }
+
+      .review-rating {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+
+        .star {
+          font-size: 1.4rem;
+          color: $accent-color;
+        }
+      }
+    }
+  }
+}
+
+// Add a review section
+.add-review {
+  margin-top: 30px;
+  padding: 30px;
+  background-color: $background-color;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+
+  h3 {
+    font-size: 1.8rem;
+    color: $text-color;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    input, textarea {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: $transition;
+      resize: none;
+
+      &:focus {
+        border-color: $primary-color;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+    }
+
+    .rating {
+      display: flex;
+      gap: 8px;
+
+      .star {
+        cursor: pointer;
+        font-size: 2rem;
+        color: $primary-color;
+        transition: $transition;
+
+        &:hover {
+          color: $accent-color;
+        }
+      }
+    }
+
+    button {
+      background-color: $primary-color;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      @include hover-effect;
+
+      &:hover {
+        background-color: $hover-color;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .review-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .add-review form {
+    gap: 15px;
+  }
+
+  h2, h3 {
+    font-size: 1.6rem;
+  }
+}

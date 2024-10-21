@@ -80,11 +80,11 @@ function CartPage() {
 
   return (
     <Container className="py-5">
-      <h2 className="mb-4" style={{ fontWeight: 'bold', fontSize: '2rem' }}>Shopping Bag</h2>
+      <h2 className="mb-4" style={{ fontWeight: 'bold', fontSize: '2rem' }}>Shopping Cart</h2>
       {cart.length === 0 ? (
         <div className="text-center">
           <h4>Your cart is empty.</h4>
-          <Button variant="primary" href="/products-men/Shoe">Shopping</Button>
+          <Button variant="primary" href="/products-men/Shoe">Shop Now</Button>
         </div>
       ) : (
         <Row>
