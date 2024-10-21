@@ -1,10 +1,11 @@
-const db = require("../db");
+const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-
+const upload = require("../middlewares/multer"); // Import cấu hình multer
 // Function Login
 const registerUser = (req, res) => {
   console.log("Received registration data:", req.body);
+  
   console.log("Received file data:", req.file); // Debugging
 
   const {

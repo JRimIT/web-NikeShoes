@@ -12,7 +12,7 @@ import ProductFeaturedPage from "../components/Home/listProduct/featured/Product
 // import Dashboard from "../components/userDashboard/pages/Dashboard";
 import ProductSearch from "../components/Home/listProduct/Product/ProductSearch";
 import ScrollToTop from "./ScrollToTop";
-import ProductFeaturedPage from "../components/Home/listProduct/featured/ProductFeaturedPage";
+
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";

@@ -11,7 +11,7 @@ const bcrypt = require("bcryptjs");
 const productRoutes = require('./routes/products'); // Import đúng router
 const handleSocket = require('./sockets/chatSocket');
 const { registerUser, loginUser } = require("./controller/authController");
-const { getProducts, getProductById } = require("./controller/productController");
+// const { getProducts, getProductById } = require("./controller/productController");
 const sendResetPassword = require("./controller/sendResetCode");
 const db = require("./db");
 
@@ -19,6 +19,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Multer storage configuration
 const storage = multer.diskStorage({
@@ -45,9 +46,10 @@ handleSocket(io);
 
 // Routes cho sản phẩm và các routes khác
 app.use('/products', productRoutes); // Route cho sản phẩm
-app.post("/register", registerUser);
+app.post("/register", upload.single('user_image'), registerUser);
+
 app.post("/login", loginUser);
-app.get("/products/:id", getProductById);
+// app.get("/products/:id", getProductById);
 app.use(sendResetPassword); // Route cho reset password
 
 // Cấu hình cors

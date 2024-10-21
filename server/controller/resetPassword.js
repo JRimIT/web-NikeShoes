@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const db = require("../db");
+const db = require("../config/db");
 
 router.post("/reset-password", async (req, res) => {
   const { email, newPassword } = req.body;

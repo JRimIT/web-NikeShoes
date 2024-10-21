@@ -124,6 +124,25 @@ router.get('/products', (req, res) => {
   });
 });
 
+// Route để lấy 8 sản phẩm "Best Seller"
+router.get('/best-sellers', (req, res) => {
+  const query = `
+    SELECT product_id AS id, name, price, primary_image AS image
+    FROM products
+    WHERE pro_message_list LIKE '%Bestseller%'
+    LIMIT 8
+  `;
+
+  db.query(query, (error, results) => {
+    if (error) {
+      return res.status(500).json({ message: 'Error fetching Best Seller products' });
+    }
+
+    res.json({ products: results });
+  });
+});
+
+
 // Route để lấy thông tin chi tiết sản phẩm theo ID
 router.get('/:id', (req, res) => {
   const productId = req.params.id;

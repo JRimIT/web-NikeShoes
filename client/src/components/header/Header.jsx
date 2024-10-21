@@ -11,7 +11,7 @@ import { FaUser } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
   import SearchBar from "./SearchBar";
 import logo from "../../pic/Logo.jpg";
-import { useState } from "react";
+
 
 const Header = () => {
     const [products, setProducts] = useState([]); // State để lưu kết quả tìm kiếm
