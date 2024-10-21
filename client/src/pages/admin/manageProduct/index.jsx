@@ -1,4 +1,12 @@
-import { Avatar, Box, IconButton, ListItemAvatar, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  IconButton,
+  ListItemAvatar,
+  Stack,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import { mockDataContacts } from "../../../data/admin/mockData";
@@ -9,7 +17,11 @@ import InputBase from "@mui/material/InputBase";
 import SearchTag from "./tag/SearchTag";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { deleteProduct, getAllProducts, getProductById } from "../../../data/api/apiService";
+import {
+  deleteProduct,
+  getAllProducts,
+  getProductById,
+} from "../../../data/api/apiService";
 
 import { IoIosInformationCircle } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
@@ -17,93 +29,87 @@ import Search from "./search/searchByInput";
 import ModalDetailProduct from "./tool/modalDetailProduct";
 import { toast } from "react-toastify";
 import ModalDeleteProduct from "./tool/modalDeleteProduct";
+import ModalUpdateProduct from "./tool/modalUpdateProduct";
 
 const ManagerProduct = () => {
-  const [initialProduct, setInitialProduct] = useState([])
-  const [products, setProducts] = useState([])
-  const [productDelete, setProductDelete] = useState({})
+  const [initialProduct, setInitialProduct] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [productDelete, setProductDelete] = useState({});
+  const [productUpdate, setProductUpdate] = useState({});
 
   const [showModal, setShowModal] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
-  const [isCreateModal,setIsCreateModal] = useState(false);
-  const [idDelete, setIdDelete] = useState(0)
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
+  // const [isUpadteModal, setIsUpdateModal] = useState(false)
+  const [idDelete, setIdDelete] = useState(0);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  
   const handleClose = () => setShowModal(false);
   const handleShow = () => setShowModal(true);
 
-
-
   useEffect(() => {
-    
-    fetchAllProducts()
-    
-    
-  },[])
-  const fetchAllProducts = async()=>{
-     let res = await getAllProducts(); 
-     // console.log("All products: ",res);
-     
-     if(res.status === 200){
-       // setProducts(res.data.products)
-       const dataProducts = res.data.products.map(product =>{
-         return({
+    fetchAllProducts();
+  }, []);
+  const fetchAllProducts = async () => {
+    let res = await getAllProducts();
+    // console.log("All products: ",res);
+
+    if (res.status === 200) {
+      // setProducts(res.data.products)
+      const dataProducts = res.data.products.map((product) => {
+        return {
           id: product.product_id,
-           ...product, 
-           product_id: undefined,  // Xóa product_id khỏi sản phẩm
-         })
-       })
-       setInitialProduct(dataProducts)
-       setProducts(dataProducts)
-     }
-     
- }
-
-const getProduct = async(idDelete) => {
-        const pro = await getProductById(idDelete)
-        console.log("Dlelte",pro);
-        
-        setProductDelete(pro.data)
+          ...product,
+          product_id: undefined, // Xóa product_id khỏi sản phẩm
+        };
+      });
+      setInitialProduct(dataProducts);
+      setProducts(dataProducts);
     }
+  };
 
- const handleClickDeleteModal = async(id) => {
-    await getProduct(id)
-    setShowModalDelete(true)
-    
- }
+  const getProduct = async (idDelete) => {
+    const pro = await getProductById(idDelete);
+    return pro.data;
+  };
 
+  const handleClickDeleteModal = async (id) => {
+    const res = await getProduct(id);
+    setProductDelete(res);
+    setShowModalDelete(true);
+  };
 
   const handleModalDetailProduct = () => {
     handleShow();
-  }
+  };
+  const handleModalUpdateProduct = async (id) => {
+    const res = await getProduct(id);
+    setProductUpdate(res);
+    setShowModalUpdate(true);
+  };
 
   console.log("products: ", products);
-  
-    const VND = new Intl.NumberFormat("vi-VN", {
+
+  const VND = new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
   });
 
-
   const columns = [
     { field: "id", headerName: "ID", flex: 0.2 },
-     { field: "primary_image",
+    {
+      field: "primary_image",
       headerName: "Image",
       flex: 0.2,
-       renderCell: (params) => (
+      renderCell: (params) => (
         <ListItemAvatar>
           <Avatar alt="Remy Sharp" src={params.row.primary_image} />
         </ListItemAvatar>
       ),
     },
-    { field: "name",
-      headerName: "Name",
-      flex: 1,
-       
-    },
-   
+    { field: "name", headerName: "Name", flex: 1 },
+
     {
       field: "category",
       headerName: "Category",
@@ -115,7 +121,7 @@ const getProduct = async(idDelete) => {
       headerName: "Size",
       headerAlign: "left",
       align: "left",
-      flex: 1
+      flex: 1,
     },
     {
       field: "color",
@@ -137,7 +143,7 @@ const getProduct = async(idDelete) => {
         </Typography>
       ),
     },
-   {
+    {
       headerName: "Tool",
       flex: 0.5,
       renderCell: (params) => (
@@ -145,11 +151,12 @@ const getProduct = async(idDelete) => {
           {/* <Button variant="contained">Contained</Button> */}
           <Button
             variant="info"
-            
+            onClick={() => handleModalUpdateProduct(params.row.id)}
           >
             <IoIosInformationCircle />
           </Button>{" "}
-          <Button variant="danger" 
+          <Button
+            variant="danger"
             onClick={() => handleClickDeleteModal(params.row.id)}
           >
             <MdDeleteForever />
@@ -162,36 +169,32 @@ const getProduct = async(idDelete) => {
   return (
     <>
       <Box m="20px">
-        <Header
-          title="Manage Product"
-          subtitle="List of Product"
-        />
-          <Stack
+        <Header title="Manage Product" subtitle="List of Product" />
+        <Stack
           spacing={{ xs: 1, sm: 2 }}
           direction="row"
           useFlexGap
-          sx={{ flexWrap: 'wrap' }}
+          sx={{ flexWrap: "wrap" }}
         >
-          <SearchTag 
+          <SearchTag
             products={products}
-            initialProduct = {initialProduct}
-            setInitialProduct={setInitialProduct} 
+            initialProduct={initialProduct}
+            setInitialProduct={setInitialProduct}
             setProducts={setProducts}
           ></SearchTag>
 
           <Search
             products={products ? products : []}
-            initialProduct = {initialProduct ? initialProduct : []}
-            setInitialProduct={setInitialProduct} 
+            initialProduct={initialProduct ? initialProduct : []}
+            setInitialProduct={setInitialProduct}
             setProducts={setProducts}
           ></Search>
 
-           <Button variant="success"
-           onClick={handleModalDetailProduct}
-           
-           >Create New Product</Button>
+          <Button variant="success" onClick={handleModalDetailProduct}>
+            Create New Product
+          </Button>
         </Stack>
-        
+
         <Box
           m="40px 0 0 0"
           height="75vh"
@@ -231,24 +234,27 @@ const getProduct = async(idDelete) => {
           />
         </Box>
       </Box>
-          
-    <ModalDetailProduct
-      show = {showModal}
-      setShow = {setShowModal}
-      fetchAllProducts = {fetchAllProducts}
-    ></ModalDetailProduct>
-    
-    <ModalDeleteProduct
-      show = {showModalDelete}
-      setShow = {setShowModalDelete}
-      fetchAllProducts = {fetchAllProducts}
-      product = {productDelete}
-    >
-    </ModalDeleteProduct>
 
+      <ModalDetailProduct
+        show={showModal}
+        setShow={setShowModal}
+        fetchAllProducts={fetchAllProducts}
+      ></ModalDetailProduct>
 
+      <ModalUpdateProduct
+        show={showModalUpdate}
+        setShow={setShowModalUpdate}
+        fetchAllProducts={fetchAllProducts}
+        productUpdate={productUpdate}
+      ></ModalUpdateProduct>
+
+      <ModalDeleteProduct
+        show={showModalDelete}
+        setShow={setShowModalDelete}
+        fetchAllProducts={fetchAllProducts}
+        product={productDelete}
+      ></ModalDeleteProduct>
     </>
-
   );
 };
 

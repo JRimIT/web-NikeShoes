@@ -11,7 +11,7 @@ import StatBox from "../../../components/AdminSide/StatBox";
 import LineChart from "../../../components/AdminSide/LineChart";
 import ProgressCircle from "../../../components/AdminSide/ProgressCricle";
 import BarChart from "../../../components/AdminSide/Barchart";
-
+import PieChart from "../../../components/AdminSide/PieChart";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -23,7 +23,7 @@ const Dashboard = () => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
 
-        <Box>
+        {/* <Box>
           <Button
             sx={{
               backgroundColor: colors.blueAccent[700],
@@ -36,7 +36,7 @@ const Dashboard = () => {
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Download Reports
           </Button>
-        </Box>
+        </Box> */}
       </Box>
 
       {/* GRID & CHARTS */}
@@ -94,7 +94,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="32,441"
-            subtitle="New Clients"
+            subtitle="Clients"
             progress="0.30"
             increase="+5%"
             icon={
@@ -232,19 +232,20 @@ const Dashboard = () => {
             alignItems="center"
             mt="25px"
           >
-            <ProgressCircle size="125" />
-            <Typography
+            <PieChart isDashboard={true}></PieChart>
+            {/* <ProgressCircle size="125" /> */}
+            {/* <Typography
               variant="h5"
               color={colors.greenAccent[500]}
               sx={{ mt: "15px" }}
             >
               $48,352 revenue generated
             </Typography>
-            <Typography>Includes extra misc expenditures and costs</Typography>
+            <Typography>Includes extra misc expenditures and costs</Typography> */}
           </Box>
         </Box>
         <Box
-          gridColumn="span 4"
+          gridColumn="span 8"
           gridRow="span 2"
           backgroundColor={colors.primary[400]}
         >
@@ -258,23 +259,6 @@ const Dashboard = () => {
           <Box height="250px" mt="-20px">
             <BarChart isDashboard={true} />
           </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          padding="30px"
-        >
-          <Typography
-            variant="h5"
-            fontWeight="600"
-            sx={{ marginBottom: "15px" }}
-          >
-            Geography Based Traffic
-          </Typography>
-          {/* <Box height="200px">
-            <GeographyChart isDashboard={true} />
-          </Box> */}
         </Box>
       </Box>
     </Box>

@@ -4,8 +4,8 @@ import Modal from "react-bootstrap/Modal";
 import FormForEdit from "./form/form";
 import FormForUpdate from "./form/formUpdate";
 
-const ModalDetailProduct = (props) => {
-  const { show, setShow, fetchAllProducts } = props;
+const ModalUpdateProduct = (props) => {
+  const { show, setShow, fetchAllProducts, productUpdate } = props;
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -17,10 +17,11 @@ const ModalDetailProduct = (props) => {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FormForEdit
+          <FormForUpdate
             fetchAllProducts={fetchAllProducts}
+            productUpdate={productUpdate}
             handleClose={handleClose}
-          ></FormForEdit>
+          ></FormForUpdate>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
@@ -32,4 +33,4 @@ const ModalDetailProduct = (props) => {
   );
 };
 
-export default ModalDetailProduct;
+export default ModalUpdateProduct;

@@ -2,6 +2,44 @@ const express = require('express');
 const db = require('../config/db'); // Import kết nối MySQL
 const router = express.Router();
 
+
+router.put('/api/products/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, price, category, stock, size, description } = req.body;
+
+    try {
+        // SQL query to update the product
+        const sql = `
+      UPDATE Products 
+      SET name = ?, price = ?, category = ?, stock = ?, size = ?, description = ?
+      WHERE product_id = ?
+    `;
+
+        // Execute the update query
+        const [result] = await db.promise().query(sql, [
+            name,
+            price,
+            category,
+            stock,
+            size,
+            description,
+            id
+        ]);
+
+        // Check if the product was updated
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        // Return success response
+        res.json({ message: "Product updated successfully" });
+
+    } catch (error) {
+        console.error("Error updating product:", error);
+        res.status(500).json({ error: "Failed to update product" });
+    }
+});
+
 // New route to fetch product details by ID
 router.get('/products/:id', (req, res) => {
     const productId = req.params.id;
