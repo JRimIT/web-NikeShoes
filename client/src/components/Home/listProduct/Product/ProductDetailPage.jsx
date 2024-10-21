@@ -21,7 +21,11 @@ const ProductDetailPage = () => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/products/${id}`);
-        setProduct(response.data);
+        if (response.data) {
+          setProduct(response.data);
+        } else {
+          throw new Error('Product not found');
+        }
       } catch (err) {
         console.error('Error fetching product details:', err);
         setError('Error fetching product details');
@@ -40,8 +44,12 @@ const ProductDetailPage = () => {
     }
 
     if (!selectedSize || !selectedColor) {
-      toast.error('Please select both size and color.');
+      toast.error('Please select size.');
       return;
+    }
+
+    if(!selectedColor){
+      toast.error('Please select color.');
     }
 
     try {
@@ -78,13 +86,31 @@ const ProductDetailPage = () => {
         color: selectedColor,
         quantity,
       });
-      toast.success(data.message); // Hiển thị thông báo thành công
+      toast.success(data.message);
     } catch (error) {
       console.error('Error adding to wishlist:', error.response?.data || error);
       toast.error(`Failed to add product to wishlist: ${error.response?.data?.message || error.message}`);
     }
   };
 
+  const handleSizeClick = (size) => {
+    setSelectedSize(size);
+    toast.dismiss(); // Dismiss any previous error notifications
+  };
+
+  const handleColorClick = (color) => {
+    setSelectedColor(color);
+    toast.dismiss(); // Dismiss any previous error notifications
+    // Update product image without causing undefined errors
+    if (product) {
+      setProduct((prevProduct) => ({
+        ...prevProduct,
+        primary_image: color
+      }));
+    }
+  };
+
+  // Safety checks for rendering
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   if (!product) return <div>Product not found.</div>;
@@ -95,7 +121,7 @@ const ProductDetailPage = () => {
   return (
     <>
       <div className="product-detail-container">
-        <ToastContainer /> {/* Add ToastContainer to render notifications */}
+        <ToastContainer />
         <div className="image-gallery">
           <div className="main-image">
             <img 
@@ -104,7 +130,7 @@ const ProductDetailPage = () => {
             />
           </div>
         </div>
-
+  
         <div className="product-info">
           <h4>{product.pro_message_list}</h4>
           <h5>{product.name}</h5>
@@ -112,45 +138,42 @@ const ProductDetailPage = () => {
           <p className="price">
             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
           </p>
-
+  
           <h3>Select Color</h3>
           <div className="color-selection">
             {colorList.map((color, index) => (
               <div
                 key={index}
-                className={`color-swatch ${selectedColor === color ? 'selected' : ''}`}
+                className={`color-swatch ${selectedColor === color ? 'selected' : product.primary_image}`}
                 style={{ backgroundImage: `url(${color})` }}
-                onClick={() => {
-                  setSelectedColor(color);
-                  setProduct((prev) => ({ ...prev, primary_image: color }));
-                }}
+                onClick={() => handleColorClick(color)}
               />
             ))}
           </div>
-
+  
           <h3>Select Size</h3>
           <div className="size-selection">
             {sizeList.map((size, index) => (
               <div
                 key={index}
                 className={`size-box ${selectedSize === size ? 'selected' : ''}`}
-                onClick={() => setSelectedSize(size)}
+                onClick={() => handleSizeClick(size)}
               >
                 {size}
               </div>
             ))}
           </div>
-
+  
           <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
           <button className="wishlist" onClick={handleAddToWishlist}>
             Favourite <FaHeart className="icon" />
           </button>
-
+  
           <p className="product-description">{product.description}</p>
           <p className="product-description-country">{product.product_descriptionCountryOrigin}</p>
         </div>
       </div>
-      <Review productId={id}/>
+      <Review productId={id} />
       <Footer />
     </>
   );
