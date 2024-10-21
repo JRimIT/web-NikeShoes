@@ -7,6 +7,7 @@ const productRoutes = require('./routes/products'); // Import đúng router
 const handleSocket = require('./sockets/chatSocket');
 const cartRoutes = require('./routes/cart');
 const wishlistRoutes = require('./routes/wishlist');
+const adminRoutes = require('./routes/admin')
 
 const app = express();
 app.use(cors());
@@ -26,8 +27,9 @@ handleSocket(io);
 
 // Sử dụng routes cho sản phẩm (middleware đúng)
 app.use('/products', productRoutes);
-app.use('/', cartRoutes); 
+app.use('/', cartRoutes);
 app.use('/', wishlistRoutes);
+app.use('/', adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
