@@ -11,9 +11,8 @@ const bcrypt = require("bcryptjs");
 const productRoutes = require('./routes/products'); // Import đúng router
 const handleSocket = require('./sockets/chatSocket');
 const { registerUser, loginUser } = require("./controller/authController");
-// const { getProducts, getProductById } = require("./controller/productController");
 const sendResetPassword = require("./controller/sendResetCode");
-const db = require("./db");
+const db = require("./config/db");
 
 const app = express();
 app.use(cors());

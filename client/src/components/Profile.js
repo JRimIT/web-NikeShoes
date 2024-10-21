@@ -12,6 +12,7 @@ const ProfilePage = () => {
     <div>
       {user && (
         <div>
+          <h1>{user.user_id}</h1>
           <h1>{user.username}</h1>
           <h2>{user.email}</h2>
           <h2>{user.phone}</h2>

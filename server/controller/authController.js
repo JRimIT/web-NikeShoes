@@ -98,6 +98,8 @@ const loginUser = (req, res) => {
         return res.status(500).send({ message: "Error logging in" });
       }
       if (!isMatch) {
+        console.log(password);
+        console.log(user.password);
         return res.status(400).send({ message: "Wrong password!" });
       }
 
