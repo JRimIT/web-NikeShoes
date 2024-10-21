@@ -10,7 +10,6 @@ function ProductListPageMen() {
   const [category, setCategory] = useState(urlCategory || ''); // State to hold the selected category
   const [totalProducts, setTotalProducts] = useState(0); // State to hold total products count
   const [filtersVisible, setFiltersVisible] = useState(true); // State for filters visibility
-
   // Function to handle category change
   const onCategoryChange = (selectedCategory) => {
     setCategory(selectedCategory); // Update the category state

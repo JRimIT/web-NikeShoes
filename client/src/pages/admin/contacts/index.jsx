@@ -1,9 +1,12 @@
-import { Box } from "@mui/material";
+import { Box, IconButton, useTheme } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../../theme";
 import { mockDataContacts } from "../../../data/admin/mockData";
 import Header from "../../../components/AdminSide/Header";
-import { useTheme } from "@mui/material";
+
+import SearchIcon from "@mui/icons-material/Search";
+import InputBase from "@mui/material/InputBase";
+import SearchTag from "./tag/SearchTag";
 
 const Contacts = () => {
   const theme = useTheme();
@@ -58,6 +61,7 @@ const Contacts = () => {
         title="CONTACTS"
         subtitle="List of Contacts for Future Reference"
       />
+        <SearchTag></SearchTag>
       <Box
         m="40px 0 0 0"
         height="75vh"

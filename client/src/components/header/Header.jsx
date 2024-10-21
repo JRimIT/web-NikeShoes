@@ -69,7 +69,7 @@
                   </div>
                   <div className="mega-dropdown-column">
                     <NavLink className="dropdown-title" to="/products-men/Men">Others</NavLink>
-                    <NavLink className="dropdown-item" to="/products-men/Shoe">All shoes</NavLink>
+                    <NavLink className="dropdown-item" to="/products-men/Shoes">All shoes</NavLink>
                     <NavLink className="dropdown-item" to="/products-men/Custom">Custom shoes</NavLink> 
                     <NavLink className="dropdown-item" to="/products-men/Men's Slides">Slide</NavLink>
                     <NavLink className="dropdown-item" to="/products-men/Men's Flip-Flops">Flip-Flops</NavLink>

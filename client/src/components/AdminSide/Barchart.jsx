@@ -1,11 +1,51 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../../theme";
-import { mockBarData as data } from "../../data/admin/mockData";
+// import { mockBarData as data } from "../../data/admin/mockData";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const BarChart = ({ isDashboard = false }) => {
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [data, setData] = useState([])
+  const [revenue, setRevenue] = useState([])
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  
+  const VND = new Intl.NumberFormat("vi-VN", {
+    style: "decimal", // using decimal style instead of currency to omit VND symbol
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
+  useEffect(()=>{
+    const fetchRevenue = async() => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/revenue-per-month?year=${year}`)
+        
+        console.log("Revenue" ,res.data);
+        
+        const dataInitial  = res.data.map((item) => ({
+          month: item.month,
+          total : item.total_amount
+        }))
+        // setRevenue(dataInitial)
+        console.log(typeof dataInitial[0].total);
+        
+        setData(dataInitial)
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+    }
+    fetchRevenue()
+  }, [year])
+
+
+  
 
   return (
     <ResponsiveBar
@@ -39,9 +79,9 @@ const BarChart = ({ isDashboard = false }) => {
           },
         },
       }}
-      keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut", "miMi"]}
-      indexBy="id"
-      margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
+      keys={["total"]}
+      indexBy="month"
+      margin={{ top: 50, right: 130, bottom: 50, left: 90 }}
       padding={0.3}
       valueScale={{ type: "linear" }}
       indexScale={{ type: "band", round: true }}
@@ -77,18 +117,18 @@ const BarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "country", // changed
+        legend: isDashboard ? undefined : "Month", // changed
         legendPosition: "middle",
         legendOffset: 32,
       }}
       axisLeft={{
-        tickValues: 20,
+        tickValues: 25,
         tickSize: 10,
-        tickPadding: 5,
+        tickPadding: 6,
         tickRotation: 0,
-        legend: isDashboard ? undefined : "food", // changed
+        legend: isDashboard ? undefined : "Revenue ( VND )", // changed
         legendPosition: "middle",
-        legendOffset: -50,
+        legendOffset: -80,
       }}
       enableLabel={false}
       labelSkipWidth={12}

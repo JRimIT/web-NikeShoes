@@ -19,6 +19,7 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';import ProductListPageMen from "../components/Home/listProduct/men/ProductListPageMen";
 import ProductListPageWomen from "../components/Home/listProduct/women/ProductListPageWomen";
 import ProductDetailPage from "../components/Home/listProduct/Product/ProductDetailPage";
+import ManagerProduct from "../pages/admin/manageProduct";
 
 const LayOut = () => {
   return (
@@ -40,7 +41,8 @@ const LayOut = () => {
         <Route path="admins" element={<Admin />}>
           <Route path="dashBoard" element={<DashBoard />} />
           <Route path="team" element={<Team />} />
-          <Route path="contacts" element={<Contacts />} />
+          {/* <Route path="contacts" element={<Contacts />} /> */}
+          <Route path="manageProduct" element={<ManagerProduct />} />
           <Route path="invoices" element={<Invoices />} />
           <Route path="form" element={<Form />} />
           <Route path="bar" element={<Bar />} />

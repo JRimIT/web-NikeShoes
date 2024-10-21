@@ -326,9 +326,9 @@ export const mockBarData = [
     country: "AD",
     "hot dog": 137,
     "hot dogColor": "hsl(229, 70%, 50%)",
-    burger: 96,
+    burger: 0,
     burgerColor: "hsl(296, 70%, 50%)",
-  
+    1: 100,
     kebab: 72,
     kebabColor: "hsl(97, 70%, 50%)",
     donut: 140,
@@ -411,12 +411,12 @@ export const mockBarData = [
 ];
 
 export const mockPieData = [
-  //  {
-  //   id: "Mixi",
-  //   label: "hack",
-  //   value: 239,
-  //   color: "hsl(204, 70%, 50%)",
-  // },
+   {
+    id: "Mixi",
+    label: "as",
+    value: 239,
+    color: "hsl(204, 70%, 50%)",
+  },
   {
     id: "hack",
     label: "hack",

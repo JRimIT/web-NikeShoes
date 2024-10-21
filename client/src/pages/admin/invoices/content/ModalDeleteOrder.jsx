@@ -14,7 +14,7 @@ const ModalDeleteOrder = (props) => {
 
  const handleDelete = async () => {
     try {
-      const res = await axios.delete(`http://localhost:8802/api/orders/${data}`);
+      const res = await axios.delete(`http://localhost:5000/api/orders/${data}`);
       console.log("delete: ", res);
       toast.success("Delete success");
       handleClose();

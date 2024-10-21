@@ -15,6 +15,7 @@ const Form = () => {
 
   const [previewImage, setPreviewImage] = useState(null);
   const [image, setImage] = useState("")
+  let user_image = ""
   const [infoUser, setInfoUser] = useState({
     username: "",
     email: "",
@@ -32,6 +33,7 @@ const Form = () => {
     console.log("Updated infoUser:", infoUser);
   }, [infoUser]); // This runs when infoUser changes
 
+ 
   const handleFormSubmit = (values) => {
     console.log(values);
   };
@@ -59,24 +61,38 @@ const Form = () => {
       }).then(res => {
         // console.log(res.data.url);
         // setImage(res.data.url);
-        setInfoUser({
-          ...infoUser, user_image: res.data.url
-        })
+        
+          user_image = res.data.url;
+        
         // console.log("=[>>>> Image: ", image);
         
         // setInfoUser({...infoUser, image: image})
       }).catch(err => console.log(err))
   }
 
+  const handleUpdateUserState = (value)=> {
+    return new Promise((resolve)=> {
+      setInfoUser((prev)=>{
+        const updateUserState = {...prev, ...value}
+        resolve(updateUserState)
+        return updateUserState
+      })
+    })
+  }
 
   const handleSubmitUser = async (event) => {
     event.preventDefault(); 
     try {
      
       await handleUploadImage()
-      console.log("Submit form: ", infoUser);
+      console.log("url image: ", user_image);
       
-      const res = await axios.post("http://localhost:8802/api/user", infoUser)
+      const updateInfoUser_Image = await handleUpdateUserState({
+        user_image: user_image
+      })
+      console.log("Submit form: ", updateInfoUser_Image);
+      
+      const res = await axios.post("http://localhost:5000/api/user", updateInfoUser_Image)
       toast.success(res.data.message);
     } catch (err) {
       if (err.response && err.response.data.error) {

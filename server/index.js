@@ -181,8 +181,11 @@ app.delete("/api/orders/:id", (req, res) => {
     });
 });
 
+app
+
 app;
 
-app.listen(8802, () => {
-    console.log("Connect to backend1");
-});
+const port = 5000;
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});;

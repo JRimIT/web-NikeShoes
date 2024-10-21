@@ -7,9 +7,9 @@ const ProductList = ({ category, onTotalProductsChange }) => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
 
-  const fetchProducts = () => {
+  const fetchProducts = async() => {
     const url = category ? `http://localhost:5000/products?category=${category}` : `http://localhost:5000/products`;
-    axios.get(url)
+    await axios.get(url)
       .then(response => {
         setProducts(response.data.products); // Update to use the products array
         onTotalProductsChange(response.data.totalCount); // Update the total count

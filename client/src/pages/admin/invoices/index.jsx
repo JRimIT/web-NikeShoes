@@ -25,7 +25,7 @@ const Invoices = () => {
 
   const fetchAllInvoices = async () => {
     try {
-      const res = await axios.get("http://localhost:8802/api/allInvoices");
+      const res = await axios.get("http://localhost:5000/api/allInvoices");
       let data = res.data.map((invoice) => ({
         id: invoice.order_id,
         username: invoice.username,
@@ -46,7 +46,7 @@ const Invoices = () => {
   const fetchAllProductById = async (order_id) => {
     try {
       const res = await axios.get(
-        `http://localhost:8802/api/orders?order_id=${order_id}`
+        `http://localhost:5000/api/orders?order_id=${order_id}`
       );
       console.log(res);
       return res.data;
