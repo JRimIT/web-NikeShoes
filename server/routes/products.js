@@ -61,7 +61,7 @@ router.get('/search', (req, res) => {
     if (error) {
       return res.status(500).json({ message: 'Error fetching products' });
     }
-    res.json({ products: results });
+    res.json({ products: results, totalCount: results.length });
   });
 });
 
