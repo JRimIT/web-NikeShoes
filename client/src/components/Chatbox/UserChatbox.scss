@@ -1,0 +1,101 @@
+.floating-chatbox {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  
+    .chatbox-bubble {
+      background-color: #000;
+      color: #fff;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    }
+  
+    .chatbox-window {
+      background-color: #000;
+      color: #fff;
+      width: 300px;
+      height: 400px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  
+    .chatbox-header {
+      background-color: #111;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #fff;
+      border-bottom: 1px solid #333;
+      
+      .close-btn {
+        color: #fff;
+        font-size: 1.5rem;
+        cursor: pointer;
+      }
+    }
+  
+    .chatbox-messages {
+      flex-grow: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      
+      .chat-bubble {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        max-width: 80%;
+        word-wrap: break-word;
+        color: #fff;
+  
+        &.user-message {
+          background-color: #444;
+          align-self: flex-end;
+        }
+  
+        &.admin-message {
+          background-color: #555;
+          align-self: flex-start;
+        }
+      }
+    }
+  
+    .chatbox-input {
+      padding: 10px;
+      display: flex;
+  
+      input {
+        flex-grow: 1;
+        padding: 8px;
+        background-color: #222;
+        border: none;
+        color: #fff;
+        border-radius: 5px;
+      }
+  
+      button {
+        margin-left: 10px;
+        background-color: #fff;
+        color: #000;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+  

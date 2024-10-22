@@ -29,8 +29,8 @@ import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 
 
-// import UserChatbox from '../components/Chatbox/UserChatbox';
-// import AdminChatbox from '../components/Chatbox/AdminChatbox';
+import UserChatbox from '../components/Chatbox/UserChatbox';
+import AdminChatbox from '../components/Chatbox/AdminChatbox';
 // import Dashboard from "../components/userDashboard/pages/Dashboard";
 
 
@@ -91,10 +91,10 @@ const LayOut = () => {
         
 
         {/* Dynamic route for User with userId */}
-        {/* <Route path="/user/:userId" element={<UserChatbox />} /> */}
+        <Route path="/user-chatbox" element={<UserChatbox />} />
 
         {/* Admin route */}
-        {/* <Route path="/admin" element={<AdminChatbox userId="admin" />} /> */}
+        <Route path="/admin-chatbox" element={<AdminChatbox userId="admin" />} />
         
       </Routes>
 

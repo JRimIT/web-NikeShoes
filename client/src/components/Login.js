@@ -42,6 +42,7 @@ const Login = () => {
       });
 
       if (response.data.message === "Login successful!") {
+        localStorage.setItem("token", response.data.token); // Lưu token vào localStorage
         localStorage.setItem("user", JSON.stringify(response.data.user));
         localStorage.setItem(
           "sessionExpiration",
@@ -55,7 +56,7 @@ const Login = () => {
         if (roleId === 1) {
           navigate("/");
         } else if (roleId === 2) {
-          navigate("/admin");
+          navigate("/admins");
         } else if (roleId === 3) {
           navigate("/ship");
         } else if (roleId === 4) {

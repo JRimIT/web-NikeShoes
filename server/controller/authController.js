@@ -107,10 +107,13 @@ const loginUser = (req, res) => {
       const token = jwt.sign({ id: user.user_id }, process.env.JWT_SECRET, {
         expiresIn: "1h",
       });
+      console.log('Token nhận từ header:', token);
 
       res.send({ message: "Login successful!", user, token });
     });
   });
+  
+
 };
 
 module.exports = { registerUser, loginUser };
