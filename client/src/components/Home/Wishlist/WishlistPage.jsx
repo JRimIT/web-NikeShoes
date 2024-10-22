@@ -80,12 +80,12 @@ const WishlistPage = () => {
       {wishlist.length === 0 ? (
         <div className="text-center">
           <p>No products in favourite.</p>
-          <Button variant="primary" href="/products-men/Shoe">
+          <Button variant="primary" href="/products-men/All">
             Shop Now
           </Button>
         </div>
       ) : (
-        <div className="wishlist-grid">
+        <div className={`wishlist-grid ${wishlist.length === 1 ? 'one-item' : wishlist.length === 2 ? 'two-items' : ''}`}>
           {wishlist.map((product) => (
             <div key={product.wishlist_id} className="wishlist-item">
               <img src={product.image} alt={product.name} />

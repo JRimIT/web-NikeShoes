@@ -6,23 +6,22 @@ import CategoryBar from "../Product/CategoryBar";
 import SidebarMen from "./SidebarMen";
 
 function ProductListPageMen() {
-  const { category: urlCategory } = useParams(); // Get category from URL
-  const [category, setCategory] = useState(urlCategory || ''); // State to hold the selected category
-  const [totalProducts, setTotalProducts] = useState(0); // State to hold total products count
-  const [filtersVisible, setFiltersVisible] = useState(true); // State for filters visibility
+  const { category: urlCategory } = useParams();
+  const [category, setCategory] = useState(urlCategory || '');
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [filtersVisible, setFiltersVisible] = useState(true);
 
-  // Function to handle category change
   const onCategoryChange = (selectedCategory) => {
-    setCategory(selectedCategory); // Update the category state
+    setCategory(selectedCategory); 
   };
 
   const toggleFilters = () => {
-    setFiltersVisible(!filtersVisible); // Toggle filters visibility
+    setFiltersVisible(!filtersVisible);
   };
 
   useEffect(() => {
     if (urlCategory) {
-      setCategory(urlCategory); // Update category state when URL changes
+      setCategory(urlCategory);
     }
   }, [urlCategory]);
 
@@ -31,15 +30,15 @@ function ProductListPageMen() {
       <CategoryBar 
         category={category} 
         totalProducts={totalProducts} 
-        onToggleFilters={toggleFilters} // Pass down the toggle function
-        filtersVisible={filtersVisible} // Pass filters visibility state
+        onToggleFilters={toggleFilters} 
+        filtersVisible={filtersVisible} 
       />
       <div className="product-page">
-        {filtersVisible && <SidebarMen onCategoryChange={onCategoryChange} />} {/* Conditionally render Sidebar */}
+        {filtersVisible && <SidebarMen onCategoryChange={onCategoryChange} />} 
         <div className="product-list-container">
           <ProductList 
             category={category} 
-            onTotalProductsChange={setTotalProducts} // Pass function to update total products
+            onTotalProductsChange={setTotalProducts}
           /> 
         </div>
       </div>

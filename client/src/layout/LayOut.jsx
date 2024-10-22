@@ -29,7 +29,6 @@ const LayOut = () => {
           <Route path="/products-men-featured/:featured" element={<ProductFeaturedPage/>}></Route>
           <Route path="/products-women" element={<ProductListPageWomen/>}></Route>
           <Route path="products-women/:category" element={<ProductListPageWomen />} />
-          
           <Route path="/products-women-featured/:featured" element={<ProductFeaturedPage/>}></Route>
           <Route path="/products/search" element={<ProductSearch />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />

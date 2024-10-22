@@ -1,8 +1,5 @@
-// frontend/src/components/review/Review.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import './Review.scss';
 
 const Review = ({ productId }) => {
@@ -11,6 +8,9 @@ const Review = ({ productId }) => {
   const [hover, setHover] = useState(0);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(true);
+  const [notification, setNotification] = useState(null);
+  const [timeoutId, setTimeoutId] = useState(null); // State to hold the timeout ID
+  const [error, setError] = useState({ comment: false, rating: false }); // State to track errors
 
   useEffect(() => {
     fetchReviews();
@@ -20,17 +20,30 @@ const Review = ({ productId }) => {
     try {
       const response = await axios.get(`http://localhost:5000/api/reviews/${productId}`);
       setReviews(response.data);
-    } catch (error) {
-      toast.error('Failed to fetch reviews.');
+    } catch {
+      showNotification('Failed to fetch reviews.', 'error');
     } finally {
       setLoading(false);
     }
   };
 
   const handleAddReview = async () => {
-    if (!comment || rating === 0) {
-      toast.error('Please provide a rating and a comment.');
-      return;
+    // Reset errors
+    setError({ comment: false, rating: false });
+
+    // Cảnh báo nếu không chọn sao hoặc không nhập bình luận
+    let hasError = false;
+    if (!comment.trim()) {
+      setError((prev) => ({ ...prev, comment: true }));
+      hasError = true;
+    }
+    if (rating === 0) {
+      setError((prev) => ({ ...prev, rating: true }));
+      hasError = true;
+    }
+
+    if (hasError) {
+      return; // Dừng nếu có lỗi
     }
 
     try {
@@ -40,18 +53,31 @@ const Review = ({ productId }) => {
         rating,
         comment,
       });
-      toast.success(data.message);
+      showNotification(data.message, 'success');
       setComment('');
       setRating(0);
       fetchReviews();
     } catch {
-      toast.error('Failed to add review.');
+      showNotification('Failed to add review.', 'error');
     }
+  };
+
+  // Function to display notifications
+  const showNotification = (message, type) => {
+    // Clear previous timeout if it exists
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    setNotification({ message, type });
+
+    // Set a new timeout to clear the notification after 2 seconds
+    const newTimeoutId = setTimeout(() => setNotification(null), 2000);
+    setTimeoutId(newTimeoutId);
   };
 
   return (
     <div className="review-container">
-      <ToastContainer />
       <h3>Customer Reviews</h3>
 
       {loading ? (
@@ -66,7 +92,9 @@ const Review = ({ productId }) => {
               <span className="stars">{'★'.repeat(review.rating)}</span>
             </p>
             <p>{review.comment}</p>
-            <p className="review-date">{new Date(review.review_date).toLocaleString()}</p>
+            <p className="review-date">
+              {new Date(review.review_date).toLocaleString()}
+            </p>
           </div>
         ))
       )}
@@ -74,7 +102,7 @@ const Review = ({ productId }) => {
       <div className="add-review">
         <h4>Add Your Review</h4>
 
-        <div className="star-rating">
+        <div className="star-rating" style={{ color: error.rating ? 'red' : 'inherit' }}>
           {[1, 2, 3, 4, 5].map((star) => (
             <span
               key={star}
@@ -87,13 +115,23 @@ const Review = ({ productId }) => {
             </span>
           ))}
         </div>
+        {error.rating && <p style={{ color: 'red' }}>Please provide a rating.</p>}
 
         <textarea
           placeholder="Write your comment..."
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          style={{ borderColor: error.comment ? 'red' : 'inherit' }}
         />
+        {error.comment && <p style={{ color: 'red' }}>Please enter a comment.</p>}
+
         <button onClick={handleAddReview}>Submit Review</button>
+
+        {notification && (
+          <div className={`notification ${notification.type}`} style={{ marginTop: '10px' }}>
+            {notification.message}
+          </div>
+        )}
       </div>
     </div>
   );

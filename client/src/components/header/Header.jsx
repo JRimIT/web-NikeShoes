@@ -79,8 +79,8 @@ const Header = () => {
                   <NavLink className="dropdown-item" to="/shopbysport/skateboarding">Skateboarding</NavLink>
                 </div>
                 <div className="mega-dropdown-column">
-                  <NavLink className="dropdown-title" to="/products-men/Men">Others</NavLink>
-                  <NavLink className="dropdown-item" to="/products-men/Shoe">All shoes</NavLink>
+                  <NavLink className="dropdown-title">Others</NavLink>
+                  <NavLink className="dropdown-item" to="/products-men/All">All shoes</NavLink>
                   <NavLink className="dropdown-item" to="/products-men/Custom">Custom shoes</NavLink> 
                   <NavLink className="dropdown-item" to="/products-men/Men's Slides">Slide</NavLink>
                   <NavLink className="dropdown-item" to="/products-men/Men's Flip-Flops">Flip-Flops</NavLink>
@@ -124,8 +124,8 @@ const Header = () => {
                   <NavLink className="dropdown-item" to="/shopbysport/skateboarding">Skateboarding</NavLink>
                 </div>
                 <div className="mega-dropdown-column">
-                  <NavLink className="dropdown-title" to="/products-women/Women">Others</NavLink>
-                  <NavLink className="dropdown-item" to="/products-women/Shoe">All shoes</NavLink>
+                  <NavLink className="dropdown-title">Others</NavLink>
+                  <NavLink className="dropdown-item" to="/products-women/All">All shoes</NavLink>
                   <NavLink className="dropdown-item" to="/products-women/Women's Sandals">Sandals</NavLink>
                   <NavLink className="dropdown-item" to="/products-women/Women's Slides">Slides</NavLink>
                   <NavLink className="dropdown-item" to="/products-women/Women's Mules">Women's Mules</NavLink>

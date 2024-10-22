@@ -3,14 +3,16 @@ const express = require('express');
 const db = require('../config/db'); // Import kết nối MySQL
 const router = express.Router();
 
-// Route để tìm kiếm sản phẩm theo tên hoặc category
 router.get('/', (req, res) => {
   const { category, pro_message_list } = req.query;
   let query;
   const queryParams = [];
 
   if (category) {
-    if (category.includes('Men')) {
+    if (category.includes('All')) {
+      // Trường hợp 'All' thì lấy tất cả sản phẩm
+      query = 'SELECT * FROM products';
+    } else if (category.includes('Men')) {
       query = `
         SELECT * 
         FROM products 
@@ -32,6 +34,7 @@ router.get('/', (req, res) => {
     queryParams.push(`%${pro_message_list}%`);
   }
 
+  // Thực hiện truy vấn database
   db.query(query, queryParams, (error, results) => {
     if (error) {
       console.error('Database query error:', error);
@@ -124,7 +127,7 @@ router.get('/products', (req, res) => {
 router.get('/:id', (req, res) => {
   const productId = req.params.id;
 
-  const query = 'SELECT * FROM products WHERE product_id = ?'; // product_id là tên cột đúng
+  const query = 'SELECT * FROM products WHERE product_id = ?';
   db.query(query, [productId], (error, results) => {
     if (error) {
       return res.status(500).json({ message: 'Error fetching product details' });
@@ -132,7 +135,7 @@ router.get('/:id', (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.json(results[0]); // Trả về sản phẩm đầu tiên tìm thấy
+    res.json(results[0]);
   });
 });
 

@@ -21,11 +21,7 @@ const ProductDetailPage = () => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/products/${id}`);
-        if (response.data) {
-          setProduct(response.data);
-        } else {
-          throw new Error('Product not found');
-        }
+        setProduct(response.data);
       } catch (err) {
         console.error('Error fetching product details:', err);
         setError('Error fetching product details');
@@ -42,22 +38,18 @@ const ProductDetailPage = () => {
       toast.error('Product details not available.');
       return;
     }
-
-    if (!selectedSize || !selectedColor) {
+    
+    if (!selectedSize) {
       toast.error('Please select size.');
       return;
     }
-
-    if(!selectedColor){
-      toast.error('Please select color.');
-    }
-
+  
     try {
       const { data } = await axios.post('http://localhost:5000/add-to-cart', {
         userId: 3,
         productId: product.product_id,
         size: selectedSize,
-        color: selectedColor,
+        color: (selectedColor || product.primary_image),
         quantity,
       });
       toast.success(data.message);
@@ -67,52 +59,35 @@ const ProductDetailPage = () => {
     }
   };
 
-  const handleAddToWishlist = async () => {
+  const handleToggleFavourite = async () => {
     if (!product) {
       toast.error('Product details not available.');
       return;
     }
 
-    if (!selectedSize || !selectedColor) {
-      toast.error('Please select both size and color.');
+    if (!selectedSize) {
+      toast.error('Please select size.');
       return;
     }
-
+  
     try {
       const { data } = await axios.post('http://localhost:5000/add-to-wishlist', {
         userId: 3,
         productId: product.product_id,
         size: selectedSize,
-        color: selectedColor,
+        color: (selectedColor || product.primary_image),
         quantity,
-      });
+      }); 
       toast.success(data.message);
     } catch (error) {
       console.error('Error adding to wishlist:', error.response?.data || error);
-      toast.error(`Failed to add product to wishlist: ${error.response?.data?.message || error.message}`);
+      toast.error(`Failed to add product to Wishlist: ${error.response?.data?.message || error.message}`);
     }
   };
 
-  const handleSizeClick = (size) => {
-    setSelectedSize(size);
-    toast.dismiss(); // Dismiss any previous error notifications
-  };
-
-  const handleColorClick = (color) => {
-    setSelectedColor(color);
-    toast.dismiss(); // Dismiss any previous error notifications
-    // Update product image without causing undefined errors
-    if (product) {
-      setProduct((prevProduct) => ({
-        ...prevProduct,
-        primary_image: color
-      }));
-    }
-  };
-
-  // Safety checks for rendering
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
+
   if (!product) return <div>Product not found.</div>;
 
   const sizeList = product.size ? product.size.split(';').map((s) => s.trim()) : [];
@@ -121,7 +96,7 @@ const ProductDetailPage = () => {
   return (
     <>
       <div className="product-detail-container">
-        <ToastContainer />
+        <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick={true} />
         <div className="image-gallery">
           <div className="main-image">
             <img 
@@ -130,45 +105,48 @@ const ProductDetailPage = () => {
             />
           </div>
         </div>
-  
+
         <div className="product-info">
           <h4>{product.pro_message_list}</h4>
-          <h5>{product.name}</h5>
-          <h5 className="category">{product.category}</h5>
+          <h2>{product.name}</h2>
+          <h5>{product.category}</h5>
           <p className="price">
             {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
           </p>
-  
+
           <h3>Select Color</h3>
           <div className="color-selection">
             {colorList.map((color, index) => (
               <div
                 key={index}
-                className={`color-swatch ${selectedColor === color ? 'selected' : product.primary_image}`}
+                className={`color-swatch ${selectedColor === color ? 'selected' : ''}`}
                 style={{ backgroundImage: `url(${color})` }}
-                onClick={() => handleColorClick(color)}
+                onClick={() => {
+                  setSelectedColor(color);
+                  setProduct((prev) => ({ ...prev, primary_image: color })); // Update primary image
+                }}
               />
             ))}
           </div>
-  
+
           <h3>Select Size</h3>
           <div className="size-selection">
             {sizeList.map((size, index) => (
               <div
                 key={index}
                 className={`size-box ${selectedSize === size ? 'selected' : ''}`}
-                onClick={() => handleSizeClick(size)}
+                onClick={() => setSelectedSize(size)}
               >
                 {size}
               </div>
             ))}
           </div>
-  
+
           <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
-          <button className="wishlist" onClick={handleAddToWishlist}>
-            Favourite <FaHeart className="icon" />
+          <button className="wishlist" onClick={handleToggleFavourite}>Favourite
+            <FaHeart className="icon" />
           </button>
-  
+
           <p className="product-description">{product.description}</p>
           <p className="product-description-country">{product.product_descriptionCountryOrigin}</p>
         </div>
