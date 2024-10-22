@@ -1,0 +1,107 @@
+/* Compact search bar trong Header */
+.compact-search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 25px;
+  padding: 5px 10px;
+  transition: all 0.3s ease; /* Mượt mà khi chuyển từ compact sang expanded */
+}
+
+.compact-search-bar input {
+  border: none;
+  outline: none;
+  padding: 5px;
+  background: none;
+}
+
+.search-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease; /* Mượt mà khi hover vào nút */
+}
+
+.search-button:hover {
+  transform: scale(1.1); /* Hiệu ứng khi hover */
+}
+
+/* Expanded search bar (floating popup) */
+.expanded-search-bar {
+  position: fixed;
+  top: -100px; /* Start off-screen */
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(100px); /* Hiệu ứng mượt khi xuất hiện */
+  transition: all 0.5s ease; /* Hiệu ứng mượt khi mở rộng */
+}
+
+.expanded-search-bar.open {
+  top: 0; /* Đặt ở đầu trang khi mở rộng */
+  opacity: 1;
+  transform: translateY(0); /* Hiệu ứng mượt */
+}
+
+.search-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-header input {
+  width: 80%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  transition: width 0.3s ease; /* Hiệu ứng mở rộng input */
+}
+
+.search-header input:focus {
+  width: 90%; /* Mở rộng khi người dùng focus vào */
+}
+
+.cancel-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.suggestions-popup {
+  margin-top: 20px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+}
+
+.suggestions-popup.open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.suggestions-popup ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.suggestions-popup li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestions-popup li:hover {
+  background-color: #f0f0f0;
+}

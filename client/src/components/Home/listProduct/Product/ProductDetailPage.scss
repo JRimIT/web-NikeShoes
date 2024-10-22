@@ -1,11 +1,12 @@
 $background-color: #f8f9fa;
 $text-color: #333;
-$primary-color: grey;
+$primary-color: #6c757d; // Softer grey for better aesthetics
 $secondary-color: #f1f3f5;
-$hover-color: black;
-$border-radius: 12px;
-$box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-$transition: all 0.3s ease;
+$hover-color: #495057; // Darker shade for a smoother hover effect
+$accent-color: #d33918; // Accent color for key elements like notifications
+$border-radius: 16px; // Increased border radius for a modern feel
+$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); // Slightly deeper shadow for better elevation
+$transition: all 0.3s ease-in-out;
 
 // Mixins
 @mixin flex-center {
@@ -17,8 +18,8 @@ $transition: all 0.3s ease;
 @mixin hover-effect {
   transition: $transition;
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -62,7 +63,7 @@ $transition: all 0.3s ease;
       transition: transform 0.5s ease;
 
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1.08);
       }
     }
   }
@@ -91,14 +92,14 @@ $transition: all 0.3s ease;
     .thumbnail {
       min-width: 70px;
       height: 70px;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
       border: 2px solid transparent;
       transition: $transition;
       object-fit: cover;
 
       &:hover {
-        transform: scale(1.1);
+        transform: scale(1.12);
       }
 
       &.selected {
@@ -113,22 +114,31 @@ $transition: all 0.3s ease;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 
   h1 {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin: 0;
     color: $text-color;
+    font-weight: bold;
   }
 
   h4 {
     font-size: 1.2rem;
-    color: brown;
+    color: $accent-color;
     margin: 0;
+    font-style: italic;
+  }
+
+  h5 {
+    font-size: 1.2rem;
+    color: black;
+    margin: 0;
+    font-weight: 500;
   }
 
   .price {
-    font-size: 2rem;
+    font-size: 1.2rem;
     color: $primary-color;
     font-weight: bold;
     margin: 10px 0;
@@ -138,14 +148,14 @@ $transition: all 0.3s ease;
   .product-description-country {
     color: black;
     line-height: 1.8;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-align: justify;
     font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
   }
 
   h3 {
     margin: 20px 0 10px;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     color: $text-color;
   }
 
@@ -158,8 +168,8 @@ $transition: all 0.3s ease;
 
   .size-box {
     border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 8px;
+    padding: 12px;
+    border-radius: 12px;
     cursor: pointer;
     transition: $transition;
     text-align: center;
@@ -196,7 +206,7 @@ $transition: all 0.3s ease;
     background-size: cover;
 
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.12);
     }
 
     &.selected {
@@ -205,7 +215,8 @@ $transition: all 0.3s ease;
     }
   }
 
-  .add-to-cart {
+  .add-to-cart,
+  .wishlist {
     background-color: $primary-color;
     color: white;
     border: none;
@@ -232,7 +243,6 @@ $transition: all 0.3s ease;
     font-size: 1.2rem;
     cursor: pointer;
     transition: $transition;
-    text-align: center;
     margin-top: 20px;
     @include hover-effect;
 
@@ -242,7 +252,7 @@ $transition: all 0.3s ease;
   }
 
   .icon {
-    margin-left: 5px;
+    margin-left: 8px;
   }
 }
 
@@ -257,10 +267,10 @@ $transition: all 0.3s ease;
   }
 
   .product-info h1 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
   .product-info .price {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
   }
 }
