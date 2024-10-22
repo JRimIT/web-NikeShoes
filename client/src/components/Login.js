@@ -6,7 +6,13 @@ import { validateEmail, validatePassword } from "../utils/validation";
 import { toast } from "react-toastify";
 
 const Login = () => {
+
   useEffect(() => {
+    // Remember
+    const savedEmail = localStorage.getItem("email");
+    if (savedEmail) {
+      setEmail(savedEmail);
+    }
     document.body.classList.add("login-background");
 
     return () => {
@@ -19,21 +25,23 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const emailError = validateEmail(email);
-    if (emailError) {
-      setErrorMessage(emailError);
-      return;
-    }
+    // const emailError = validateEmail(email);
+    // if (emailError) {
+    //   setErrorMessage(emailError);
+    //   return;
+    // }
 
-    const passwordError = validatePassword(password);
-    if (passwordError) {
-      setErrorMessage(passwordError);
-      return;
-    }
+    // const passwordError = validatePassword(password);
+    // if (passwordError) {
+    //   setErrorMessage(passwordError);
+    //   return;
+    // }
 
     try {
       const response = await axios.post("http://localhost:5000/login", {
@@ -44,10 +52,19 @@ const Login = () => {
       if (response.data.message === "Login successful!") {
         localStorage.setItem("token", response.data.token); // Lưu token vào localStorage
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        
+        const rememberExpiration = rememberMe
+          ? 1 * 24 * 60 * 60 * 1000
+          : 1 * 60 * 1000;
         localStorage.setItem(
           "sessionExpiration",
-          new Date().getTime() + 10 * 60 * 1000
+          new Date().getTime() + 10 * 60 * 1000 + rememberExpiration
         );
+        if (rememberMe) {
+          localStorage.setItem("email", email);
+        } else {
+          localStorage.removeItem("email");
+        }
         toast.success("Login successful!");
         // setSuccessMessage("Login successful!");
         setErrorMessage("");
@@ -133,8 +150,14 @@ const Login = () => {
             </label>
           </div>
           <div className="remember-forgot">
-            <div className="remember-me">
-              <input type="checkbox" id="remember" />
+          <div className="remember-me">
+              <input
+                type="checkbox"
+                id="remember"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+                state
+              />
               <label htmlFor="remember">Remember Me</label>
             </div>
             <Link to={`/forgot?email=${email}`} className="forgot-password">
