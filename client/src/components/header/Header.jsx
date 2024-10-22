@@ -24,6 +24,8 @@ const Header = () => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
+  const goToCartPage = () => navigate('/cart'); // Navigate to CartPage
+  const goToWishlistPage = () => navigate('/wishlist'); // Navigate to WishlistPage
   // Get user data from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -461,17 +463,14 @@ const Header = () => {
             </Nav>
 
             <div className="navbar-right-content">
-              <span className="icon-bag rounded-circle">
-                <FaHeart className="w-100  icon" />
-              </span>
-              <span className="icon-bag rounded-circle">
-                <IoBagHandleOutline className="w-100 icon " />
-              </span>
-              
-              
-              <SearchBar onSearchResults={handleSearchResults} />
-
-            </div>
+          <span className="icon-bag rounded-circle" onClick={goToWishlistPage}>
+            <FaHeart />
+          </span>
+          <span className="icon-bag rounded-circle" onClick={goToCartPage}>
+            <IoBagHandleOutline />
+          </span>
+          <SearchBar onSearchResults={handleSearchResults}></SearchBar>
+        </div>
           </Navbar.Collapse>
         </Container>
       </Navbar>

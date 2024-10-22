@@ -7,12 +7,14 @@ const cors = require('cors');
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
-
-const productRoutes = require('./routes/products'); // Import đúng router
-const handleSocket = require('./sockets/chatSocket');
 const { registerUser, loginUser } = require("./controller/authController");
 const sendResetPassword = require("./controller/sendResetCode");
 const db = require("./config/db");
+const productRoutes = require('./routes/products'); // Import đúng router
+const handleSocket = require('./sockets/chatSocket');
+const cartRoutes = require('./routes/cart');
+const wishlistRoutes = require('./routes/wishlist');
+const adminRoutes = require('./routes/admin')
 
 const app = express();
 app.use(cors());
@@ -46,10 +48,14 @@ handleSocket(io);
 // Routes cho sản phẩm và các routes khác
 app.use('/products', productRoutes); // Route cho sản phẩm
 app.post("/register", upload.single('user_image'), registerUser);
-
 app.post("/login", loginUser);
 // app.get("/products/:id", getProductById);
 app.use(sendResetPassword); // Route cho reset password
+// Sử dụng routes cho sản phẩm (middleware đúng)
+app.use('/products', productRoutes);
+app.use('/', cartRoutes);
+app.use('/', wishlistRoutes);
+app.use('/', adminRoutes);
 
 // Cấu hình cors
 app.use(
@@ -67,3 +73,6 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
+
