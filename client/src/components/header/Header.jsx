@@ -4,36 +4,75 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { useState } from "react";
-import './Header.scss';
+import "./Header.scss";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
-import SearchBar from "./SearchBar";
-import logo from '../../pic/Logo.jpg'
+  import SearchBar from "./SearchBar";
+import logo from "../../pic/Logo.jpg";
+
 
 const Header = () => {
-  const [products, setProducts] = useState([]); // State để lưu kết quả tìm kiếm
-  const navigate = useNavigate();
+    const [products, setProducts] = useState([]); // State để lưu kết quả tìm kiếm
 
-// Hàm xử lý kết quả tìm kiếm từ SearchBar
+  // Hàm xử lý kết quả tìm kiếm từ SearchBar
   const handleSearchResults = (searchResults) => {
     setProducts(searchResults); // Cập nhật state với sản phẩm tìm kiếm được
     console.log(searchResults); // Kiểm tra kết quả tìm kiếm
   };
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
   const goToCartPage = () => navigate('/cart'); // Navigate to CartPage
   const goToWishlistPage = () => navigate('/wishlist'); // Navigate to WishlistPage
+  // Get user data from localStorage
+  const user = JSON.parse(localStorage.getItem("user"));
 
+  const handleDropdownToggle = () => {
+    setDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user"); // Remove user data
+    navigate("/login"); // Redirect to login page
+  };
   return (
     <>
-    <div className="head">
+      <div className="head">
         <div className="container-login">
-            {/* <span>Sign In</span> */}
-            <NavLink to="/login" className="login-link">Sign In</NavLink>
-            <FaUser />
+          {!user ? (
+            // If user is not logged in
+            <NavLink to="/login" className="login-link">
+              Sign In <FaUser />
+            </NavLink>
+          ) : (
+            // If user is logged in
+            <div
+              className="user-container"
+              onMouseEnter={handleDropdownToggle}
+              onMouseLeave={handleDropdownToggle}
+            >
+              <span className="username">Hi, {user.username}</span>
+              <img
+                src={user.user_image}
+                alt="User Avatar"
+                className="user-avatar"
+              />
+
+              {isDropdownOpen && (
+                <div className="dropdown-profile">
+                  <NavLink to="/profile">Profile</NavLink>
+                  <NavLink to="/setting">Setting</NavLink>
+                  <button className="butLogout" onClick={handleLogout}>
+                    Log Out
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
-    </div>
+      </div>
 
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
@@ -140,21 +179,20 @@ const Header = () => {
 
         <SearchBar onSearchResults={handleSearchResults} />
 
-        <div className="navbar-right-content">
+            <div className="navbar-right-content">
           <span className="icon-bag rounded-circle" onClick={goToWishlistPage}>
             <FaHeart />
           </span>
           <span className="icon-bag rounded-circle" onClick={goToCartPage}>
             <IoBagHandleOutline />
           </span>
+          <SearchBar onSearchResults={handleSearchResults}></SearchBar>
         </div>
-        
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
     </>
-
   );
 };
 
-export default Header
+export default Header;

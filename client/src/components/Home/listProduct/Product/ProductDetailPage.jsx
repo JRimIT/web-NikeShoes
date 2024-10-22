@@ -20,11 +20,13 @@ const ProductDetailPage = () => {
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/products/${id}`);
+        const response = await axios.get(
+          `http://localhost:5000/products/${id}`
+        );
         setProduct(response.data);
       } catch (err) {
-        console.error('Error fetching product details:', err);
-        setError('Error fetching product details');
+        console.error("Error fetching product details:", err);
+        setError("Error fetching product details");
       } finally {
         setLoading(false);
       }
@@ -88,10 +90,13 @@ const ProductDetailPage = () => {
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
-  if (!product) return <div>Product not found.</div>;
-
-  const sizeList = product.size ? product.size.split(';').map((s) => s.trim()) : [];
-  const colorList = product.list_color ? product.list_color.split(';').map((c) => c.trim()) : [];
+  // Split sizes and colors
+  const sizeList = product?.size
+    ? product.size.split(";").map((size) => size.trim())
+    : [];
+  const colorList = product?.list_color
+    ? product.list_color.split(";").map((color) => color.trim())
+    : [];
 
   return (
     <>

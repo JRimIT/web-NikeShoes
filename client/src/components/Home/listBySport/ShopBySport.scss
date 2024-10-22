@@ -1,0 +1,46 @@
+// ShopBySport.scss
+.shop-by-sport {
+    .product-grid {
+      display: flex;
+      flex-wrap: nowrap; // Không cho phép xuống dòng
+      justify-content: space-between; // Khoảng cách đều giữa các item
+      overflow-x: auto; // Cho phép cuộn ngang nếu có quá nhiều card
+      gap: 20px; // Khoảng cách giữa các card
+  
+      @media (max-width: 1024px) {
+        flex-wrap: wrap; // Cho phép xuống dòng trên màn hình nhỏ hơn
+        justify-content: center; // Căn giữa trên tablet
+      }
+    }
+  
+    .title-feature {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+  
+    .card {
+      min-width: 300px; // Đặt chiều rộng tối thiểu cho card
+      flex: 0 0 auto; // Giữ kích thước cố định của card
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      transition: transform 0.2s ease-in-out;
+  
+      &:hover {
+        transform: translateY(-5px); // Hiệu ứng hover
+      }
+  
+      .product--image {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+  
+      h3 {
+        margin: 10px 0;
+      }
+    }
+  }
+  
