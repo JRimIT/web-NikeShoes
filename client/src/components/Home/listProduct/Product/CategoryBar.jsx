@@ -28,7 +28,7 @@ const CategoryBar = ({ category, totalProducts, onSortChange, onToggleFilters, f
 
   return (
     <nav className="category-navbar">
-      <h1>{category ? `${category} (${totalProducts})` : `Men's Shoes (${totalProducts})`}</h1>
+      <h1>{category ? `${category} (${totalProducts})` : `All Shoes (${totalProducts})`}</h1>
       <div className="category-controls">
         <button className="toggle-filters-btn" onClick={onToggleFilters}>
           <FontAwesomeIcon icon={faSliders} /> {filtersVisible ? 'Hide Filters' : 'Show Filters'}

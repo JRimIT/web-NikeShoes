@@ -1,0 +1,99 @@
+.wishlist-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+
+  h1 {
+    text-align: left;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    color: #333;
+  }
+
+  .wishlist-grid {
+    display: flex;
+    flex-wrap: wrap; // Cho phép các thẻ tràn xuống dòng
+    justify-content: space-between; // Căn giữa và tạo khoảng cách đều giữa các thẻ
+    gap: 20px; // Khoảng cách giữa các thẻ
+  }
+
+  .wishlist-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+    text-align: center;
+    flex: 0 1 calc(33.333% - 20px); // Mỗi thẻ chiếm 1/3 chiều rộng và trừ đi khoảng cách
+    box-sizing: border-box; // Bao gồm padding và border trong kích thước tổng
+    margin-bottom: 20px; // Khoảng cách giữa các hàng
+
+    &:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-bottom: 1px solid #ddd;
+    }
+
+    h4 {
+      font-size: 1.2rem;
+      margin: 10px 0;
+      color: #333;
+    }
+
+    p {
+      font-size: 1rem;
+      color: #777;
+      text-decoration: line-through; // Gạch ngang giá cũ
+      margin: 5px 0;
+    }
+
+    .price {
+      font-size: 1.2rem;
+      color: #28a745; // Màu xanh cho giá
+      margin: 5px 0;
+    }
+
+    button {
+      margin: 10px 5px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+
+      &.add-to-bag {
+        background-color: #28a745;
+        color: white;
+
+        &:hover {
+          background-color: #218838;
+        }
+      }
+
+      &.remove-wishlist {
+        background-color: #dc3545;
+        color: white;
+
+        &:hover {
+          background-color: #c82333;
+        }
+      }
+    }
+
+    .sold-out {
+      background-color: #f0ad4e;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: not-allowed;
+      padding: 10px;
+      margin: 10px 5px;
+      display: inline-block;
+    }
+  }
+}
