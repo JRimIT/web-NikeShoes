@@ -121,10 +121,17 @@ const SearchBar = ({ onSearchResults }) => {
 
           {showSuggestions && (
             <div className={`suggestions-popup ${showSuggestions ? 'open' : ''}`}>
-              <ul>
+              <ul className="suggestions-list">
                 {suggestions.map((suggestion, index) => (
-                  <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                    {suggestion.name}
+                  <li key={index} onClick={() => handleSuggestionClick(suggestion)} className="suggestion-item">
+                    <img src={suggestion.image} alt={suggestion.name} className="suggestion-image" />
+                    <div className="suggestion-info">
+                      <p className="suggestion-name">{suggestion.name}</p>
+                      <p className="suggestion-price">
+                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+                          .format(suggestion.price)}
+                      </p>
+                    </div>
                   </li>
                 ))}
               </ul>

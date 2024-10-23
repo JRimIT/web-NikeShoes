@@ -74,16 +74,18 @@
   font-size: 16px;
 }
 
+/* Popup chứa gợi ý */
 .suggestions-popup {
   margin-top: 20px;
   background-color: white;
   border: 1px solid #ddd;
-  border-radius: 4px;
-  max-height: 200px;
+  border-radius: 8px;
+  max-height: 300px;
   overflow-y: auto;
   opacity: 0;
   transform: scale(0.9);
   transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
 }
 
 .suggestions-popup.open {
@@ -91,17 +93,46 @@
   transform: scale(1);
 }
 
-.suggestions-popup ul {
+.suggestions-list {
   list-style-type: none;
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
 
-.suggestions-popup li {
-  padding: 10px;
+/* Style cho từng suggestion item */
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: #f9f9f9; /* Hiệu ứng hover */
+  }
 }
 
-.suggestions-popup li:hover {
-  background-color: #f0f0f0;
+.suggestion-image {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 15px;
+}
+
+.suggestion-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.suggestion-name {
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+}
+
+.suggestion-price {
+  font-size: 14px;
+  color: #777;
 }

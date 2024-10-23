@@ -1,0 +1,218 @@
+@import url("https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css");
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  --primary-color: #c6c3c3;
+  --second-color: #ffffff;
+  --black-color: #000000;
+}
+
+body.login-background {
+  background-image: url("https://i.pinimg.com/564x/e7/a9/6f/e7a96fe4030719afba8bf111f6cec041.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+a {
+  text-decoration: none;
+  color: var(--second-color);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.wrapper {
+  width: 100%;
+  background-color: #00000033;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.login_box {
+  position: relative;
+  width: 450px;
+  color: var(--second-color);
+  backdrop-filter: blur(25px);
+  border: 2px solid var(--primary-color);
+  border-radius: 15px;
+  padding: 7.5em 2.5em 4em 2.5em;
+  box-shadow: 0px 0px 10px 2px #00000033;
+}
+
+.login-header {
+  width: 140px;
+  height: 70px;
+  background-color: var(--primary-color);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 20px 20px;
+}
+
+.login-header span {
+  font-size: 30px;
+  color: var(--black-color);
+}
+
+.login-header::before {
+  width: 30px;
+  height: 30px;
+  content: "";
+  box-shadow: 15px 0 0 0 var(--primary-color);
+  position: absolute;
+  top: 0;
+  left: -30px;
+  border-top-right-radius: 50%;
+  background: transparent;
+}
+
+.login-header::after {
+  content: "";
+  width: 30px;
+  height: 30px;
+  box-shadow: -15px 0 0 0 var(--primary-color);
+  position: absolute;
+  top: 0;
+  right: -30px;
+  border-top-left-radius: 50%;
+  background: transparent;
+}
+
+.input_box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.input-field {
+  width: 100%;
+  height: 55px;
+  background: transparent;
+  color: var(--second-color);
+  font-size: 16px;
+  padding-inline: 20px 50px;
+  border: 2px solid var(--primary-color);
+  border-radius: 30px;
+  outline: none;
+}
+
+#user {
+  margin-bottom: 10px;
+}
+
+.label {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  transition: 0.2s;
+}
+
+.input-field:focus ~ .label,
+.input-field:valid ~ .label {
+  background-color: var(--primary-color);
+  color: var(--black-color);
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  font-size: 14px;
+  border-radius: 30px;
+  padding: 0 10px;
+}
+
+i {
+  position: absolute;
+  top: 18px;
+  right: 25px;
+  font-size: 20px;
+}
+
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+}
+
+.remember-me {
+  display: flex;
+  gap: 4px;
+}
+
+.input-submit {
+  width: 100%;
+  height: 50px;
+  background: #ececec;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.register-container {
+  display: flex; /* Sử dụng flexbox để sắp xếp các phần tử trên cùng một hàng */
+  justify-content: space-between; /* Tạo khoảng cách giữa các phần tử */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  margin-top: 10px; /* Thêm khoảng cách phía trên nếu cần */
+}
+
+.register {
+  text-align: right; /* Căn phải cho link */
+  margin-left: 10px; /* Thêm khoảng cách giữa text và link */
+}
+
+.register a {
+  font-weight: 500;
+  text-decoration: none; /* Nếu bạn muốn bỏ gạch chân */
+}
+
+/* Alert */
+/* styles for custom alert */
+.custom-alert {
+  background-color: #f8d7da; /* Màu nền cho lỗi */
+  color: #721c24; /* Màu chữ cho lỗi */
+  border: 1px solid #f5c6cb; /* Đường viền cho lỗi */
+  border-radius: 5px; /* Bo góc */
+  padding: 10px 15px; /* Khoảng cách bên trong */
+  margin: 10px 0; /* Khoảng cách bên ngoài */
+  display: flex; /* Sử dụng flexbox để căn chỉnh */
+  align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+/* styles for success alert */
+.success-alert {
+  position: fixed; /* Để nó ở vị trí cố định */
+  top: 20px; /* Cách từ đỉnh màn hình */
+  right: 20px; /* Cách từ bên phải màn hình */
+  padding: 15px; /* Khoảng đệm cho thông báo */
+  border-radius: 5px; /* Bo góc */
+  z-index: 1000; /* Đảm bảo nó nằm trên các thành phần khác */
+  transition: opacity 0.5s ease-in-out; /* Hiệu ứng mờ khi ẩn */
+  opacity: 1; /* Đặt ban đầu là hiển thị */
+  background-color: #d4edda; /* Màu nền cho thành công */
+  color: #155724; /* Màu chữ cho thành công */
+  border: 1px solid #c3e6cb; /* Đường viền cho thành công */
+}
+
+/* Close button */
+.alert-close {
+  margin-left: auto; /* Đẩy nút đóng sang bên phải */
+  cursor: pointer; /* Hiển thị con trỏ chuột khi di chuột qua */
+  font-weight: bold; /* Đậm chữ */
+}

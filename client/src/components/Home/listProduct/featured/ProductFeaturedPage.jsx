@@ -10,6 +10,7 @@ function ProductFeaturedPage() {
   const [featured, setFeatured] = useState(urlFeatured || '');
   const [totalProducts, setTotalProducts] = useState(0);
   const [filtersVisible, setFiltersVisible] = useState(true);
+  const [sortBy, setSortBy] = useState('featured');
 
   const onFeaturedChange = (selectedFeatured) => {
     setFeatured(selectedFeatured); 
@@ -17,6 +18,10 @@ function ProductFeaturedPage() {
 
   const toggleFilters = () => {
     setFiltersVisible(!filtersVisible);
+  };
+
+  const handleSortChange = (sortValue) => {
+    setSortBy(sortValue); // Cập nhật giá trị sắp xếp khi người dùng chọn
   };
 
   useEffect(() => {
@@ -32,6 +37,7 @@ function ProductFeaturedPage() {
         totalProducts={totalProducts} 
         onToggleFilters={toggleFilters} // Pass down the toggle function
         filtersVisible={filtersVisible} // Pass filters visibility state
+        onSortChange={handleSortChange}
       />
       <div className="product-page">
         {filtersVisible && <SidebarFeatured onFeaturedChange={onFeaturedChange} />} {/* Conditionally render Sidebar */}
@@ -39,6 +45,7 @@ function ProductFeaturedPage() {
           <ProductFeaturedList 
             featured={featured}
             onTotalProductsChange={setTotalProducts} // Pass function to update total products
+            sortBy={sortBy}
           /> 
         </div>
       </div>

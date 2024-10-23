@@ -3,7 +3,7 @@ import axios from 'axios';
 import './ProductList.scss';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-const ProductList = ({ category, onTotalProductsChange }) => {
+const ProductList = ({ category, onTotalProductsChange, sortBy }) => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const location = useLocation(); // Lấy thông tin URL hiện tại
@@ -31,7 +31,32 @@ const ProductList = ({ category, onTotalProductsChange }) => {
 
     axios.get(url)
       .then(response => {
-        setProducts(response.data.products);
+        let fetchedProducts = response.data.products;
+
+        // Kiểm tra giá trị sortBy và áp dụng sắp xếp hoặc lọc dữ liệu
+        if (sortBy === 'featured') {
+          // Sắp xếp sản phẩm sao cho những sản phẩm có `pro_message_list` lên trước
+          fetchedProducts = fetchedProducts.sort((a, b) => {
+            if (a.pro_message_list && !b.pro_message_list) return -1;
+            if (!a.pro_message_list && b.pro_message_list) return 1;
+            return 0; // Nếu cả hai đều có hoặc đều không có, giữ nguyên thứ tự
+          });
+        } else if (sortBy === 'price-high-low') {
+          fetchedProducts = fetchedProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        } else if (sortBy === 'price-low-high') {
+          fetchedProducts = fetchedProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+        } else if (sortBy === 'newest') {
+          // Sắp xếp theo newest với ưu tiên các sản phẩm có pro_message_list là "Just In"
+          fetchedProducts = fetchedProducts.sort((a, b) => {
+            if (a.pro_message_list === "Just In" && b.pro_message_list !== "Just In") return -1;
+            if (a.pro_message_list !== "Just In" && b.pro_message_list === "Just In") return 1;
+
+            // Nếu không phải "Just In", sắp xếp theo release_date (mới nhất trước)
+            
+          });
+        }
+
+        setProducts(fetchedProducts);
         onTotalProductsChange(response.data.totalCount);
       })
       .catch(error => {
@@ -41,7 +66,7 @@ const ProductList = ({ category, onTotalProductsChange }) => {
 
   useEffect(() => {
     fetchProducts();
-  }, [category, location.search]); // Gọi lại khi category hoặc searchTerm (trong URL) thay đổi
+  }, [category, location.search, sortBy]); // Gọi lại khi có thay đổi trong category, searchTerm hoặc sortBy
 
   return (
     <div className="product-container">

@@ -3,14 +3,16 @@ const express = require('express');
 const db = require('../config/db'); // Import kết nối MySQL
 const router = express.Router();
 
-// Route để tìm kiếm sản phẩm theo tên hoặc category
 router.get('/', (req, res) => {
   const { category, pro_message_list } = req.query;
   let query;
   const queryParams = [];
 
   if (category) {
-    if (category.includes('Men')) {
+    if (category.includes('All')) {
+      // Trường hợp 'All' thì lấy tất cả sản phẩm
+      query = 'SELECT * FROM products';
+    } else if (category.includes('Men')) {
       query = `
         SELECT * 
         FROM products 
@@ -32,6 +34,7 @@ router.get('/', (req, res) => {
     queryParams.push(`%${pro_message_list}%`);
   }
 
+  // Thực hiện truy vấn database
   db.query(query, queryParams, (error, results) => {
     if (error) {
       console.error('Database query error:', error);
@@ -61,21 +64,22 @@ router.get('/search', (req, res) => {
     if (error) {
       return res.status(500).json({ message: 'Error fetching products' });
     }
-    res.json({ products: results });
+    res.json({ products: results, totalCount: results.length });
   });
 });
 
 // Route để tìm gợi ý (suggestion) khi nhập từ khóa
 router.get('/suggestions', (req, res) => {
   const searchTerm = req.query.term;
-  
+
   if (!searchTerm) {
     return res.status(400).json({ message: 'Search term is required' });
   }
 
-  // Sử dụng câu truy vấn để lấy cả id và name
+  // Sử dụng câu truy vấn để lấy id, name, price và image
   const query = `
-    SELECT DISTINCT product_id AS id, name FROM products
+    SELECT DISTINCT product_id AS id, name, price, primary_image AS image
+    FROM products
     WHERE name LIKE ? OR category LIKE ? LIMIT 5
   `;
   const queryParams = [`%${searchTerm}%`, `%${searchTerm}%`];
@@ -85,15 +89,18 @@ router.get('/suggestions', (req, res) => {
       return res.status(500).json({ message: 'Error fetching suggestions' });
     }
 
-    // Map lại kết quả để trả về cả id và name
+    // Map lại kết quả để trả về id, name, price và image
     const suggestions = results.map((result) => ({
-      id: result.id,  // Đảm bảo trả về cả id
-      name: result.name
+      id: result.id,      // ID sản phẩm
+      name: result.name,  // Tên sản phẩm
+      price: result.price,  // Giá sản phẩm
+      image: result.image  // Ảnh sản phẩm
     }));
-    
+
     res.json({ suggestions });
   });
 });
+
 
 // Route để tìm sản phẩm theo category và searchTerm, bao gồm pro_message_list
 router.get('/products', (req, res) => {
@@ -120,11 +127,30 @@ router.get('/products', (req, res) => {
   });
 });
 
+// Route để lấy 8 sản phẩm "Best Seller"
+router.get('/best-sellers', (req, res) => {
+  const query = `
+    SELECT product_id AS id, name, price, primary_image AS image
+    FROM products
+    WHERE pro_message_list LIKE '%Bestseller%'
+    LIMIT 8
+  `;
+
+  db.query(query, (error, results) => {
+    if (error) {
+      return res.status(500).json({ message: 'Error fetching Best Seller products' });
+    }
+
+    res.json({ products: results });
+  });
+});
+
+
 // Route để lấy thông tin chi tiết sản phẩm theo ID
 router.get('/:id', (req, res) => {
   const productId = req.params.id;
 
-  const query = 'SELECT * FROM products WHERE product_id = ?'; // product_id là tên cột đúng
+  const query = 'SELECT * FROM products WHERE product_id = ?';
   db.query(query, [productId], (error, results) => {
     if (error) {
       return res.status(500).json({ message: 'Error fetching product details' });
@@ -132,7 +158,7 @@ router.get('/:id', (req, res) => {
     if (results.length === 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
-    res.json(results[0]); // Trả về sản phẩm đầu tiên tìm thấy
+    res.json(results[0]);
   });
 });
 

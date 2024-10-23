@@ -28,7 +28,6 @@ const HomePage = () => {
             <button className="btn">Shop</button>
           </div>
           <div className="content">
-            <h2 className="title-feature">Feature</h2>
             <HomePageContent></HomePageContent>
           </div>
         </div>

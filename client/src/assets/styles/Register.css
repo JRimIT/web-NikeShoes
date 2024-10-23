@@ -1,0 +1,205 @@
+@import url("https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css");
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  --primary-color: #c6c3c3;
+  --second-color: #ffffff;
+  --black-color: #000000;
+}
+
+body.register-background {
+  background-image: url("https://i.pinimg.com/564x/e7/a9/6f/e7a96fe4030719afba8bf111f6cec041.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+a {
+  text-decoration: none;
+  color: var(--second-color);
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.wrapper {
+  width: 100%;
+  background-color: #00000033;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.register_box {
+  position: relative;
+  width: 450px;
+  color: var(--second-color);
+  backdrop-filter: blur(25px);
+  border: 2px solid var(--primary-color);
+  border-radius: 15px;
+  padding: 7.5em 2.5em 4em 2.5em;
+  box-shadow: 0px 0px 10px 2px #00000033;
+}
+
+.register-header {
+  width: 140px;
+  height: 70px;
+  background-color: var(--primary-color);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 0 20px 20px;
+}
+
+.register-header span {
+  font-size: 30px;
+  color: var(--black-color);
+}
+
+.register-header::before {
+  width: 30px;
+  height: 30px;
+  content: "";
+  box-shadow: 15px 0 0 0 var(--primary-color);
+  position: absolute;
+  top: 0;
+  left: -30px;
+  border-top-right-radius: 50%;
+  background: transparent;
+}
+
+.register-header::after {
+  content: "";
+  width: 30px;
+  height: 30px;
+  box-shadow: -15px 0 0 0 var(--primary-color);
+  position: absolute;
+  top: 0;
+  right: -30px;
+  border-top-left-radius: 50%;
+  background: transparent;
+}
+
+.input_box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.input-field {
+  width: 100%;
+  height: 55px;
+  background: transparent;
+  color: var(--second-color);
+  font-size: 16px;
+  padding-inline: 20px 50px;
+  border: 2px solid var(--primary-color);
+  border-radius: 30px;
+  outline: none;
+}
+
+#user {
+  margin-bottom: 10px;
+}
+
+.label {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  transition: 0.2s;
+}
+
+.input-field:focus ~ .label,
+.input-field:valid ~ .label {
+  background-color: var(--primary-color);
+  color: var(--black-color);
+  position: absolute;
+  top: -10px;
+  left: 20px;
+  font-size: 14px;
+  border-radius: 30px;
+  padding: 0 10px;
+}
+
+i {
+  position: absolute;
+  top: 18px;
+  right: 25px;
+  font-size: 20px;
+}
+
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+}
+
+.remember-me {
+  display: flex;
+  gap: 4px;
+}
+
+.input-submit {
+  width: 100%;
+  height: 50px;
+  background: #ececec;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.login-container {
+  display: flex; /* Sử dụng flexbox để sắp xếp các phần tử trên cùng một hàng */
+  justify-content: space-between; /* Tạo khoảng cách giữa các phần tử */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  margin-top: 10px; /* Thêm khoảng cách phía trên nếu cần */
+}
+
+.login {
+  text-align: right; /* Căn phải cho link */
+  margin-left: 10px; /* Thêm khoảng cách giữa text và link */
+}
+
+.login a {
+  font-weight: 500;
+  text-decoration: none; /* Nếu bạn muốn bỏ gạch chân */
+}
+
+/* Avatar */
+.img-preview-container {
+  border: 2px dashed #ccc; /* Đường viền cho khung preview */
+  border-radius: 5px; /* Bo góc */
+  padding: 10px; /* Khoảng cách giữa ảnh và đường viền */
+  margin: 10px 0; /* Khoảng cách giữa khung preview và các phần tử khác */
+  height: 200px; /* Đặt chiều cao cho khung */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ẩn phần ảnh bị tràn */
+}
+
+.img-preview {
+  width: 100%; /* Đặt chiều rộng của ảnh bằng chiều rộng khung */
+  height: 100%; /* Đặt chiều cao của ảnh bằng chiều cao khung */
+  object-fit: cover; /* Đảm bảo ảnh bao phủ khung mà không bị biến dạng */
+}
+
+.preview-text {
+  color: #888; /* Màu chữ khi không có ảnh */
+}

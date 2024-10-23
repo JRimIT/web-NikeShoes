@@ -40,8 +40,7 @@ const CategoryFeaturedBar = ({ featured, totalProducts, onSortChange, onToggleFi
           </button>
           {dropdownVisible && (
             <div className="dropdown-options">
-              <div onClick={() => handleSortChange('featured')}>Featured</div>
-              <div onClick={() => handleSortChange('newest')}>Newest</div>
+              
               <div onClick={() => handleSortChange('price-high-low')}>Price: High-Low</div>
               <div onClick={() => handleSortChange('price-low-high')}>Price: Low-High</div>
             </div>

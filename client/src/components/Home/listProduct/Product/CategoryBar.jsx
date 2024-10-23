@@ -1,25 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSliders, faSort } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom'; // Import navigate từ react-router-dom
 import './CategoryBar.scss';
 
 const CategoryBar = ({ category, totalProducts, onSortChange, onToggleFilters, filtersVisible }) => {
   const [dropdownVisible, setDropdownVisible] = useState(false);
-  const dropdownRef = useRef(null); // Reference to the dropdown
+  const dropdownRef = useRef(null);
+  const navigate = useNavigate(); // Hook điều hướng
 
   const handleSortChange = (value) => {
-    onSortChange(value); // Call the function passed from the parent to sort products
-    setDropdownVisible(false); // Hide dropdown after selection
+     {
+      // Gọi hàm onSortChange khi có giá trị khác (ví dụ: price-high-low, price-low-high)
+      if (onSortChange) {
+        onSortChange(value); 
+      }
+    }
+    setDropdownVisible(false); // Ẩn dropdown sau khi lựa chọn
   };
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setDropdownVisible(false); // Close dropdown if click is outside of it
+      setDropdownVisible(false); // Đóng dropdown nếu nhấp ra ngoài
     }
   };
 
   useEffect(() => {
-    // Listen for clicks outside of the dropdown
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);

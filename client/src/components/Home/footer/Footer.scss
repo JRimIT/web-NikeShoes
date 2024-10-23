@@ -1,0 +1,30 @@
+.footer-link {
+    color: #6c757d;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-link:hover {
+    color: #1e90ff;
+  }
+  
+  .footer-bottom {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e0e0e0;
+  }
+  
+  .social-icons {
+    margin-top: 10px;
+  }
+  
+  .social-icon {
+    font-size: 24px;
+    color: #6c757d;
+    transition: color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .social-icon:hover {
+    color: #1e90ff;
+  }
+  

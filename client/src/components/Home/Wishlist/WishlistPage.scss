@@ -8,92 +8,92 @@
     margin-bottom: 30px;
     font-size: 2.5rem;
     color: #333;
+    font-weight: bold;
   }
 
   .wishlist-grid {
-    display: flex;
-    flex-wrap: wrap; // Cho phép các thẻ tràn xuống dòng
-    justify-content: space-between; // Căn giữa và tạo khoảng cách đều giữa các thẻ
-    gap: 20px; // Khoảng cách giữa các thẻ
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); // Responsive columns
+    gap: 20px;
+    padding-bottom: 40px;
+
+    // Items will automatically wrap to the next line
   }
 
   .wishlist-item {
     background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
     overflow: hidden;
-    transition: box-shadow 0.3s ease;
+    transition: transform 0.3s, box-shadow 0.3s;
     text-align: center;
-    flex: 0 1 calc(33.333% - 20px); // Mỗi thẻ chiếm 1/3 chiều rộng và trừ đi khoảng cách
-    box-sizing: border-box; // Bao gồm padding và border trong kích thước tổng
-    margin-bottom: 20px; // Khoảng cách giữa các hàng
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%; // Ensure consistent height for grid items
 
     &:hover {
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     }
 
     img {
-      max-width: 100%;
-      height: auto;
+      width: 100%;
+      height: 220px; // Slightly taller for better image display
+      object-fit: cover; // Makes sure images fit nicely without stretching
       border-bottom: 1px solid #ddd;
     }
 
     h4 {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       margin: 10px 0;
-      color: #333;
+      color: #222;
+      font-weight: 600;
     }
 
     p {
       font-size: 1rem;
       color: #777;
-      text-decoration: line-through; // Gạch ngang giá cũ
       margin: 5px 0;
     }
 
-    .price {
-      font-size: 1.2rem;
-      color: #28a745; // Màu xanh cho giá
-      margin: 5px 0;
+    .button-group {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      gap: 10px; // Add space between buttons
     }
 
     button {
-      margin: 10px 5px;
-      padding: 10px;
+      flex: 1;
+      padding: 12px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s, transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center; // Center icons properly
+      gap: 8px; // Add spacing between icons and text (if needed)
 
-      &.add-to-bag {
-        background-color: #28a745;
-        color: white;
-
-        &:hover {
-          background-color: #218838;
-        }
+      &:hover {
+        transform: translateY(-2px);
       }
 
-      &.remove-wishlist {
-        background-color: #dc3545;
+      &.sold-out {
+        background-color: #f0ad4e;
         color: white;
-
-        &:hover {
-          background-color: #c82333;
-        }
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: not-allowed;
+        padding: 10px;
+        margin-top: 10px;
+        width: 80%;
+        align-self: center; // Center the button horizontally
       }
-    }
-
-    .sold-out {
-      background-color: #f0ad4e;
-      color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: not-allowed;
-      padding: 10px;
-      margin: 10px 5px;
-      display: inline-block;
     }
   }
 }
