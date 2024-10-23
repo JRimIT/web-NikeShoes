@@ -54,3 +54,43 @@ export const updateProductById = async (id, body) => {
     return error;
   }
 };
+
+export const getRevenuePerMonth = async (year) => {
+  try {
+    const res = await axios.get(
+      `http://localhost:5000/api/revenue-per-month?year=${year}`
+    );
+    return res;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const getCountAllUsers = async () => {
+  try {
+    const res = await axios.get(`http://localhost:5000/api/user/count`);
+    return res;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
+
+export const getCountAllNewUser = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/user/countNewUser");
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getRecentTransactions = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/transaction");
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
