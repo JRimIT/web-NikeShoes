@@ -86,49 +86,49 @@ const addToCart = (cartId, productId, size, color, quantity, res) => {
 };
 
 // Route to get cart items for a user
-router.get('/api/cart/:userId', (req, res) => {
-  const userId = req.params.userId;
-  console.log('Fetching cart for userId:', userId);
+// router.get('/api/cart/:userId', (req, res) => {
+//   const userId = req.params.userId;
+//   console.log('Fetching cart for userId:', userId);
 
-  if (!userId) {
-    console.error('User ID is missing.');
-    return res.status(400).json({ message: 'User ID is required.' });
-  }
+//   if (!userId) {
+//     console.error('User ID is missing.');
+//     return res.status(400).json({ message: 'User ID is required.' });
+//   }
 
-  const query = `
-    SELECT 
-      ci.cart_item_id, ci.cart_id, ci.quantity, 
-      ci.color AS cart_color, ci.size AS cart_size, 
-      p.product_id, p.name, p.price, 
-      p.primary_image AS image, 
-      p.size AS available_sizes, 
-      p.color AS available_colors, 
-      p.description
-    FROM 
-      Cart_Items ci
-    JOIN 
-      Cart c ON ci.cart_id = c.cart_id
-    JOIN 
-      Products p ON ci.product_id = p.product_id
-    WHERE 
-      c.user_id = ?
-  `;
+//   const query = `
+//     SELECT 
+//       ci.cart_item_id, ci.cart_id, ci.quantity, 
+//       ci.color AS cart_color, ci.size AS cart_size, 
+//       p.product_id, p.name, p.price, 
+//       p.primary_image AS image, 
+//       p.size AS available_sizes, 
+//       p.color AS available_colors, 
+//       p.description
+//     FROM 
+//       Cart_Items ci
+//     JOIN 
+//       Cart c ON ci.cart_id = c.cart_id
+//     JOIN 
+//       Products p ON ci.product_id = p.product_id
+//     WHERE 
+//       c.user_id = ?
+//   `;
 
-  db.query(query, [userId], (err, rows) => {
-    if (err) {
-      console.error('Error fetching cart items:', err);
-      return res.status(500).json({ message: 'Error fetching cart items.' });
-    }
+//   db.query(query, [userId], (err, rows) => {
+//     if (err) {
+//       console.error('Error fetching cart items:', err);
+//       return res.status(500).json({ message: 'Error fetching cart items.' });
+//     }
 
-    if (rows.length === 0) {
-      console.warn('No items found for user ID:', userId);
-      return res.status(404).json({ message: 'No items found in cart.' });
-    }
+//     if (rows.length === 0) {
+//       console.warn('No items found for user ID:', userId);
+//       return res.status(404).json({ message: 'No items found in cart.' });
+//     }
 
-    console.log('Cart items fetched successfully for user ID:', userId);
-    res.json(rows);
-  });
-});
+//     console.log('Cart items fetched successfully for user ID:', userId);
+//     res.json(rows);
+//   });
+// });
 
 router.delete('/api/cart/:userId/:cartItemId', (req, res) => {
   const { userId, cartItemId } = req.params;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Review.scss';
 
-const Review = ({ productId }) => {
+const Review = ({ productId, userId }) => {
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -14,7 +14,7 @@ const Review = ({ productId }) => {
 
   useEffect(() => {
     fetchReviews();
-  }, [productId]);
+  }, [productId, userId]);
 
   const fetchReviews = async () => {
     try {
@@ -28,6 +28,7 @@ const Review = ({ productId }) => {
   };
 
   const handleAddReview = async () => {
+    console.log(userId);
     // Reset errors
     setError({ comment: false, rating: false });
 
@@ -48,7 +49,7 @@ const Review = ({ productId }) => {
 
     try {
       const { data } = await axios.post('http://localhost:5000/add-review', {
-        userId: 3, // Demo user ID
+        userId: userId,
         productId,
         rating,
         comment,

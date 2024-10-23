@@ -16,7 +16,9 @@ const ProductDetailPage = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [userId, setUserId] = useState(0); // Initialize userId as null
 
+  //fetch id for product
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
@@ -35,6 +37,15 @@ const ProductDetailPage = () => {
     fetchProductDetails();
   }, [id]);
 
+  //fetch id for user
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+    if (userData && userData.user_id) {
+      setUserId(userData.user_id); // Set userId from userData
+      console.log(userData.user_id); // Log user_id from userData
+    }
+  }, [userId]);
+
   const handleAddToCart = async () => {
     if (!product) {
       toast.error('Product details not available.');
@@ -48,7 +59,7 @@ const ProductDetailPage = () => {
   
     try {
       const { data } = await axios.post('http://localhost:5000/add-to-cart', {
-        userId: 3,
+        userId: userId,
         productId: product.product_id,
         size: selectedSize,
         color: (selectedColor || product.primary_image),
@@ -74,7 +85,7 @@ const ProductDetailPage = () => {
   
     try {
       const { data } = await axios.post('http://localhost:5000/add-to-wishlist', {
-        userId: 3,
+        userId: userId,
         productId: product.product_id,
         size: selectedSize,
         color: (selectedColor || product.primary_image),
@@ -156,7 +167,7 @@ const ProductDetailPage = () => {
           <p className="product-description-country">{product.product_descriptionCountryOrigin}</p>
         </div>
       </div>
-      <Review productId={id} />
+      <Review productId={id} userId={userId}/>
       <Footer />
     </>
   );
