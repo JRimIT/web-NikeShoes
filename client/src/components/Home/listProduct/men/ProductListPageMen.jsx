@@ -21,6 +21,10 @@ function ProductListPageMen() {
     setFiltersVisible(!filtersVisible);
   };
 
+  const handleSortChange = (sortValue) => {
+    setSortBy(sortValue); // Cập nhật giá trị sắp xếp khi người dùng chọn
+  };
+
   useEffect(() => {
     if (urlCategory) {
       setCategory(urlCategory);

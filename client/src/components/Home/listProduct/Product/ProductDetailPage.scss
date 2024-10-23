@@ -19,8 +19,8 @@ $transition: all 0.3s ease-in-out;
 @mixin hover-effect {
   transition: $transition;
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -64,7 +64,7 @@ $transition: all 0.3s ease-in-out;
       transition: transform 0.5s ease;
 
       &:hover {
-        transform: scale(1.05);
+        transform: scale(1.08);
       }
     }
   }
@@ -91,14 +91,14 @@ $transition: all 0.3s ease-in-out;
     .thumbnail {
       min-width: 70px;
       height: 70px;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
       border: 2px solid transparent;
       transition: $transition;
       object-fit: cover;
 
       &:hover {
-        transform: scale(1.1);
+        transform: scale(1.12);
       }
 
       &.selected {
@@ -119,6 +119,7 @@ $transition: all 0.3s ease-in-out;
     font-size: 2.2rem;
     margin: 0; 
     color: $text-color;
+    font-weight: bold;
   }
 
   h4 {
@@ -139,10 +140,6 @@ $transition: all 0.3s ease-in-out;
     color: grey;
   }
 
-  .category {
-    color: grey;
-  }
-
   .price {
     font-size: 1.1rem;
     color: $primary-color;
@@ -150,8 +147,6 @@ $transition: all 0.3s ease-in-out;
     margin: 3px 0;
   }
 
-  .product-description,
-  .product-description-country {
   .product-description,
   .product-description-country {
     color: black;
@@ -215,7 +210,7 @@ $transition: all 0.3s ease-in-out;
     background-size: cover;
 
     &:hover {
-      transform: scale(1.1);
+      transform: scale(1.12);
     }
 
     &.selected {
@@ -244,30 +239,28 @@ $transition: all 0.3s ease-in-out;
 
   .icon {
     margin-left: 5px;
-    margin-left: 5px;
   }
 }
 
 // Responsive adjustments
-  @media (max-width: 768px) {
-    .product-detail-container {
-      margin: 20px auto;
-    }
+@media (max-width: 768px) {
+  .product-detail-container {
+    margin: 20px auto;
+  }
 
-    .image-gallery .main-image {
-      max-width: 100%;
-    }
+  .image-gallery .main-image {
+    max-width: 100%;
+  }
 
-    .product-info h1 {
-      font-size: 2.2rem;
-    }
+  .product-info h1 {
+    font-size: 2.2rem;
+  }
 
-    .product-info h4 {
-      font-size: 1.1rem;
-    }
+  .product-info h4 {
+    font-size: 1.1rem;
+  }
 
-    .product-info .price {
-      font-size: 1.1rem;
-    }
+  .product-info .price {
+    font-size: 1.1rem;
   }
 }
