@@ -94,3 +94,12 @@ export const getRecentTransactions = async () => {
     console.log(error);
   }
 };
+
+export const getCountSuccessTransactions = async () => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/count_transaction");
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};

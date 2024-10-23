@@ -430,4 +430,21 @@ router.get('/api/transaction', async (req, res) => {
     }
 })
 
+
+router.get('/api/count_transaction', async (req, res) => {
+    try {
+        const [rows] = await db.promise().query(`
+            SELECT 
+                COUNT(bt.transaction_id) AS total_transactions
+            FROM 
+                bank_transactions bt
+            WHERE 
+                bt.status = "success";
+            `)
+        res.json(rows)
+    } catch (error) {
+        console.log('Error retrieving count transactions: ', error);
+        res.status(500).json({ message: "Database error, could not retrieve transactions" })
+    }
+})
 module.exports = router;

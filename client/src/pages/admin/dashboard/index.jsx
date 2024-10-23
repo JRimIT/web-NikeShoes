@@ -17,14 +17,19 @@ import { useSelector } from "react-redux";
 import {
   getCountAllNewUser,
   getCountAllUsers,
+  getCountSuccessTransactions,
   getRecentTransactions,
 } from "../../../data/api/apiService";
 import { useEffect, useState } from "react";
+
+import loadingGif from "../../../assets/Double Ring@1x-1.0s-200px-200px.gif";
+
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [numberUsers, setNumberUsers] = useState(0);
   const [numberNewUsers, setNumberNewUsers] = useState(0);
+  const [numberOfTransactions, setNumberOfTransactions] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const VND = new Intl.NumberFormat("vi-VN", {
@@ -81,6 +86,22 @@ const Dashboard = () => {
         }
       };
       fetchRecentTractions();
+    }, 3000);
+  });
+  useEffect(() => {
+    setTimeout(() => {
+      const fetchCountSuccessTractions = async () => {
+        try {
+          const res = await getCountSuccessTransactions();
+          console.log("Count transactions: ", res.data[0].total_transactions);
+          setNumberOfTransactions(res.data[0].total_transactions);
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchCountSuccessTractions();
     }, 3000);
   });
 
@@ -141,7 +162,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           {loading ? (
-            <Typography>Loading...</Typography>
+            <>
+              <img src={loadingGif} alt="loading" />
+              <Typography>Loading...</Typography>
+            </>
           ) : (
             <StatBox
               title={
@@ -164,7 +188,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           {loading ? (
-            <Typography>Loading...</Typography>
+            <>
+              <img src={loadingGif} alt="loading" />
+              <Typography>Loading...</Typography>
+            </>
           ) : (
             <StatBox
               title={numberUsers.data}
@@ -186,17 +213,24 @@ const Dashboard = () => {
           alignItems="center"
           justifyContent="center"
         >
-          <StatBox
-            title="1,325,134"
-            subtitle="All transaction"
-            progress="0.80"
-            increase="+43%"
-            icon={
-              <TrafficIcon
-                sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
-              />
-            }
-          />
+          {loading ? (
+            <>
+              <img src={loadingGif} alt="loading" />
+              <Typography>Loading...</Typography>
+            </>
+          ) : (
+            <StatBox
+              title={numberOfTransactions}
+              subtitle="All transaction"
+              progress="0.80"
+              increase="+43%"
+              icon={
+                <TrafficIcon
+                  sx={{ color: colors.greenAccent[600], fontSize: "26px" }}
+                />
+              }
+            />
+          )}
         </Box>
         <Box
           gridColumn="span 3"
@@ -206,7 +240,10 @@ const Dashboard = () => {
           justifyContent="center"
         >
           {loading ? (
-            <Typography>Loading...</Typography>
+            <>
+              <img src={loadingGif} alt="loading" />
+              <Typography>Loading...</Typography>
+            </>
           ) : (
             <StatBox
               title={numberNewUsers}
@@ -241,13 +278,13 @@ const Dashboard = () => {
               >
                 Revenue Generated
               </Typography>
-              <Typography
+              {/* <Typography
                 variant="h3"
                 fontWeight="bold"
                 color={colors.greenAccent[500]}
               >
                 $59,342.32
-              </Typography>
+              </Typography> */}
             </Box>
           </Box>
           <Box height="580px" m="-20px 0 0 0">
@@ -272,37 +309,46 @@ const Dashboard = () => {
               Recent Transactions
             </Typography>
           </Box>
-          {transactions.map((transaction, i) => (
-            <Box
-              key={`${transaction.transaction_id}-${i}`}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              borderBottom={`4px solid ${colors.primary[500]}`}
-              p="15px"
-            >
-              <Box>
-                <Typography
-                  color={colors.greenAccent[500]}
-                  variant="h5"
-                  fontWeight="600"
-                >
-                  {transaction.transaction_id}
-                </Typography>
-                <Typography color={colors.grey[100]}>
-                  {transaction.username}
-                </Typography>
-              </Box>
-              <Box color={colors.grey[100]}>{transaction.transaction_date}</Box>
+          {loading ? (
+            <>
+              <img src={loadingGif} alt="loading" />
+              <Typography>Loading...</Typography>
+            </>
+          ) : (
+            transactions.map((transaction, i) => (
               <Box
-                backgroundColor={colors.greenAccent[500]}
-                p="5px 10px"
-                borderRadius="4px"
+                key={`${transaction.transaction_id}-${i}`}
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                borderBottom={`4px solid ${colors.primary[500]}`}
+                p="15px"
               >
-                {VND.format(transaction.amount)}
+                <Box>
+                  <Typography
+                    color={colors.greenAccent[500]}
+                    variant="h5"
+                    fontWeight="600"
+                  >
+                    {transaction.transaction_id}
+                  </Typography>
+                  <Typography color={colors.grey[100]}>
+                    {transaction.username}
+                  </Typography>
+                </Box>
+                <Box color={colors.grey[100]}>
+                  {transaction.transaction_date}
+                </Box>
+                <Box
+                  backgroundColor={colors.greenAccent[500]}
+                  p="5px 10px"
+                  borderRadius="4px"
+                >
+                  {VND.format(transaction.amount)}
+                </Box>
               </Box>
-            </Box>
-          ))}
+            ))
+          )}
         </Box>
 
         {/* ROW 3 */}
