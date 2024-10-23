@@ -8,7 +8,7 @@ function CartPage() {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true); 
   const [loadingAction, setLoadingAction] = useState(false); // New action loading state
-  const [userId] = useState(3); // Temporary static userId
+  const [userId] = useState(3);
    // const [userId, setUserId] = useState(null);
   const shippingFee = 0;
   const sale = '99.9%';
@@ -41,8 +41,6 @@ function CartPage() {
   const handleQuantityChange = async (id, newQuantity) => {
     if (newQuantity < 1) return;
 
-    setLoadingAction(true); // Set loading state for action
-
     try {
       await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, { quantity: newQuantity });
 
@@ -54,7 +52,7 @@ function CartPage() {
     } catch (error) {
       console.error('Error updating quantity:', error.message);
     } finally {
-      setLoadingAction(false); // Turn off loading state
+      setLoadingAction(false);
     }
   };
 
@@ -79,29 +77,29 @@ function CartPage() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <Container className="py-5">
-      <h2 className="mb-4" style={{ fontWeight: 'bold', fontSize: '2rem' }}>Shopping Bag</h2>
+    <Container className="cart-container">
+      <h2 className="mb-4">Shopping Cart</h2>
       {cart.length === 0 ? (
         <div className="text-center">
           <h4>Your cart is empty.</h4>
-          <Button variant="primary" href="/products-men/Shoe">Shopping</Button>
+          <Button variant="primary" href="/products-men/All">Shop Now</Button>
         </div>
       ) : (
         <Row>
           <Col md={8}>
             {cart.map((item) => (
-              <Row key={item.cart_item_id} className="align-items-center mb-4 border-bottom pb-3">
-                <Col xs={4} md={3}>
-                  <Image src={item.card_color || item.cart_color} fluid className="border" />
-                </Col>
-                <Col xs={8} md={5}>
-                  <h5 style={{ fontSize: '1.5rem', fontWeight: '600' }}>{item.name}</h5>
-                  <p className="text-muted" style={{ fontSize: '1rem' }}>
-                    {formatPrice(parsePrice(item.price))}
-                  </p>
-                  <p style={{ fontSize: '1rem' }}>Size: {item.cart_size}</p>
-                </Col>
-                <Col xs={6} md={2}>
+              <div className="cart-item" key={item.cart_item_id}>
+                <img
+                  src={item.card_color || item.cart_color}
+                  alt={item.name}
+                  className="item-image"
+                />
+                <div className="item-details">
+                  <h5>{item.name}</h5>
+                  <p>{formatPrice(parsePrice(item.price))}</p>
+                  <p>Size: {item.cart_size}</p>
+                </div>
+                <div className="quantity-container">
                   <Form.Control
                     type="number"
                     min="1"
@@ -109,37 +107,31 @@ function CartPage() {
                     onChange={(e) =>
                       handleQuantityChange(item.cart_item_id, parseInt(e.target.value, 10))
                     }
-                    style={{ textAlign: 'center' }}
-                    disabled={loadingAction}
+                    className="quantity-control"
                   />
-                </Col>
-                <Col xs={6} md={2}>
                   <FaTrashAlt
                     onClick={() => handleRemove(item.cart_item_id)}
-                    style={{ color: 'black', cursor: 'pointer', fontSize: '1.5rem' }}
+                    className="remove-button"
                   />
-                </Col>
-              </Row>
+                </div>
+              </div>
             ))}
           </Col>
-          <Col md={4}>
-            <div className="border p-3 rounded" style={{ backgroundColor: '#f9f9f9' }}>
-              <h4>Order Summary</h4>
-              <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
-              <p>Shipping: <strong>Free</strong></p>
-              <p>Sale: <strong>{sale}</strong></p>
-              <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
-              <h5>Total: <strong>{formatPrice(total)}</strong></h5>
-              <Button
-                variant="dark"
-                className="w-100 mt-3"
-                onClick={handleCheckout}
-                disabled={loading || loadingAction}
-                style={{ fontSize: '1.2rem' }}
-              >
-                {loading ? 'Processing...' : 'Proceed to Checkout'}
-              </Button>
-            </div>
+          <Col md={4} className="order-summary">
+            <h4>Order Summary</h4>
+            <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
+            <p>Shipping: <strong>Free</strong></p>
+            <p>Sale: <strong>{sale}</strong></p>
+            <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
+            <h5>Total: <strong>{formatPrice(total)}</strong></h5>
+            <Button
+              variant="dark"
+              className="w-100 mt-3 checkout-button"
+              onClick={handleCheckout}
+              disabled={loading || loadingAction}
+            >
+              {loading ? 'Processing...' : 'Proceed to Checkout'}
+            </Button>
           </Col>
         </Row>
       )}

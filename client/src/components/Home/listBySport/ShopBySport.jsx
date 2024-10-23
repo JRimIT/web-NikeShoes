@@ -1,33 +1,29 @@
 import React from "react";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import { productData, responsive } from "./dataListBySport";
+import { productData } from "./dataListBySport"; // Không cần responsive từ đây
 import ListItem from "./listItem";
-
+import './ShopBySport.scss'; // Import SCSS cho giao diện responsive
 
 const ShopBySport = () => {
- const product = productData.map((item) => (
+  const productList = productData.map((item) => (
     <ListItem
-      id = {item.id}
+      key={item.id}
+      id={item.id}
       name={item.name}
-      url={item.imageurl}
-     
+      image={item.imageurl}
+      url={item.link}
+      men={item.linkMen}
+      women={item.linkWomen}
     />
   ));
 
   return (
     <div className="shop-by-sport">
       <div className="pt-5">
-        <p className="title-feature" >Shop by sport</p>
-          
+        <p className="title-feature">Shop by sport</p>
       </div>
-      <div className="content">
-          {product} 
+      <div className="product-grid"> {/* Sử dụng CSS Flexbox/Grid cho responsive */}
+        {productList} {/* Hiển thị danh sách sản phẩm */}
       </div>
-       {/* <Carousel showDots={true} responsive={responsive}> */}
-        {/* {product} */}
-      {/* </Carousel> */}
-     
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Spinner, Form } from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import './WishlistPage.scss';
+import { FaShoppingCart, FaTrashAlt } from 'react-icons/fa'; // Import icons
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './WishlistPage.scss';
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -11,9 +12,7 @@ const WishlistPage = () => {
   const [operationLoading, setOperationLoading] = useState(false);
   const [error, setError] = useState(null);
   const [userId] = useState(3);
-  const [selectedSize, setSelectedSize] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
-  const [quantity, setQuantity] = useState(1);
+  const [quantity] = useState(1);
 
   useEffect(() => {
     const fetchWishlist = async () => {
@@ -32,7 +31,6 @@ const WishlistPage = () => {
   }, [userId]);
 
   const handleMoveToBag = async (product) => {
-
     setOperationLoading(true); // Start loading
 
     try {
@@ -61,7 +59,9 @@ const WishlistPage = () => {
   const handleRemove = async (wishlistId) => {
     try {
       await axios.delete(`http://localhost:5000/api/wishlist/${userId}/${wishlistId}`);
-      setWishlist((prevWishlist) => prevWishlist.filter((item) => item.wishlist_id !== wishlistId));
+      setWishlist((prevWishlist) =>
+        prevWishlist.filter((item) => item.wishlist_id !== wishlistId)
+      );
       toast.info('Product removed from wishlist.');
     } catch (error) {
       console.error('Error removing item:', error.message);
@@ -79,11 +79,13 @@ const WishlistPage = () => {
 
       {wishlist.length === 0 ? (
         <div className="text-center">
-          <p>No products in wishlist.</p>
-          <Button variant="primary" href="/products-men/Shoe">Shop Now</Button>
+          <p>No products in favourite.</p>
+          <Button variant="primary" href="/products-men/All">
+            Shop Now
+          </Button>
         </div>
       ) : (
-        <div className="wishlist-grid">
+        <div className={`wishlist-grid ${wishlist.length === 1 ? 'one-item' : wishlist.length === 2 ? 'two-items' : ''}`}>
           {wishlist.map((product) => (
             <div key={product.wishlist_id} className="wishlist-item">
               <img src={product.image} alt={product.name} />
@@ -99,19 +101,25 @@ const WishlistPage = () => {
               {product.isSoldOut ? (
                 <button className="sold-out">Sold Out</button>
               ) : (
-                <div>
+                <div className="button-group">
                   <Button
-                    className="add-to-bag"
+                    className="icon-button"
                     onClick={() => handleMoveToBag(product)}
                     disabled={operationLoading}
+                    variant="outline-success"
                   >
-                    {operationLoading ? <Spinner animation="border" size="sm" /> : 'Add to Bag'}
+                    {operationLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      <FaShoppingCart size={24} />
+                    )}
                   </Button>
                   <Button
-                    className="remove-wishlist"
+                    className="icon-button"
                     onClick={() => handleRemove(product.wishlist_id)}
+                    variant="outline-danger"
                   >
-                    Remove
+                    <FaTrashAlt size={24} />
                   </Button>
                 </div>
               )}
