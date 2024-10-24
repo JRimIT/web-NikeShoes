@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Review.scss';
+import { useNavigate } from 'react-router-dom';
 
 const Review = ({ productId, userId }) => {
   const [reviews, setReviews] = useState([]);
@@ -11,6 +12,7 @@ const Review = ({ productId, userId }) => {
   const [notification, setNotification] = useState(null);
   const [timeoutId, setTimeoutId] = useState(null); // State to hold the timeout ID
   const [error, setError] = useState({ comment: false, rating: false }); // State to track errors
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchReviews();
@@ -28,7 +30,9 @@ const Review = ({ productId, userId }) => {
   };
 
   const handleAddReview = async () => {
-    console.log(userId);
+    if (userId == 0) {
+      navigate("/login");
+    }
     // Reset errors
     setError({ comment: false, rating: false });
 

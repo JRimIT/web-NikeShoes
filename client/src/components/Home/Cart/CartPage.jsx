@@ -11,7 +11,7 @@ function CartPage() {
   const [userId, setUserId] = useState(null);
   const shippingFee = 0;
   const sale = '99.9%';
-  const discount = 100000;
+  const discount = 200000;
 
   const parsePrice = (price) => Number(price.replaceAll(',', ''));
   const formatPrice = (price) => `${price.toLocaleString('vi-VN')}₫`;
@@ -20,7 +20,8 @@ function CartPage() {
     cart.reduce((acc, item) => acc + parsePrice(item.price) * item.quantity, 0);
 
   const subtotal = calculateSubtotal();
-  const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
+  // const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
+  const total = (subtotal + shippingFee - discount);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
@@ -49,7 +50,11 @@ function CartPage() {
   ;
 
   const handleQuantityChange = async (id, newQuantity) => {
-    if (newQuantity < 1) return;
+    // if (newQuantity < 1) return;
+    if (newQuantity < 1 || newQuantity > 10) {
+      console.warn('Quantity must be between 1 and 10.');
+      return;
+    }
 
     try {
       await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, { quantity: newQuantity });
@@ -130,7 +135,7 @@ function CartPage() {
             <h4>Order Summary</h4>
             <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
             <p>Shipping: <strong>Free</strong></p>
-            <p>Sale: <strong>{sale}</strong></p>
+            {/* <p>Sale: <strong>{sale}</strong></p> */}
             <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
             <h5>Total: <strong>{formatPrice(total)}</strong></h5>
             <Button

@@ -88,7 +88,7 @@ const WishlistPage = () => {
 
   return (
     <div className="wishlist-container">
-      <ToastContainer />
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick={true}/>
       <h1>Favourites</h1>
 
       {wishlist.length === 0 ? (

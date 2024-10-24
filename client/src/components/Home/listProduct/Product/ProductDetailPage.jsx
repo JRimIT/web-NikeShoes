@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import './ProductDetailPage.scss';
 import { FaHeart } from "react-icons/fa";
@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../footer/Footer';
 import Review from '../review/Review';
+import { useNavigate } from 'react-router-dom';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const ProductDetailPage = () => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [userId, setUserId] = useState(0); // Initialize userId as null
+  const navigate = useNavigate();
 
   //fetch id for product
   useEffect(() => {
@@ -47,11 +49,15 @@ const ProductDetailPage = () => {
   }, [userId]);
 
   const handleAddToCart = async () => {
+    if (userId == 0) {
+      navigate("/login");
+    }
+
     if (!product) {
       toast.error('Product details not available.');
       return;
     }
-    
+  
     if (!selectedSize) {
       toast.error('Please select size.');
       return;
@@ -62,17 +68,34 @@ const ProductDetailPage = () => {
         userId: userId,
         productId: product.product_id,
         size: selectedSize,
-        color: (selectedColor || product.primary_image),
+        color: selectedColor || product.primary_image,
         quantity,
       });
-      toast.success(data.message);
+  
+      toast.success(data.message); // Display success message
     } catch (error) {
       console.error('Error adding to cart:', error.response?.data || error);
-      toast.error('Failed to add product to cart.');
+  
+      // Handle quantity limit error
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.message;
+  
+        if (errorMessage.includes('maximum quantity')) {
+          toast.error('You cannot add more than 10 of this product.');
+        } else {
+          toast.error(errorMessage); // Other errors from the backend
+        }
+      } else {
+        toast.error('An error occurred. Please try again.');
+      }
     }
   };
 
   const handleToggleFavourite = async () => {
+    if (userId == 0) {
+      navigate("/login");
+    }
+
     if (!product) {
       toast.error('Product details not available.');
       return;
@@ -94,7 +117,8 @@ const ProductDetailPage = () => {
       toast.success(data.message);
     } catch (error) {
       console.error('Error adding to wishlist:', error.response?.data || error);
-      toast.error(`Failed to add product to Wishlist: ${error.response?.data?.message || error.message}`);
+      toast.error(`Failed to add product to Wishlist!`);
+      // navigate(`/login`);
     }
   };
 
@@ -112,7 +136,7 @@ const ProductDetailPage = () => {
   return (
     <>
       <div className="product-detail-container">
-        <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick={true} />
+        <ToastContainer position="top-right" autoClose={1500} hideProgressBar={false} closeOnClick={true} />
         <div className="image-gallery">
           <div className="main-image">
             <img 

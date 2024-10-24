@@ -65,7 +65,7 @@ const Login = () => {
         } else {
           localStorage.removeItem("email");
         }
-        toast.success("Login successful!");
+        // toast.success("Login successful!");
         // setSuccessMessage("Login successful!");
         setErrorMessage("");
 
