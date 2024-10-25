@@ -10,7 +10,8 @@ const UserChatbox = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
-  const [newMessageCount, setNewMessageCount] = useState(0); // Thêm state đếm tin nhắn mới
+  const [newMessageCount, setNewMessageCount] = useState(0); 
+  const [roleId, setRoleId] = useState(null); // Thêm state để lưu role_id
   const messagesEndRef = useRef(null);
   const socket = useRef(null);
   
@@ -27,10 +28,13 @@ const UserChatbox = () => {
         socket.current.emit('user_login', { userId });
       });
 
+      // Nhận role_id từ server
+      socket.current.on('user_role', ({ role_id }) => {
+        setRoleId(role_id); // Lưu role_id vào state
+      });
+
       socket.current.on('receive_message', (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
-        
-        // Tăng số lượng tin nhắn mới nếu chatbox chưa mở
         if (!isOpen) {
           setNewMessageCount((prevCount) => prevCount + 1);
         }
@@ -69,11 +73,12 @@ const UserChatbox = () => {
 
   const handleChatboxToggle = () => {
     setIsOpen((prevIsOpen) => {
-      // Đặt lại số lượng tin nhắn mới khi mở chatbox
       if (!prevIsOpen) setNewMessageCount(0);
       return !prevIsOpen;
     });
   };
+
+  if (roleId !== 1) return null; // Ẩn chatbox nếu role_id khác 1
 
   return (
     <div className="floating-chatbox">

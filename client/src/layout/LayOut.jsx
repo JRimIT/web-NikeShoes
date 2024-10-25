@@ -39,6 +39,7 @@ import ProfilePage from "../components/Profile";
 const LayOut = () => {
   return (
     <>
+        <UserChatbox/>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -103,7 +104,7 @@ const LayOut = () => {
         </Route>
 
         {/* Dynamic route for User with userId */}
-        <Route path="/user-chatbox" element={<UserChatbox />} />
+        
 
         {/* Admin route */}
         <Route

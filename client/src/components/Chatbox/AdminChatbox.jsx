@@ -11,18 +11,18 @@ const AdminChatbox = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const chatEndRef = useRef(null);
   const socket = useRef(null);
+ 
 
   useEffect(() => {
     const token = localStorage.getItem('token'); 
   
     if (token) {
       socket.current = io('http://localhost:5000', { auth: { token } });
-  
+      
       socket.current.on('connect', () => {
         console.log('Admin socket connected!');
-        setIsAuthenticated(true); 
+        setIsAuthenticated(true);
       });
-  
       socket.current.on('online_users', (users) => {
         console.log("Danh sách người dùng online nhận từ server:", users);
         setOnlineUsers(Object.values(users));

@@ -31,6 +31,7 @@ const handleSocket = (io) => {
           socket.userId = user_id;
           socket.username = username;
           socket.isAdmin = true;
+          socket.role = role_id;
           adminSocketId = socket.id;
           next();
         } else if (role_id === 1) { // User
@@ -97,6 +98,9 @@ const handleSocket = (io) => {
         }
       }
     });
+    if (!socket.isAdmin) {
+      socket.emit('user_role', { role_id: socket.role }); // Gửi role_id đến client
+    }
   });
 };
 
