@@ -6,16 +6,15 @@ import Header from "../../../components/AdminSide/Header";
 import { useEffect, useState } from "react";
 import { FcPlus } from "react-icons/fc";
 import "./scss/index.scss";
-import axios from "axios";
+import axios from "../../../utils/axios.customize";
 import { toast } from "react-toastify";
-
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
   const [previewImage, setPreviewImage] = useState(null);
-  const [image, setImage] = useState("")
-  let user_image = ""
+  const [image, setImage] = useState("");
+  let user_image = "";
   const [infoUser, setInfoUser] = useState({
     username: "",
     email: "",
@@ -27,72 +26,76 @@ const Form = () => {
     country: "",
     role_id: 1,
     user_image: image,
-  })
+  });
 
   useEffect(() => {
     console.log("Updated infoUser:", infoUser);
   }, [infoUser]); // This runs when infoUser changes
 
- 
   const handleFormSubmit = (values) => {
     console.log(values);
   };
 
   // sibmit-------------------------
-  const handleUploadImage = async() => {
-     const file = image;
+  const handleUploadImage = async () => {
+    const file = image;
 
-      const CLOUD_NAME = "dzbhzlwoe"
-      const PRESET_NAME = "maeqzsyj"
-      const FOLDER_NAME = "Avartar_User"
-      // const urls = [];
+    const CLOUD_NAME = "dzbhzlwoe";
+    const PRESET_NAME = "maeqzsyj";
+    const FOLDER_NAME = "Avartar_User";
+    // const urls = [];
 
-      const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`
+    const api = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
 
-      const formData = new FormData();
-      formData.append("upload_preset", PRESET_NAME);
-      formData.append("folder", FOLDER_NAME);
-      formData.append("file", file);
+    const formData = new FormData();
+    formData.append("upload_preset", PRESET_NAME);
+    formData.append("folder", FOLDER_NAME);
+    formData.append("file", file);
 
-      await axios.post(api, formData, {
+    await axios
+      .post(api, formData, {
         headers: {
-          "Content-Type": "multipart/form-data"
+          "Content-Type": "multipart/form-data",
         },
-      }).then(res => {
+      })
+      .then((res) => {
         // console.log(res.data.url);
         // setImage(res.data.url);
-        
-          user_image = res.data.url;
-        
-        // console.log("=[>>>> Image: ", image);
-        
-        // setInfoUser({...infoUser, image: image})
-      }).catch(err => console.log(err))
-  }
 
-  const handleUpdateUserState = (value)=> {
-    return new Promise((resolve)=> {
-      setInfoUser((prev)=>{
-        const updateUserState = {...prev, ...value}
-        resolve(updateUserState)
-        return updateUserState
+        user_image = res.data.url;
+
+        // console.log("=[>>>> Image: ", image);
+
+        // setInfoUser({...infoUser, image: image})
       })
-    })
-  }
+      .catch((err) => console.log(err));
+  };
+
+  const handleUpdateUserState = (value) => {
+    return new Promise((resolve) => {
+      setInfoUser((prev) => {
+        const updateUserState = { ...prev, ...value };
+        resolve(updateUserState);
+        return updateUserState;
+      });
+    });
+  };
 
   const handleSubmitUser = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     try {
-     
-      await handleUploadImage()
+      await handleUploadImage();
       console.log("url image: ", user_image);
-      
+
       const updateInfoUser_Image = await handleUpdateUserState({
-        user_image: user_image
-      })
+        user_image: user_image,
+      });
       console.log("Submit form: ", updateInfoUser_Image);
-      
-      const res = await axios.post("http://localhost:5000/api/user", updateInfoUser_Image)
+
+      const res = await axios.post(
+        "http://localhost:5000/api/user",
+        updateInfoUser_Image
+      );
       toast.success(res.data.message);
     } catch (err) {
       if (err.response && err.response.data.error) {
@@ -102,14 +105,12 @@ const Form = () => {
         toast.error("Something went wrong while creating the user");
       }
     }
-
-  }
+  };
   const handlePreviewImage = (event) => {
-
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
       console.log(file); // Log file information
-      setImage(file)
+      setImage(file);
 
       const reader = new FileReader();
 
@@ -127,21 +128,21 @@ const Form = () => {
     // setPreviewImage(URL.createObjectURL(file));
   };
   const initialValues = {
-      username: infoUser.username,
-      email: infoUser.email,
-      password: infoUser.password,
-      phone: infoUser.phone,
-      address_line: infoUser.address_line,
-      city: infoUser.city,
-      state: infoUser.state,
-      country: infoUser.country,
-      role_id: infoUser.role_id,
-      image: infoUser.image,
+    username: infoUser.username,
+    email: infoUser.email,
+    password: infoUser.password,
+    phone: infoUser.phone,
+    address_line: infoUser.address_line,
+    city: infoUser.city,
+    state: infoUser.state,
+    country: infoUser.country,
+    role_id: infoUser.role_id,
+    image: infoUser.image,
   };
 
   const handleChangeInput = (e) => {
-    setInfoUser(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+    setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
   return (
     <Box m="20px">
       <Header title="CREATE USER" subtitle="Create a New User Profile" />
@@ -159,7 +160,7 @@ const Form = () => {
           handleChange,
           handleSubmit,
         }) => (
-          <form >
+          <form>
             <Box
               display="grid"
               gap="30px"
@@ -273,20 +274,18 @@ const Form = () => {
                 sx={{ gridColumn: "span 2" }}
               />
 
-
-              <select class="form-select" aria-label="Default select example"
+              <select
+                class="form-select"
+                aria-label="Default select example"
                 onChange={handleChangeInput}
                 name="role_id"
               >
                 <option selected>Role</option>
                 <option value={1}>User</option>
                 <option value={2}>Admin</option>
-
               </select>
 
               <div className="col-md-12">
-
-
                 <label
                   className="form-label label-upload"
                   htmlFor="labelUpload"
@@ -303,7 +302,10 @@ const Form = () => {
                 ></input>
               </div>
 
-              <div style={{ gridColumn: "span 4" }} className="col-md-12 img-preview">
+              <div
+                style={{ gridColumn: "span 4" }}
+                className="col-md-12 img-preview"
+              >
                 {previewImage ? (
                   <img src={previewImage} alt="aaaaa" />
                 ) : (
@@ -312,8 +314,12 @@ const Form = () => {
               </div>
             </Box>
             <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained" onClick={(event) => handleSubmitUser(event)
-              }>
+              <Button
+                type="submit"
+                color="secondary"
+                variant="contained"
+                onClick={(event) => handleSubmitUser(event)}
+              >
                 Create New User
               </Button>
             </Box>
@@ -346,6 +352,5 @@ const checkoutSchema = yup.object().shape({
 //   address1: "",
 //   address2: "",
 // };
-
 
 export default Form;

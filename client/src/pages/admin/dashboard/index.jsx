@@ -23,6 +23,7 @@ import {
 import { useEffect, useState } from "react";
 
 import loadingGif from "../../../assets/Double Ring@1x-1.0s-200px-200px.gif";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -44,8 +45,17 @@ const Dashboard = () => {
       const fetchNumberOfUser = async () => {
         try {
           const res = await getCountAllUsers();
-          setNumberUsers(res);
+          console.log("Check res Dmin: ", res);
+
+          if (!res?.message) {
+            setNumberUsers(res);
+          } else {
+            toast.error({
+              message: "unauthorized",
+            });
+          }
         } catch (error) {
+          toast.error("Fail");
           console.log(error);
         } finally {
           setLoading(false); // Tắt trạng thái loading sau khi dữ liệu nạp xong
@@ -87,7 +97,7 @@ const Dashboard = () => {
       };
       fetchRecentTractions();
     }, 3000);
-  });
+  }, []);
   useEffect(() => {
     setTimeout(() => {
       const fetchCountSuccessTractions = async () => {

@@ -49,8 +49,6 @@ const Login = () => {
         password,
       });
 
-      // console.log("Login: ", response);
-
       if (response.data.message === "Login successful!") {
         localStorage.setItem("token", response.data.token); // Lưu token vào localStorage
         localStorage.setItem("user", JSON.stringify(response.data.user));

@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from "../../utils/axios.customize";
 
 export const getAllProducts = async () => {
   try {
-    const res = await axios.get(`http://localhost:5000/api/allProducts`);
+    const res = await axios.get(`api/allProducts`);
 
     return res;
   } catch (error) {
@@ -13,7 +13,7 @@ export const getAllProducts = async () => {
 
 export const createNewProduct = async (product) => {
   try {
-    const res = await axios.post(`http://localhost:5000/api/products`, product);
+    const res = await axios.post(`api/products`, product);
     console.log("Create: ", res);
     return res;
   } catch (err) {
@@ -24,7 +24,7 @@ export const createNewProduct = async (product) => {
 
 export const deleteProduct = async (id) => {
   try {
-    const res = await axios.delete(`http://localhost:5000/api/products/${id}`);
+    const res = await axios.delete(`api/products/${id}`);
     return res;
   } catch (error) {
     console.log(error);

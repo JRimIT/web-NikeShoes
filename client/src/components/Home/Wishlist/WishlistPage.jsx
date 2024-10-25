@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Spinner } from 'react-bootstrap';
-import axios from 'axios';
-import { FaShoppingCart, FaTrashAlt } from 'react-icons/fa'; // Import icons
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import './WishlistPage.scss';
+import React, { useEffect, useState } from "react";
+import { Button, Spinner } from "react-bootstrap";
+import axios from "../../../utils/axios.customize";
+import { FaShoppingCart, FaTrashAlt } from "react-icons/fa"; // Import icons
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "./WishlistPage.scss";
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -17,11 +17,13 @@ const WishlistPage = () => {
   useEffect(() => {
     const fetchWishlist = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/wishlist/${userId}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/wishlist/${userId}`
+        );
         setWishlist(response.data || []);
       } catch (err) {
-        console.error('Error fetching wishlist:', err.message);
-        setError('Error fetching wishlist.');
+        console.error("Error fetching wishlist:", err.message);
+        setError("Error fetching wishlist.");
       } finally {
         setLoading(false);
       }
@@ -34,7 +36,7 @@ const WishlistPage = () => {
     setOperationLoading(true); // Start loading
 
     try {
-      const { data } = await axios.post('http://localhost:5000/move-to-cart', {
+      const { data } = await axios.post("http://localhost:5000/move-to-cart", {
         userId,
         productId: product.product_id,
         size: product.size,
@@ -49,8 +51,11 @@ const WishlistPage = () => {
         prevWishlist.filter((item) => item.wishlist_id !== product.wishlist_id)
       );
     } catch (error) {
-      console.error('Error moving product to cart:', error.response?.data || error);
-      toast.error('Failed to add product to cart.');
+      console.error(
+        "Error moving product to cart:",
+        error.response?.data || error
+      );
+      toast.error("Failed to add product to cart.");
     } finally {
       setOperationLoading(false); // Stop loading
     }
@@ -58,14 +63,16 @@ const WishlistPage = () => {
 
   const handleRemove = async (wishlistId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/wishlist/${userId}/${wishlistId}`);
+      await axios.delete(
+        `http://localhost:5000/api/wishlist/${userId}/${wishlistId}`
+      );
       setWishlist((prevWishlist) =>
         prevWishlist.filter((item) => item.wishlist_id !== wishlistId)
       );
-      toast.info('Product removed from wishlist.');
+      toast.info("Product removed from wishlist.");
     } catch (error) {
-      console.error('Error removing item:', error.message);
-      toast.error('Failed to remove item from wishlist.');
+      console.error("Error removing item:", error.message);
+      toast.error("Failed to remove item from wishlist.");
     }
   };
 
@@ -85,16 +92,24 @@ const WishlistPage = () => {
           </Button>
         </div>
       ) : (
-        <div className={`wishlist-grid ${wishlist.length === 1 ? 'one-item' : wishlist.length === 2 ? 'two-items' : ''}`}>
+        <div
+          className={`wishlist-grid ${
+            wishlist.length === 1
+              ? "one-item"
+              : wishlist.length === 2
+              ? "two-items"
+              : ""
+          }`}
+        >
           {wishlist.map((product) => (
             <div key={product.wishlist_id} className="wishlist-item">
               <img src={product.image} alt={product.name} />
               <h4>{product.name}</h4>
               <h4>{product.category}</h4>
               <p>
-                {new Intl.NumberFormat('vi-VN', {
-                  style: 'currency',
-                  currency: 'VND',
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
                 }).format(product.price)}
               </p>
 
