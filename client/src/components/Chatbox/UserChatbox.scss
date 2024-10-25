@@ -15,6 +15,21 @@
       align-items: center;
       cursor: pointer;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      .new-message-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: #ff4d4f;
+        color: #fff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.75rem;
+        font-weight: bold;
+      }
     }
   
     .chatbox-window {
