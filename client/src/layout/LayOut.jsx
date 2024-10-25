@@ -94,6 +94,9 @@ const LayOut = () => {
           {/* <Route path="contacts" element={<Contacts />} /> */}
           <Route path="manageProduct" element={<ManagerProduct />} />
           <Route path="invoices" element={<Invoices />} />
+          <Route path="adminChatbox"
+          element={<AdminChatbox userId="admin"/>}
+        />
           <Route path="form" element={<Form />} />
           <Route path="bar" element={<Bar />} />
           <Route path="pie" element={<Pie />} />
@@ -107,10 +110,7 @@ const LayOut = () => {
         
 
         {/* Admin route */}
-        <Route
-          path="/admin-chatbox"
-          element={<AdminChatbox userId="admin" />}
-        />
+        
       </Routes>
 
       <ToastContainer
