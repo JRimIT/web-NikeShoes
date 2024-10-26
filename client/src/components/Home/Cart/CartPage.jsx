@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button, Image, Form } from 'react-bootstrap';
 import { FaTrashAlt } from 'react-icons/fa';
 import axios from 'axios';
+import axiosClient from "../../../api/axiosClient";
 import './CartPage.scss';
 import { useNavigate } from 'react-router-dom';
+import { CartContext } from '../../../context/CartContext';
 
 function CartPage() {
+  const { setCartRequest } = useContext(CartContext);
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true); 
@@ -13,23 +16,23 @@ function CartPage() {
   const [userId] = useState(3); // Temporary static userId
    // const [userId, setUserId] = useState(null);
   const shippingFee = 0;
-  const sale = '99.9%';
+  const sale = '10%';
   const discount = 100000;
 
-  const parsePrice = (price) => Number(price.replaceAll(',', ''));
+  const parsePrice = (price) => Number(parseFloat(price.replaceAll(',', '')).toFixed(2));
   const formatPrice = (price) => `${price.toLocaleString('vi-VN')}₫`;
 
   const calculateSubtotal = () =>
     cart.reduce((acc, item) => acc + parsePrice(item.price) * item.quantity, 0);
 
   const subtotal = calculateSubtotal();
-  const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
+  const _total = (subtotal + shippingFee - discount) * (1 - 10 / 1000);
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
-        setCart(response.data || []); // Handle empty or null data
+        setCart(response.data || []); // Handle empty or null data        
       } catch (error) {
         console.error('Error fetching cart:', error.message, error.response?.data);
       } finally {
@@ -69,14 +72,52 @@ function CartPage() {
     }
   };
 
-  const handleCheckout = () => {
-    setLoading(true); // Block UI during checkout
-    navigate(`/payment`);
-    setTimeout(() => {
-      alert('Checkout successful!');
-      setCart([]); // Clear cart for demo
-      setLoading(false);
-    }, 1500);
+  const handleCheckout = async () => {
+    // await axiosClient.post(`paypal/order`, cart)
+    //   .then(response => {
+    //     console.log('Order created: ', response.data);
+    //     navigate('/payment');
+    //   })
+    //   .catch(error => console.error('Error creating order: ', error));
+    if (cart.length === 0) {
+      console.error('Empty cart');
+      return;
+    }
+    const cartRequest = {
+      CartItems: cart.map(item => ({
+        CartItemId: item.cart_item_id,
+        CartId: item.cart_id,
+        ProductId: item.product_id,
+        Quantity: item.quantity,
+        ProductName: item.name,
+        Price: parsePrice(item.price),
+        CartColor: item.cart_color,
+        CartSize: item.cart_size,
+        Image: item.image,
+        ProductColor: item.available_colors,
+        ProductSize: item.available_sizes,
+        Description: item.description
+      })),
+      TotalAmount: _total
+    };
+    setCartRequest(cartRequest);
+    const cartId = cart[1]?.cart_id;
+    if (cartId) {
+      try {
+        await axiosClient.delete(`carts/${cartId}`);
+        await axiosClient.post(`orders/`, cartRequest);
+        navigate('/payment', { state: { cartRequest } });
+        // await axios.post(`http://localhost:7167/api/paypal/order`, {
+        //   total: total
+        // });
+        // , { state: { CartRequest }}
+      } catch (error) {
+        console.error('Error navigating to payment page: ', error);
+      }
+    } else {
+      console.error('No cartId found to delete.');
+    }
+    
   };
 
   if (loading) return <p>Loading...</p>;
@@ -132,7 +173,8 @@ function CartPage() {
               <p>Shipping: <strong>Free</strong></p>
               <p>Sale: <strong>{sale}</strong></p>
               <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
-              <h5>Total: <strong>{formatPrice(total)}</strong></h5>
+              <h5>Total: <strong>{formatPrice(_total)}</strong></h5>
+              {/* <PayPalCheckout total={total}/> */}
               <Button
                 variant="dark"
                 className="w-100 mt-3"

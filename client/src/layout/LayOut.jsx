@@ -16,10 +16,12 @@ import ProductFeaturedPage from "../components/Home/listProduct/featured/Product
 import ProductSearch from "../components/Home/listProduct/Product/ProductSearch";
 import CartPage from "../components/Home/Cart/CartPage";
 import WishlistPage from "../components/Home/Wishlist/WishlistPage";
+import { CartProvider } from "../context/CartContext";
 
 const LayOut = () => {
   return (
     <>
+    <CartProvider>
       <Routes>
         {/* Nested Routes */}
         <Route path="/" element={<App />}>
@@ -49,6 +51,7 @@ const LayOut = () => {
         {/* <Route path="/admin" element={<AdminChatbox userId="admin" />} /> */}
         
       </Routes>
+      </CartProvider>
     </>
   );
 };

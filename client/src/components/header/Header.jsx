@@ -144,7 +144,7 @@ const Header = () => {
               <IoBagCheck className="w-100 icon" /> 
             </span>
 
-            {/* <Form className="d-flex">
+            <Form className="d-flex">
               <Form.Control
                 type="search"
                 placeholder="Search"
@@ -154,7 +154,7 @@ const Header = () => {
               <Button className="rounded-circle btn btn-dark">
                 <IoMdSearch className="w-100" /> 
               </Button>
-            </Form> */}
+            </Form>
           </div>
 
           </Navbar.Collapse>
@@ -172,6 +172,7 @@ const Header = () => {
 
   const goToCartPage = () => navigate('/cart'); // Navigate to CartPage
   const goToWishlistPage = () => navigate('/wishlist'); // Navigate to WishlistPage
+  const goToOrderPage = () => navigate('/orders');
 
   return (
     <>
@@ -294,6 +295,9 @@ const Header = () => {
           </span>
           <span className="icon-bag rounded-circle" onClick={goToCartPage}>
             <IoBagHandleOutline />
+          </span>
+          <span className="icon-bag rounded-circle" onClick={goToOrderPage}>
+            <IoBagCheck/>
           </span>
         </div>
         
