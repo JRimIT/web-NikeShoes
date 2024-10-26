@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 // import axios from "axios";
 import axios from "../../../../utils/axios.customize";
 
@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Footer from '../../footer/Footer';
 import Review from '../review/Review';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -46,7 +46,6 @@ const ProductDetailPage = () => {
     const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
     if (userData && userData.user_id) {
       setUserId(userData.user_id); // Set userId from userData
-      // console.log(userData.user_id); // Log user_id from userData
     }
   }, [userId]);
 
