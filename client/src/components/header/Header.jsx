@@ -20,7 +20,6 @@ import loadingGif from "../../assets/Double Ring@1x-1.0s-200px-200px.gif";
 
 const Header = () => {
   const [products, setProducts] = useState([]); // State để lưu kết quả tìm kiếm
-<<<<<<< HEAD
   const navigate = useNavigate();
 
   const Header = () => {
@@ -169,28 +168,19 @@ const Header = () => {
   
     );
   };
-//Hàm xử lý kết quả tìm kiếm từ SearchBar
-=======
   const [isLoading, setIsLoading] = useState(false);
   // Hàm xử lý kết quả tìm kiếm từ SearchBar
->>>>>>> Truong
   const handleSearchResults = (searchResults) => {
     setProducts(searchResults); // Cập nhật state với sản phẩm tìm kiếm được
     console.log(searchResults); // Kiểm tra kết quả tìm kiếm
   };
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const navigate = useNavigate();
 
-<<<<<<< HEAD
   const goToCartPage = () => navigate('/cart'); // Navigate to CartPage
   const goToWishlistPage = () => navigate('/wishlist'); // Navigate to WishlistPage
   const goToOrderPage = () => navigate('/orders');
-=======
-  const goToCartPage = () => navigate("/cart"); // Navigate to CartPage
-  const goToWishlistPage = () => navigate("/wishlist"); // Navigate to WishlistPage
   // Get user data from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
->>>>>>> Truong
 
   const handleDropdownToggle = () => {
     setDropdownOpen(!isDropdownOpen);
@@ -648,50 +638,26 @@ const Header = () => {
                   </NavLink>
                 </Nav>
 
-<<<<<<< HEAD
-        <div className="navbar-right-content">
-          <span className="icon-bag rounded-circle" onClick={goToWishlistPage}>
-            <FaHeart />
-          </span>
-          <span className="icon-bag rounded-circle" onClick={goToCartPage}>
-            <IoBagHandleOutline />
-          </span>
-          <span className="icon-bag rounded-circle" onClick={goToOrderPage}>
-            <IoBagCheck/>
-          </span>
-        </div>
-        
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
-    </>
-
-    );
-  };
-=======
                 <div className="navbar-right-content">
-                  <span
-                    className="icon-bag rounded-circle"
-                    onClick={goToWishlistPage}
-                  >
+                  <span className="icon-bag rounded-circle" onClick={goToWishlistPage}>
                     <FaHeart />
                   </span>
-                  <span
-                    className="icon-bag rounded-circle"
-                    onClick={goToCartPage}
-                  >
+                  <span className="icon-bag rounded-circle" onClick={goToCartPage}>
                     <IoBagHandleOutline />
+                  </span>
+                  <span className="icon-bag rounded-circle" onClick={goToOrderPage}>
+                    <IoBagCheck/>
                   </span>
                   <SearchBar onSearchResults={handleSearchResults}></SearchBar>
                 </div>
+        
               </Navbar.Collapse>
             </Container>
           </Navbar>
         </>
-      )}
+      )};
     </>
   );
 };
->>>>>>> Truong
 
 export default Header;
