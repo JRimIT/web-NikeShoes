@@ -5,75 +5,62 @@ import {
   MDBRow,
   MDBCol,
   MDBIcon,
-  MDBBtn,
 } from "mdb-react-ui-kit";
-import { MdOutlineFacebook } from "react-icons/md";
-import { FaInstagram } from "react-icons/fa";
-
+import { FaUser } from "react-icons/fa";
+import "./Footer.scss";
 
 function Footer() {
   return (
-    <MDBFooter bgColor="light" className="text-center text-lg-start text-muted">
-    
-
-      <section className="">
+    <MDBFooter bgColor="white" className="text-center text-lg-start text-muted">
+      <section>
         <MDBContainer className="text-center text-md-start mt-5">
           <MDBRow className="mt-3">
             <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
-              <h6 className="text-uppercase fw-bold mb-4">
-                <MDBIcon color="secondary" icon="gem" className="me-3" />
-                Nike
-              </h6>
+              <h6 className="text-uppercase fw-bold mb-4">Nike</h6>
               <p>
-                Here you can use rows and columns to organize your footer
-                content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                elit.
+                We deliver premium sportswear and footwear designed to elevate
+                your performance and style.
               </p>
             </MDBCol>
 
             <MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Products</h6>
               <p>
-                <a href="#!" className="text-reset">
+                <a href="/products-men/Men" className="footer-link">
                   Men
                 </a>
               </p>
               <p>
-                <a href="#!" className="text-reset">
-                  Woman
+                <a href="/products-women/Women" className="footer-link">
+                  Women
                 </a>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <a href="" className="footer-link">
                   Sport
-                </a>
-              </p>
-              <p>
-                <a href="#!" className="text-reset">
-                  Personal style
                 </a>
               </p>
             </MDBCol>
 
             <MDBCol md="3" lg="2" xl="2" className="mx-auto mb-4">
-              <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
+              <h6 className="text-uppercase fw-bold mb-4">Useful Links</h6>
               <p>
-                <a href="#!" className="text-reset">
+                <a href="#!" className="footer-link">
                   Pricing
                 </a>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <a href="#!" className="footer-link">
                   Settings
                 </a>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <a href="#!" className="footer-link">
                   Orders
                 </a>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <a href="#!" className="footer-link">
                   Help
                 </a>
               </p>
@@ -81,33 +68,36 @@ function Footer() {
 
             <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
+              <p>FPTU Da Nang, Ngu Hanh Son, Viet Nam</p>
               <p>
-                <MDBIcon color="secondary" icon="home" className="me-2" />
-                New York, NY 10012, US
+                {/* <MDBIcon icon="envelope" className="me-3" /> */}
+                fpt@example.com
               </p>
               <p>
-                <MDBIcon color="secondary" icon="envelope" className="me-3" />
-                info@example.com
-              </p>
-              <p>
-                <MDBIcon color="secondary" icon="phone" className="me-3" /> + 01
-                234 567 88
-              </p>
-              <p>
-                <MDBIcon color="secondary" icon="print" className="me-3" /> + 01
-                234 567 89
+                <MDBIcon icon="phone" className="me-3" /> +01 234 567 88
               </p>
             </MDBCol>
           </MDBRow>
         </MDBContainer>
       </section>
 
-      <div
-        className="text-center p-4"
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
-      >
-        © 2024 Nike, Inc. All rights reserved
-        
+      <div className="footer-bottom text-center p-4">
+        <p>
+          © 2024 Nike, Inc. All rights reserved |{" "}
+          <a href="#!" className="footer-link">
+            Privacy Policy
+          </a>{" "}
+          |{" "}
+          <a href="#!" className="footer-link">
+            Terms & Conditions
+          </a>
+        </p>
+        {/* <div className="social-icons">
+          <MdOutlineFacebook className="me-3 social-icon" />
+          <FaInstagram className="me-3 social-icon" />
+          <FaTwitter className="me-3 social-icon" />
+          <FaYoutube className="social-icon" />
+        </div> */}
       </div>
     </MDBFooter>
   );
