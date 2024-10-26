@@ -226,42 +226,42 @@ const Header = () => {
                           </NavLink>
                         </div>
                         <div className="mega-dropdown-column">
-                          <NavLink className="dropdown-title" to="/shopbysport">
+                          <NavLink className="dropdown-title" >
                             Shop By Sports
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/running"
+                            to="/products-men/Men's Road Running Shoes"
                           >
                             Running
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/football"
+                            to="/products-men/Football"
                           >
                             Football
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/baseball"
+                            to="/products-men/Basketball"
                           >
-                            Baseball
+                            Basketball
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/training-and-gym"
+                            to="/products-men/Men's Workout Shoes"
                           >
                             Training And Gym
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/tennis"
+                            to="/products-men/Men's Hard Court Tennis Shoes"
                           >
                             Tennis
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/skateboarding"
+                            to="/products-men/Skate"
                           >
                             Skateboarding
                           </NavLink>
@@ -407,42 +407,42 @@ const Header = () => {
                           </NavLink>
                         </div>
                         <div className="mega-dropdown-column">
-                          <NavLink className="dropdown-title" to="/shopbysport">
+                          <NavLink className="dropdown-title">
                             Shop By Sports
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/running"
+                            to="/products-women/Women's Trail-Running Shoes"
                           >
                             Running
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/football"
+                            to="/products-women/Football"
                           >
                             Football
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/baseball"
+                            to="/products-women/Basketball"
                           >
-                            Baseball
+                            Basketball
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/training-and-gym"
+                            to="/products-women/Women's Workout Shoes"
                           >
                             Training And Gym
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/tennis"
+                            to="/products-women/Women's Hard Court Tennis Shoes"
                           >
                             Tennis
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/skateboarding"
+                            to="/products-women/Skate"
                           >
                             Skateboarding
                           </NavLink>
