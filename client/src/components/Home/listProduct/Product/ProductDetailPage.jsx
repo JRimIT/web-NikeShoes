@@ -44,15 +44,22 @@ const ProductDetailPage = () => {
     const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
     if (userData && userData.user_id) {
       setUserId(userData.user_id); // Set userId from userData
-      console.log(userData.user_id); // Log user_id from userData
+      // console.log(userData.user_id); // Log user_id from userData
     }
   }, [userId]);
 
-  const handleAddToCart = async () => {
-    if (userId == 0) {
+  const checkLoginAndNavigate = (userId, navigate) => {
+    if (userId === 0) {
+      toast.info('Please log in to continue.');
       navigate("/login");
+      return false;
     }
-
+    return true;
+  };
+  
+  const handleAddToCart = async () => {
+    if (!checkLoginAndNavigate(userId, navigate)) return;
+  
     if (!product) {
       toast.error('Product details not available.');
       return;
@@ -65,42 +72,39 @@ const ProductDetailPage = () => {
   
     try {
       const { data } = await axios.post('http://localhost:5000/add-to-cart', {
-        userId: userId,
+        userId,
         productId: product.product_id,
         size: selectedSize,
         color: selectedColor || product.primary_image,
         quantity,
       });
   
-      toast.success(data.message); // Display success message
+      toast.success(data.message);
     } catch (error) {
       console.error('Error adding to cart:', error.response?.data || error);
   
-      // Handle quantity limit error
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.message;
   
         if (errorMessage.includes('maximum quantity')) {
           toast.error('You cannot add more than 10 of this product.');
         } else {
-          toast.error(errorMessage); // Other errors from the backend
+          toast.error(errorMessage);
         }
       } else {
         toast.error('An error occurred. Please try again.');
       }
     }
   };
-
+  
   const handleToggleFavourite = async () => {
-    if (userId == 0) {
-      navigate("/login");
-    }
-
+    if (!checkLoginAndNavigate(userId, navigate)) return;
+  
     if (!product) {
       toast.error('Product details not available.');
       return;
     }
-
+  
     if (!selectedSize) {
       toast.error('Please select size.');
       return;
@@ -108,17 +112,17 @@ const ProductDetailPage = () => {
   
     try {
       const { data } = await axios.post('http://localhost:5000/add-to-wishlist', {
-        userId: userId,
+        userId,
         productId: product.product_id,
         size: selectedSize,
-        color: (selectedColor || product.primary_image),
+        color: selectedColor || product.primary_image,
         quantity,
-      }); 
+      });
+  
       toast.success(data.message);
     } catch (error) {
       console.error('Error adding to wishlist:', error.response?.data || error);
-      toast.error(`Failed to add product to Wishlist!`);
-      // navigate(`/login`);
+      toast.error('Failed to add product to Wishlist!');
     }
   };
 

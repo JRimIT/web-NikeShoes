@@ -43,6 +43,19 @@
                     border: 1px solid black;
                 }
             }
+            .shop-button {
+                background-color: black;
+                border-color: black;
+                color: white;
+                text-decoration: none;
+                transition: background-color 0.3s, border-color 0.3s;
+            }
+            
+            .shop-button:hover {
+                background-color: gray;
+                border-color: gray;
+            }
+              
         }
 
         .content{

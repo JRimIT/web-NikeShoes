@@ -1,0 +1,594 @@
+// Variables
+$primary-color: #000;
+$secondary-color: #fff;
+$accent-color: #f5f5f5;
+$text-color: #333;
+$gray-color: #808080;
+
+// Mixins
+@mixin container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin button-reset {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+// Keyframes
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 1s infinite;
+}
+
+// Global styles
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: $text-color;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: $secondary-color;
+}
+
+.container {
+  @include container;
+}
+
+// Help Page styles
+.help-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  main {
+    flex: 1;
+    padding: 2rem 0;
+
+    .hero-section {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeIn 0.8s ease-out;
+
+      h2 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: $primary-color;
+      }
+
+      .animated-text {
+        background: linear-gradient(45deg, $primary-color, $gray-color);
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: pulse 2s infinite;
+      }
+
+      .search-bar {
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto;
+
+        input {
+          width: 100%;
+          padding: 1rem 1rem 1rem 3rem;
+          font-size: 1rem;
+          border: 2px solid $gray-color;
+          border-radius: 30px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+            box-shadow: 0 0 0 3px rgba($primary-color, 0.3);
+          }
+        }
+
+        .search-button {
+          @include button-reset;
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          color: $gray-color;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: $primary-color;
+          }
+        }
+      }
+    }
+
+    .help-topics {
+      margin-bottom: 3rem;
+      animation: slideIn 0.6s ease-out;
+
+      .topics-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+
+        h3 {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: $primary-color;
+        }
+
+        .topics-tabs {
+          display: flex;
+          gap: 0.5rem;
+          background-color: $accent-color;
+          padding: 0.25rem;
+          border-radius: 25px;
+
+          button {
+            @include button-reset;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+
+            &.active, &:hover {
+              background-color: $primary-color;
+              color: $secondary-color;
+            }
+          }
+        }
+      }
+
+      .topics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+
+        .topic-button {
+          @include button-reset;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 1rem;
+          background-color: $secondary-color;
+          border-radius: 8px;
+          text-align: left;
+          transition: all 0.3s ease;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+          &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          }
+
+          .topic-icon {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+          }
+
+          .topic-title {
+            font-weight: bold;
+            flex-grow: 1;
+          }
+
+          .chevron-icon {
+            color: $gray-color;
+            transition: transform 0.3s ease;
+          }
+
+          &:hover .chevron-icon {
+            transform: translateX(4px);
+          }
+        }
+      }
+
+      .loading-spinner {
+        @include flex-center;
+        height: 200px;
+        color: $gray-color;
+      }
+    }
+
+    .quick-help {
+      margin-bottom: 3rem;
+      animation: slideIn 0.6s ease-out 0.1s both;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: $primary-color;
+      }
+
+      .quick-help-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+
+      .quick-help-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem;
+        background-color: $secondary-color;
+        border-radius: 8px;
+        text-decoration: none;
+        color: $text-color;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        svg {
+          width: 2rem;
+          height: 2rem;
+          margin-bottom: 0.5rem;
+          color: $gray-color;
+        }
+
+        span {
+          font-weight: 500;
+        }
+      }
+    }
+
+    .faq {
+      margin-bottom: 3rem;
+      animation: slideIn 0.6s ease-out 0.2s both;
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        color: $primary-color;
+      }
+
+      .faq-list {
+        details {
+          margin-bottom: 1rem;
+          border: 1px solid $gray-color;
+          border-radius: 8px;
+          overflow: hidden;
+          transition: all 0.3s ease;
+
+          &[open] {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          }
+
+          summary {
+            padding: 1rem;
+            background-color: $secondary-color;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+
+            &:hover {
+              background-color: $accent-color;
+            }
+
+            &::marker {
+              content: '';
+            }
+
+            &::-webkit-details-marker {
+              display: none;
+            }
+
+            &::after {
+              content: '+';
+              float: right;
+              font-size: 1.5rem;
+              line-height: 1;
+              transition: transform 0.3s ease;
+            }
+          }
+
+          &[open] summary::after {
+            transform: rotate(45deg);
+          }
+
+          p {
+            padding: 1rem;
+            background-color: $secondary-color;
+            animation: slideIn 0.3s ease-out;
+          }
+        }
+      }
+    }
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .modal-content {
+    background-color: $secondary-color;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    animation: slideIn 0.3s ease-out;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: $primary-color;
+    }
+
+    p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .close-button {
+      @include button-reset;
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: $text-color;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $primary-color;
+      }
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+    }
+
+    .action-button {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      background-color: $primary-color;
+      color: $secondary-color;
+      border: none;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      &.secondary {
+        background-color: $accent-color;
+        color: $text-color;
+      }
+    }
+
+    .map-container {
+      width: 100%;
+      height: 300px;
+      background-color: $accent-color;
+      border-radius: 8px;
+      overflow: hidden;
+
+      iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+    }
+
+    .email-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid $gray-color;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+    }
+
+    .contact-options {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+
+      .contact-option {
+        @include button-reset;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+        background-color: $accent-color;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        svg {
+          width: 2rem;
+          height: 2rem;
+          margin-bottom: 0.5rem;
+          color: $primary-color;
+        }
+
+        span {
+          font-weight: 500;
+        }
+      }
+    }
+
+    .phone-number {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: $primary-color;
+      margin: 1rem 0;
+    }
+
+    .call-status {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1rem;
+    
+      .calling-animation {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    
+        svg {
+          width: 48px;
+          height: 48px;
+          color: $primary-color;
+        }
+      }
+    
+      .call-connected, .call-ended {
+        text-align: center;
+    
+        p {
+          margin: 0.5rem 0;
+        }
+      }
+    
+      .end-call {
+        background-color: #ff4d4f;
+        &:hover {
+          background-color: #ff7875;
+        }
+      }
+    }
+  }
+
+  .scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: $primary-color;
+    color: $secondary-color;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0.7;
+  
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .help-page {
+    main {
+      .hero-section {
+        h2 {
+          font-size: 2rem;
+        }
+      }
+
+      .help-topics {
+        .topics-header {
+          flex-direction: column;
+          align-items: flex-start;
+
+          .topics-tabs {
+            margin-top: 1rem;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+
+            button {
+              flex-shrink: 0;
+            }
+          }
+        }
+
+        .topics-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .quick-help {
+        .quick-help-options {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+
+    .modal-content {
+      width: 95%;
+
+      .contact-options {
+        flex-direction: column;
+      }
+    }
+  }
+}

@@ -8,7 +8,7 @@ import './WishlistPage.scss';
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [operationLoading, setOperationLoading] = useState(false);
   const [error, setError] = useState(null);
   const [quantity] = useState(1);
@@ -17,7 +17,7 @@ const WishlistPage = () => {
   // Fetch the wishlist when userId is available
   useEffect(() => {
     const fetchWishlist = async () => {
-      if (!userId) return;
+      // if (!userId) return;
       try {
         console.log(userId);
         const response = await axios.get(`http://localhost:5000/api/wishlist/${userId}`);
@@ -30,7 +30,7 @@ const WishlistPage = () => {
       }
     };
 
-    if (userId) fetchWishlist();
+    fetchWishlist();
   }, [userId]);
 
   // Get user ID from localStorage
@@ -89,11 +89,11 @@ const WishlistPage = () => {
   return (
     <div className="wishlist-container">
       <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick={true}/>
-      <h1>Favourites</h1>
+      <h2>Favourites</h2>
 
       {wishlist.length === 0 ? (
         <div className="text-center">
-          <p>No products in favourite.</p>
+          <h4>No products in favourite.</h4>
           <Button variant="primary" href="/products-men/All">
             Shop Now
           </Button>

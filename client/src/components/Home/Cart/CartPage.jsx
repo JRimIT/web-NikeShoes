@@ -6,7 +6,7 @@ import './CartPage.scss';
 
 function CartPage() {
   const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(false); 
   const [loadingAction, setLoadingAction] = useState(false);
   const [userId, setUserId] = useState(null);
   const shippingFee = 0;
@@ -33,7 +33,7 @@ function CartPage() {
 
   useEffect(() => {
     const fetchCart = async () => {
-      if (!userId) return; // Don't fetch if userId is not set
+      // if (!userId) return; // Don't fetch if userId is not set
       try {
         console.log(userId);
         const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
@@ -46,8 +46,7 @@ function CartPage() {
     };
 
     fetchCart();
-  }, [userId])
-  ;
+  }, [userId]);
 
   const handleQuantityChange = async (id, newQuantity) => {
     // if (newQuantity < 1) return;

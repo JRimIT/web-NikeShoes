@@ -1,8 +1,8 @@
 .review-container {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  max-width: 90%; /* Adjust to ensure it adapts to different screen sizes */
+  max-width: 90%;
   width: 1200px;
-  margin: 20px auto; /* Added some vertical margin for spacing */
+  margin: 20px auto;
   padding: 20px;
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -100,14 +100,14 @@
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
-  background-color: #4caf50;
+  background-color: black;
   color: #fff;
   font-size: 1rem;
   cursor: pointer;
 }
 
 .add-review button:hover {
-  background-color: #45a049;
+  background-color: grey;
 }
 
 /* Responsive Design */

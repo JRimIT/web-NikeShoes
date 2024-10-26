@@ -39,6 +39,7 @@ import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
 import ProfilePage from "../components/Profile";
+import HelpPage from "../components/Home/Help/HelpPage";
 
 const LayOut = () => {
   return (
@@ -65,6 +66,7 @@ const LayOut = () => {
           <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/cart" element={<CartPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
+          <Route path="/help" element={<HelpPage />} />
         </Route>
 
         {/* Dynamic route for User with userId */}

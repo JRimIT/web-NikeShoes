@@ -171,9 +171,7 @@ const Header = () => {
                   </div>
                 </div>
               </div>
-              <NavLink className="nav-link" to="/sale">Sale</NavLink>
               <NavLink className="nav-link" to="/help">Help</NavLink>
-              <NavLink className="nav-link" to="/join">Join Us</NavLink>
             </Nav>
 
             <div className="navbar-right-content">
