@@ -1,19 +1,12 @@
-<<<<<<< HEAD
 import React, { useState, useEffect, useContext } from 'react';
 import { Container, Row, Col, Button, Image, Form } from 'react-bootstrap';
 import { FaTrashAlt } from 'react-icons/fa';
-import axios from 'axios';
+// import axios from 'axios';
 import axiosClient from "../../../api/axiosClient";
+import axios from "../../../utils/axios.customize";
 import './CartPage.scss';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../../../context/CartContext';
-=======
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Image, Form } from "react-bootstrap";
-import { FaTrashAlt } from "react-icons/fa";
-import axios from "../../../utils/axios.customize";
-import "./CartPage.scss";
->>>>>>> Truong
 
 function CartPage() {
   const { setCartRequest } = useContext(CartContext);
@@ -23,29 +16,19 @@ function CartPage() {
   const [loadingAction, setLoadingAction] = useState(false);
   const [userId, setUserId] = useState(null);
   const shippingFee = 0;
-<<<<<<< HEAD
   const sale = '10%';
   const discount = 100000;
 
   const parsePrice = (price) => Number(parseFloat(price.replaceAll(',', '')).toFixed(2));
   const formatPrice = (price) => `${price.toLocaleString('vi-VN')}₫`;
-=======
-  const sale = '99.9%';
-  const discount = 200000;
-
-  const parsePrice = (price) => Number(price.replaceAll(",", ""));
-  const formatPrice = (price) => `${price.toLocaleString("vi-VN")}₫`;
->>>>>>> Truong
 
   const calculateSubtotal = () =>
     cart.reduce((acc, item) => acc + parsePrice(item.price) * item.quantity, 0);
 
   const subtotal = calculateSubtotal();
-<<<<<<< HEAD
   const _total = (subtotal + shippingFee - discount) * (1 - 10 / 1000);
-=======
   // const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
-  const total = (subtotal + shippingFee - discount);
+  // const total = (subtotal + shippingFee - discount);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
@@ -54,7 +37,6 @@ function CartPage() {
       console.log(userData.user_id);
     }
   }, []);
->>>>>>> Truong
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -113,7 +95,6 @@ function CartPage() {
     }
   };
 
-<<<<<<< HEAD
   const handleCheckout = async () => {
     // await axiosClient.post(`paypal/order`, cart)
     //   .then(response => {
@@ -160,15 +141,6 @@ function CartPage() {
       console.error('No cartId found to delete.');
     }
     
-=======
-  const handleCheckout = () => {
-    setLoading(true); // Block UI during checkout
-    setTimeout(() => {
-      alert("Checkout successful!");
-      setCart([]); // Clear cart for demo
-      setLoading(false);
-    }, 1500);
->>>>>>> Truong
   };
 
   if (loading) return <p>Loading...</p>;
@@ -219,8 +191,7 @@ function CartPage() {
               </div>
             ))}
           </Col>
-<<<<<<< HEAD
-          <Col md={4}>
+          <Col md={4} className="order-summary">
             <div className="border p-3 rounded" style={{ backgroundColor: '#f9f9f9' }}>
               <h4>Order Summary</h4>
               <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
@@ -231,7 +202,7 @@ function CartPage() {
               {/* <PayPalCheckout total={total}/> */}
               <Button
                 variant="dark"
-                className="w-100 mt-3"
+                className="w-100 mt-3 checkout-button"
                 onClick={handleCheckout}
                 disabled={loading || loadingAction}
                 style={{ fontSize: '1.2rem' }}
@@ -239,23 +210,6 @@ function CartPage() {
                 {loading ? 'Processing...' : 'Proceed to Checkout'}
               </Button>
             </div>
-=======
-          <Col md={4} className="order-summary">
-            <h4>Order Summary</h4>
-            <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
-            <p>Shipping: <strong>Free</strong></p>
-            {/* <p>Sale: <strong>{sale}</strong></p> */}
-            <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
-            <h5>Total: <strong>{formatPrice(total)}</strong></h5>
-            <Button
-              variant="dark"
-              className="w-100 mt-3 checkout-button"
-              onClick={handleCheckout}
-              disabled={loading || loadingAction}
-            >
-              {loading ? "Processing..." : "Proceed to Checkout"}
-            </Button>
->>>>>>> Truong
           </Col>
         </Row>
       )}
