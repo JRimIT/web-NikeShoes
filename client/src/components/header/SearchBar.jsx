@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { IoMdSearch } from 'react-icons/io'; // Icon search
-import './SearchBar.scss'; // CSS file
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import axios from "../../utils/axios.customize";
+import { IoMdSearch } from "react-icons/io"; // Icon search
+import "./SearchBar.scss"; // CSS file
+import { useNavigate } from "react-router-dom";
 
 const SearchBar = ({ onSearchResults }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false); // Trạng thái popup
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -18,10 +18,12 @@ const SearchBar = ({ onSearchResults }) => {
     if (searchTerm.length > 2) {
       const fetchSuggestions = async () => {
         try {
-          const response = await axios.get(`http://localhost:5000/products/suggestions?term=${searchTerm}`);
+          const response = await axios.get(
+            `products/suggestions?term=${searchTerm}`
+          );
           setSuggestions(response.data.suggestions);
         } catch (error) {
-          console.error('Error fetching suggestions:', error);
+          console.error("Error fetching suggestions:", error);
         }
       };
       fetchSuggestions();
@@ -38,7 +40,7 @@ const SearchBar = ({ onSearchResults }) => {
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSearch(); // Khi nhấn Enter, điều hướng URL
     }
   };
@@ -70,24 +72,26 @@ const SearchBar = ({ onSearchResults }) => {
   // Thêm sự kiện để lắng nghe nhấp chuột ngoài popup
   useEffect(() => {
     if (isExpanded) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     } else {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     }
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside); // Cleanup
+      document.removeEventListener("mousedown", handleClickOutside); // Cleanup
     };
   }, [isExpanded]);
 
   // Đóng popup khi nhấn Cancel
   const handleCancel = () => {
     setIsExpanded(false);
-    setSearchTerm(''); // Reset lại input
+    setSearchTerm(""); // Reset lại input
     setShowSuggestions(false);
   };
 
   return (
-    <div ref={wrapperRef}> {/* Tham chiếu đến toàn bộ wrapper */}
+    <div ref={wrapperRef}>
+      {" "}
+      {/* Tham chiếu đến toàn bộ wrapper */}
       {!isExpanded ? (
         <div className="compact-search-bar">
           <input
@@ -103,7 +107,7 @@ const SearchBar = ({ onSearchResults }) => {
           </button>
         </div>
       ) : (
-        <div className={`expanded-search-bar ${isExpanded ? 'open' : ''}`}>
+        <div className={`expanded-search-bar ${isExpanded ? "open" : ""}`}>
           <div className="search-header">
             <input
               type="text"
@@ -116,20 +120,34 @@ const SearchBar = ({ onSearchResults }) => {
             <button className="search-button" onClick={handleSearch}>
               <IoMdSearch />
             </button>
-            <button className="cancel-button" onClick={handleCancel}>Cancel</button>
+            <button className="cancel-button" onClick={handleCancel}>
+              Cancel
+            </button>
           </div>
 
           {showSuggestions && (
-            <div className={`suggestions-popup ${showSuggestions ? 'open' : ''}`}>
+            <div
+              className={`suggestions-popup ${showSuggestions ? "open" : ""}`}
+            >
               <ul className="suggestions-list">
                 {suggestions.map((suggestion, index) => (
-                  <li key={index} onClick={() => handleSuggestionClick(suggestion)} className="suggestion-item">
-                    <img src={suggestion.image} alt={suggestion.name} className="suggestion-image" />
+                  <li
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="suggestion-item"
+                  >
+                    <img
+                      src={suggestion.image}
+                      alt={suggestion.name}
+                      className="suggestion-image"
+                    />
                     <div className="suggestion-info">
                       <p className="suggestion-name">{suggestion.name}</p>
                       <p className="suggestion-price">
-                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
-                          .format(suggestion.price)}
+                        {new Intl.NumberFormat("vi-VN", {
+                          style: "currency",
+                          currency: "VND",
+                        }).format(suggestion.price)}
                       </p>
                     </div>
                   </li>

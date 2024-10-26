@@ -124,6 +124,19 @@
   }
 }
 
+.header-container{
+  position: relative;
+  .Loading-PageLogOut{
+    position: fixed;
+    display: flex ;
+    background-color: #f1f1f1;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 // Avatar
 .user-avatar {
   width: 30px;

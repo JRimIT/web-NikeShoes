@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import './ProductDetailPage.scss';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+// import axios from "axios";
+import axios from "../../../../utils/axios.customize";
+
+import "./ProductDetailPage.scss";
 import { FaHeart } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -61,15 +63,15 @@ const ProductDetailPage = () => {
     if (!checkLoginAndNavigate(userId, navigate)) return;
   
     if (!product) {
-      toast.error('Product details not available.');
+      toast.error("Product details not available.");
       return;
     }
   
     if (!selectedSize) {
-      toast.error('Please select size.');
+      toast.error("Please select size.");
       return;
     }
-  
+
     try {
       const { data } = await axios.post('http://localhost:5000/add-to-cart', {
         userId,
@@ -101,15 +103,15 @@ const ProductDetailPage = () => {
     if (!checkLoginAndNavigate(userId, navigate)) return;
   
     if (!product) {
-      toast.error('Product details not available.');
+      toast.error("Product details not available.");
       return;
     }
   
     if (!selectedSize) {
-      toast.error('Please select size.');
+      toast.error("Please select size.");
       return;
     }
-  
+
     try {
       const { data } = await axios.post('http://localhost:5000/add-to-wishlist', {
         userId,
@@ -121,8 +123,18 @@ const ProductDetailPage = () => {
   
       toast.success(data.message);
     } catch (error) {
-      console.error('Error adding to wishlist:', error.response?.data || error);
-      toast.error('Failed to add product to Wishlist!');
+      if (error) {
+        toast.error("Product is already in your wishlist.");
+      } else if (error?.response?.status === 409) {
+        toast.error("Product is already in your wishlist.");
+      } else {
+        // Safely handle other errors
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to add product to Wishlist";
+        toast.error(`Failed to add product to Wishlist: ${errorMessage}`);
+      }
     }
   };
 
@@ -143,9 +155,11 @@ const ProductDetailPage = () => {
         <ToastContainer position="top-right" autoClose={1500} hideProgressBar={false} closeOnClick={true} />
         <div className="image-gallery">
           <div className="main-image">
-            <img 
-              src={selectedColor || product.primary_image || '/default-image.jpg'} 
-              alt={product.name || 'Product Image'} 
+            <img
+              src={
+                selectedColor || product.primary_image || "/default-image.jpg"
+              }
+              alt={product.name || "Product Image"}
             />
           </div>
         </div>
@@ -155,7 +169,10 @@ const ProductDetailPage = () => {
           <h2>{product.name}</h2>
           <h5>{product.category}</h5>
           <p className="price">
-            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price)}
+            {new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(product.price)}
           </p>
 
           <h3>Select Color</h3>
@@ -163,7 +180,9 @@ const ProductDetailPage = () => {
             {colorList.map((color, index) => (
               <div
                 key={index}
-                className={`color-swatch ${selectedColor === color ? 'selected' : ''}`}
+                className={`color-swatch ${
+                  selectedColor === color ? "selected" : ""
+                }`}
                 style={{ backgroundImage: `url(${color})` }}
                 onClick={() => {
                   setSelectedColor(color);
@@ -178,7 +197,9 @@ const ProductDetailPage = () => {
             {sizeList.map((size, index) => (
               <div
                 key={index}
-                className={`size-box ${selectedSize === size ? 'selected' : ''}`}
+                className={`size-box ${
+                  selectedSize === size ? "selected" : ""
+                }`}
                 onClick={() => setSelectedSize(size)}
               >
                 {size}
@@ -186,13 +207,18 @@ const ProductDetailPage = () => {
             ))}
           </div>
 
-          <button className="add-to-cart" onClick={handleAddToCart}>Add to Cart</button>
-          <button className="wishlist" onClick={handleToggleFavourite}>Favourite
+          <button className="add-to-cart" onClick={handleAddToCart}>
+            Add to Cart
+          </button>
+          <button className="wishlist" onClick={handleToggleFavourite}>
+            Favourite
             <FaHeart className="icon" />
           </button>
 
           <p className="product-description">{product.description}</p>
-          <p className="product-description-country">{product.product_descriptionCountryOrigin}</p>
+          <p className="product-description-country">
+            {product.product_descriptionCountryOrigin}
+          </p>
         </div>
       </div>
       <Review productId={id} userId={userId}/>

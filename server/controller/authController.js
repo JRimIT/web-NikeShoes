@@ -5,7 +5,7 @@ const upload = require("../middlewares/multer"); // Import cấu hình multer
 // Function Login
 const registerUser = (req, res) => {
   console.log("Received registration data:", req.body);
-  
+
   console.log("Received file data:", req.file); // Debugging
 
   const {
@@ -112,7 +112,7 @@ const loginUser = (req, res) => {
       res.send({ message: "Login successful!", user, token });
     });
   });
-  
+
 
 };
 

@@ -4,22 +4,36 @@ const db = require('../config/db');
 
 // Middleware xác thực JWT
 const authenticateJWT = (req, res, next) => {
-    
+  const white_lists = ["/", "/register", "/login", "/api/reviews"];
 
   const authHeader = req.headers.authorization;
 
+  if (white_lists.includes(req.originalUrl)) {
+    return next(); // Allow access to whitelisted routes
+  }
+  console.log("Check req: ", req.originalUrl);
+  console.log("Check authHead: ", authHeader);
+
+
   if (authHeader) {
     const token = authHeader.split(' ')[1]; // Lấy token từ "Bearer <token>"
-    
+
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-        return res.sendStatus(403); // Token không hợp lệ
+        return res.sendStatus(401).json({
+          message: "Token is expired"
+        });
+        ; // Token không hợp lệ
       }
       req.user = user; // Lưu thông tin user sau khi giải mã token
+      console.log("User: ", user);
+
       next(); // Tiếp tục đến route tiếp theo
     });
   } else {
-    res.sendStatus(401); // Không có token
+    return res.sendStatus(401).json({
+      message: "Not have access token!"
+    }); // Không có token
   }
 };
 

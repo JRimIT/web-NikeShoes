@@ -1,51 +1,48 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../../theme";
+import { useDispatch, useSelector } from "react-redux";
 // import { mockBarData as data } from "../../data/admin/mockData";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { getRevenuePerMonth } from "../../data/api/apiService";
+import RevenueSlice from "../../redux/revenue/revenueSlice";
 
 const BarChart = ({ isDashboard = false }) => {
   const [year, setYear] = useState(new Date().getFullYear());
-  const [data, setData] = useState([])
-  const [revenue, setRevenue] = useState([])
+  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
-  
   const VND = new Intl.NumberFormat("vi-VN", {
     style: "decimal", // using decimal style instead of currency to omit VND symbol
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
 
-  useEffect(()=>{
-    const fetchRevenue = async() => {
+  useEffect(() => {
+    const fetchRevenue = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/revenue-per-month?year=${year}`)
-        
-        console.log("Revenue" ,res.data);
-        
-        const dataInitial  = res.data.map((item) => ({
+        const res = await getRevenuePerMonth(year);
+
+        console.log("Revenue", res.data);
+
+        const dataInitial = res.data.map((item) => ({
           month: item.month,
-          total : item.total_amount
-        }))
+          total: item.total_amount,
+        }));
         // setRevenue(dataInitial)
         console.log(typeof dataInitial[0].total);
-        
-        setData(dataInitial)
-        
+        dispatch(RevenueSlice.actions.setRevenue(dataInitial));
+        setData(dataInitial);
       } catch (error) {
         console.log(error);
-        
       }
-    }
-    fetchRevenue()
-  }, [year])
-
-
-  
+    };
+    fetchRevenue();
+  }, [year]);
 
   return (
     <ResponsiveBar
@@ -113,7 +110,6 @@ const BarChart = ({ isDashboard = false }) => {
       axisTop={null}
       axisRight={null}
       axisBottom={{
-        
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
@@ -122,7 +118,7 @@ const BarChart = ({ isDashboard = false }) => {
         legendOffset: 32,
       }}
       axisLeft={{
-        tickValues: 25,
+        tickValues: isDashboard ? 5 : 20,
         tickSize: 10,
         tickPadding: 6,
         tickRotation: 0,

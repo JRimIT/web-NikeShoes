@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, Form } from 'react-bootstrap';
-import { FaTrashAlt } from 'react-icons/fa';
-import axios from 'axios';
-import './CartPage.scss';
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Button, Image, Form } from "react-bootstrap";
+import { FaTrashAlt } from "react-icons/fa";
+import axios from "../../../utils/axios.customize";
+import "./CartPage.scss";
 
 function CartPage() {
   const [cart, setCart] = useState([]);
@@ -13,8 +13,8 @@ function CartPage() {
   const sale = '99.9%';
   const discount = 200000;
 
-  const parsePrice = (price) => Number(price.replaceAll(',', ''));
-  const formatPrice = (price) => `${price.toLocaleString('vi-VN')}₫`;
+  const parsePrice = (price) => Number(price.replaceAll(",", ""));
+  const formatPrice = (price) => `${price.toLocaleString("vi-VN")}₫`;
 
   const calculateSubtotal = () =>
     cart.reduce((acc, item) => acc + parsePrice(item.price) * item.quantity, 0);
@@ -39,7 +39,11 @@ function CartPage() {
         const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
         setCart(response.data || []); // Handle empty or null data
       } catch (error) {
-        console.error('Error fetching cart:', error.message, error.response?.data);
+        console.error(
+          "Error fetching cart:",
+          error.message,
+          error.response?.data
+        );
       } finally {
         setLoading(false);
       }
@@ -63,7 +67,7 @@ function CartPage() {
         )
       );
     } catch (error) {
-      console.error('Error updating quantity:', error.message);
+      console.error("Error updating quantity:", error.message);
     } finally {
       setLoadingAction(false);
     }
@@ -72,16 +76,22 @@ function CartPage() {
   const handleRemove = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/cart/${userId}/${id}`);
-      setCart((prevCart) => prevCart.filter((item) => item.cart_item_id !== id));
+      setCart((prevCart) =>
+        prevCart.filter((item) => item.cart_item_id !== id)
+      );
     } catch (error) {
-      console.error('Error deleting item:', error.message, error.response?.data);
+      console.error(
+        "Error deleting item:",
+        error.message,
+        error.response?.data
+      );
     }
   };
 
   const handleCheckout = () => {
     setLoading(true); // Block UI during checkout
     setTimeout(() => {
-      alert('Checkout successful!');
+      alert("Checkout successful!");
       setCart([]); // Clear cart for demo
       setLoading(false);
     }, 1500);
@@ -95,7 +105,9 @@ function CartPage() {
       {cart.length === 0 ? (
         <div className="text-center">
           <h4>Your cart is empty.</h4>
-          <Button variant="primary" href="/products-men/All">Shop Now</Button>
+          <Button variant="primary" href="/products-men/All">
+            Shop Now
+          </Button>
         </div>
       ) : (
         <Row>
@@ -118,7 +130,10 @@ function CartPage() {
                     min="1"
                     value={item.quantity}
                     onChange={(e) =>
-                      handleQuantityChange(item.cart_item_id, parseInt(e.target.value, 10))
+                      handleQuantityChange(
+                        item.cart_item_id,
+                        parseInt(e.target.value, 10)
+                      )
                     }
                     className="quantity-control"
                   />
@@ -143,7 +158,7 @@ function CartPage() {
               onClick={handleCheckout}
               disabled={loading || loadingAction}
             >
-              {loading ? 'Processing...' : 'Proceed to Checkout'}
+              {loading ? "Processing..." : "Proceed to Checkout"}
             </Button>
           </Col>
         </Row>

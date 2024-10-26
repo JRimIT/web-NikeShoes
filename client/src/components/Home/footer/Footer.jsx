@@ -6,9 +6,8 @@ import {
   MDBCol,
   MDBIcon,
 } from "mdb-react-ui-kit";
-import { MdOutlineFacebook } from "react-icons/md";
-import { FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa";
-import './Footer.scss';
+import { FaUser } from "react-icons/fa";
+import "./Footer.scss";
 
 function Footer() {
   return (
@@ -17,9 +16,7 @@ function Footer() {
         <MDBContainer className="text-center text-md-start mt-5">
           <MDBRow className="mt-3">
             <MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
-              <h6 className="text-uppercase fw-bold mb-4">
-                <MDBIcon icon="gem" className="me-2" /> Nike
-              </h6>
+              <h6 className="text-uppercase fw-bold mb-4">Nike</h6>
               <p>
                 We deliver premium sportswear and footwear designed to elevate
                 your performance and style.
@@ -71,11 +68,9 @@ function Footer() {
 
             <MDBCol md="4" lg="3" xl="3" className="mx-auto mb-md-0 mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
+              <p>FPTU Da Nang, Ngu Hanh Son, Viet Nam</p>
               <p>
-                <MDBIcon icon="home" className="me-2" /> FPTU Da Nang, Ngu Hanh Son, Viet Nam
-              </p>
-              <p>
-                <MDBIcon icon="envelope" className="me-3" />
+                {/* <MDBIcon icon="envelope" className="me-3" /> */}
                 fpt@example.com
               </p>
               <p>

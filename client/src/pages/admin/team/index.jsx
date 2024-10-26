@@ -7,8 +7,7 @@ import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../../components/AdminSide/Header";
 import { useEffect, useState } from "react";
-import axios from "axios";
-
+import axios from "../../../utils/axios.customize";
 
 /*
     id: 5,
@@ -21,41 +20,31 @@ import axios from "axios";
 */
 
 const Team = () => {
+  const [team, setTeam] = useState([]);
 
-      const [team, setTeam] = useState([])
+  useEffect(() => {
+    fetchAllAdmin();
+  }, []);
 
-      useEffect(() => {
-          fetchAllAdmin()
-      }, [])
+  const fetchAllAdmin = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/allAdmin");
+      // console.log(res.data);
+      let data = res.data.map((user) => {
+        return {
+          id: user.user_id,
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+          role_name: user.role_name,
+        };
+      });
 
-
-
-      const fetchAllAdmin = async() => {
-          try {
-              const res = await axios.get("http://localhost:5000/api/allAdmin")
-              // console.log(res.data);
-              let data =  res.data.map(user => {
-                return{
-                  id: user.user_id,
-                  username: user.username,
-                  email: user.email,
-                  phone: user.phone,
-                  role_name: user.role_name
-
-                }
-              })
-              
-              
-              setTeam(data)
-          } catch (err) {
-              console.log(err);
-              
-          }
-
-          
-      }
-
-
+      setTeam(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -67,7 +56,7 @@ const Team = () => {
       flex: 1,
       cellClassName: "name-column--cell",
     },
-    
+
     {
       field: "phone",
       headerName: "Phone Number",
@@ -114,11 +103,11 @@ const Team = () => {
     <Box m="5px">
       <Header title="TEAM" subtitle="Managing the team Members" />
 
-      <Box 
-        m="40px 0 0 0" 
+      <Box
+        m="40px 0 0 0"
         height="75vh"
         sx={{
-           "& .MuiDataGrid-root": {
+          "& .MuiDataGrid-root": {
             border: "none",
           },
           "& .MuiDataGrid-cell": {

@@ -16,6 +16,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import ChatIcon from '@mui/icons-material/Chat';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -149,6 +150,13 @@ const Sidebar = () => {
               title="Invoices Balances"
               to="invoices"
               icon={<ReceiptOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Users Contact"
+              to="adminChatbox"
+              icon={<ChatIcon />}
               selected={selected}
               setSelected={setSelected}
             />

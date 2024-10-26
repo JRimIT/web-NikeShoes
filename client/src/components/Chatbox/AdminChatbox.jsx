@@ -4,107 +4,87 @@ import { io } from 'socket.io-client';
 import './AdminChatbox.scss';
 
 const AdminChatbox = () => {
-  const [onlineUsers, setOnlineUsers] = useState([]); // Danh sách user online
+  const [onlineUsers, setOnlineUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState({});
   const [newMessage, setNewMessage] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Trạng thái xác thực admin
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const chatEndRef = useRef(null);
-  const socket = useRef(null); // Sử dụng useRef để lưu socket
+  const socket = useRef(null);
+ 
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Lấy JWT token từ localStorage
-
+    const token = localStorage.getItem('token'); 
+  
     if (token) {
-      // Kết nối socket với token để xác thực admin
-      socket.current = io('http://localhost:5000', {
-        auth: { token }, // Gửi token qua socket auth
-      });
-
-      // Khi kết nối thành công
+      socket.current = io('http://localhost:5000', { auth: { token } });
+      
       socket.current.on('connect', () => {
         console.log('Admin socket connected!');
-        setIsAuthenticated(true); // Xác thực thành công
-        socket.current.emit('user_login', { userId: 'admin' }); // Phát sự kiện đăng nhập admin
+        setIsAuthenticated(true);
       });
-
-      // Lắng nghe sự kiện khi có user online
       socket.current.on('online_users', (users) => {
-        setOnlineUsers(users); // Cập nhật danh sách người dùng online
+        console.log("Danh sách người dùng online nhận từ server:", users);
+        setOnlineUsers(Object.values(users));
       });
-
-      // Lắng nghe sự kiện nhận tin nhắn
+  
       socket.current.on('receive_message', (message) => {
-        const { senderId, text } = message;
-        console.log('Received message from user:', message);
-        console.log('SenderId:', senderId); // Kiểm tra giá trị senderId
-      
-        if (!senderId) {
-          console.error('Error: senderId is undefined');
-          return; // Ngăn chặn nếu senderId bị undefined
-        }
-      
-        setMessages((prev) => {
-          const updatedMessages = {
-            ...prev,
-            [senderId]: [...(prev[senderId] || []), { senderId, text }],
-          };
-          console.log('Updated messages:', updatedMessages);
-          return updatedMessages;
-        });
+        const { senderId, senderName, text } = message;
+        setMessages((prev) => ({
+          ...prev,
+          [senderId]: [...(prev[senderId] || []), { senderId, senderName, text }],
+        }));
       });
-      
+  
       return () => {
-        socket.current.disconnect(); // Ngắt kết nối khi unmount
+        socket.current.disconnect();
       };
     } else {
-      setIsAuthenticated(false); // Nếu không có token
+      setIsAuthenticated(false); 
     }
   }, []);
-
-  // Auto-scroll xuống cuối mỗi khi tin nhắn mới được thêm vào
+  
   useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages[selectedUser]]);
+  }, [messages[selectedUser?.userId]]);
 
   const handleSendMessage = () => {
     if (newMessage.trim() && selectedUser) {
-      const message = { receiverId: selectedUser, text: newMessage, senderId: 'admin' };
+      const message = { receiverId: selectedUser.userId, text: newMessage, senderId: 'admin' };
       if (socket.current) {
-        socket.current.emit('send_message', message); // Gửi tin nhắn qua socket
+        socket.current.emit('send_message', message);
         setMessages((prev) => ({
           ...prev,
-          [selectedUser]: [...(prev[selectedUser] || []), message],
+          [selectedUser.userId]: [...(prev[selectedUser.userId] || []), message],
         }));
-        setNewMessage(''); // Xóa tin nhắn sau khi gửi
+        setNewMessage('');
       }
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleSendMessage(); // Gửi tin nhắn khi nhấn Enter
-    }
+    if (e.key === 'Enter') handleSendMessage();
   };
 
-  if (!isAuthenticated) {
-    return <p>Please log in as Admin to access the chat.</p>; // Yêu cầu đăng nhập nếu chưa xác thực
-  }
+  if (!isAuthenticated) return <p>Please log in as Admin to access the chat.</p>;
 
   return (
     <div className="admin-chatbox">
       <div className="user-list">
-        <h5>Online Users ({onlineUsers.length})</h5> {/* Hiển thị tổng số user */}
+        <h5>Online Users ({onlineUsers.length})</h5>
         <ListGroup variant="flush">
           {onlineUsers.map((user) => (
             <ListGroup.Item
-              key={user}
-              active={selectedUser === user}
-              onClick={() => setSelectedUser(user)}
+              key={user.userId}
+              active={selectedUser?.userId === user.userId}
+              onClick={() => {
+                console.log("User được chọn:", user); // Log để kiểm tra thông tin user được chọn
+                setSelectedUser(user); // Đảm bảo selectedUser có chứa userId của user
+              }}
             >
-              {user}
+              {user.username}
             </ListGroup.Item>
           ))}
         </ListGroup>
@@ -113,7 +93,7 @@ const AdminChatbox = () => {
       {selectedUser && (
         <div className="chat-section">
           <div className="chat-messages">
-            {(messages[selectedUser] || []).map((msg, index) => (
+            {(messages[selectedUser.userId] || []).map((msg, index) => (
               <div
                 key={index}
                 className={`chat-bubble ${msg.senderId === 'admin' ? 'admin-message' : 'user-message'}`}
@@ -130,7 +110,7 @@ const AdminChatbox = () => {
               placeholder="Type a message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={handleKeyPress} // Thêm sự kiện keypress cho Enter
+              onKeyDown={handleKeyPress}
             />
             <Button onClick={handleSendMessage}>Send</Button>
           </div>

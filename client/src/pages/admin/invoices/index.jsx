@@ -4,7 +4,7 @@ import { tokens } from "../../../theme";
 import { mockDataInvoices } from "../../../data/admin/mockData";
 import Header from "../../../components/AdminSide/Header";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../../utils/axios.customize";
 import { Button } from "react-bootstrap";
 import { IoIosInformationCircle } from "react-icons/io";
 import { MdDeleteForever } from "react-icons/md";
@@ -13,15 +13,14 @@ import ModalDeleteOrder from "./content/ModalDeleteOrder";
 
 const Invoices = () => {
   const [showModalDetailProduct, setShowModalDetailProduct] = useState(false);
-  const [showModalDeleteOrder, setShowModalDeleteOrder] = useState(false)
+  const [showModalDeleteOrder, setShowModalDeleteOrder] = useState(false);
 
   const [invoices, setInvoices] = useState([]);
   const [detailOrder, setDetailOrder] = useState([]);
-  const [dataDelete, setDataDelete] = useState(0)
+  const [dataDelete, setDataDelete] = useState(0);
   useEffect(() => {
     fetchAllInvoices();
   }, []);
-
 
   const fetchAllInvoices = async () => {
     try {
@@ -67,19 +66,14 @@ const Invoices = () => {
     setDetailOrder(data);
   };
 
-
   useEffect(() => {
     console.log("Id to delete effect: ", dataDelete);
-
   }, [dataDelete]);
   const handleClickDeleteModal = (id) => {
+    setShowModalDeleteOrder(true);
+    setDataDelete(id);
+  };
 
-    setShowModalDeleteOrder(true)
-     setDataDelete(id)
-    
-  }
-  
-  
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const columns = [
@@ -134,8 +128,11 @@ const Invoices = () => {
           >
             <IoIosInformationCircle />
           </Button>{" "}
-          <Button variant="danger" 
-            onClick={()=>{handleClickDeleteModal(params.row.id)}}
+          <Button
+            variant="danger"
+            onClick={() => {
+              handleClickDeleteModal(params.row.id);
+            }}
           >
             <MdDeleteForever />
           </Button>
@@ -186,13 +183,11 @@ const Invoices = () => {
       ></ModalDetailProduct>
 
       <ModalDeleteOrder
-        show = {showModalDeleteOrder}
-        setShow = {setShowModalDeleteOrder}
-        data= {dataDelete}
-        fetchAllInvoices = {fetchAllInvoices}
-      >
-
-      </ModalDeleteOrder>
+        show={showModalDeleteOrder}
+        setShow={setShowModalDeleteOrder}
+        data={dataDelete}
+        fetchAllInvoices={fetchAllInvoices}
+      ></ModalDeleteOrder>
     </Box>
   );
 };

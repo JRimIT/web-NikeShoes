@@ -26,7 +26,7 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -52,7 +52,7 @@ const Login = () => {
       if (response.data.message === "Login successful!") {
         localStorage.setItem("token", response.data.token); // Lưu token vào localStorage
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        
+
         const rememberExpiration = rememberMe
           ? 1 * 24 * 60 * 60 * 1000
           : 1 * 60 * 1000;
@@ -114,9 +114,8 @@ const Login = () => {
         </div>
         {(errorMessage || successMessage) && (
           <div
-            className={`custom-alert ${
-              errorMessage ? "error-alert" : "success-alert"
-            }`}
+            className={`custom-alert ${errorMessage ? "error-alert" : "success-alert"
+              }`}
           >
             {errorMessage || successMessage}
             <span className="alert-close" onClick={handleCloseAlert}>
@@ -150,7 +149,7 @@ const Login = () => {
             </label>
           </div>
           <div className="remember-forgot">
-          <div className="remember-me">
+            <div className="remember-me">
               <input
                 type="checkbox"
                 id="remember"

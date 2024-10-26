@@ -374,4 +374,77 @@ router.get("/api/most-popular-product", async (req, res) => {
 
 })
 
+router.get('/api/user/count', async (req, res) => {
+    try {
+        const [rows] = await db.promise().query('SELECT count(*) as total_users From Users');
+        const totalUsers = rows[0].total_users;
+        res.json(totalUsers)
+
+    } catch (error) {
+        console.error('Error retrieving user count:', error);
+        res.status(500).json({ message: 'Database error, could not retrieve user count' });
+    }
+})
+
+router.get('/api/user/countNewUser', async (req, res) => {
+    try {
+        const [rows] = await db.promise().query(`
+            SELECT COUNT(*) AS new_users_count
+            FROM Users
+            WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY);`)
+        res.json(rows)
+
+    } catch (error) {
+        console.error('Error retrieving user count:', error);
+        res.status(500).json({ message: 'Database error, could not retrieve user count' });
+    }
+})
+
+
+router.get('/api/transaction', async (req, res) => {
+    try {
+        const [rows] = await db.promise().query(`
+            select 
+                bt.transaction_id,
+                us.username,
+                DATE_FORMAT(bt.transaction_date, '%d-%m-%Y') AS transaction_date,
+                bt.amount,
+                bt.status
+            From 
+                bank_transactions bt
+            Join
+                Orders o ON bt.order_id = o.order_id
+            Join
+                Users us ON us.user_id = o.user_id
+            where
+                bt.status = "success"
+            ORDER BY transaction_date DESC
+            LIMIT 10;
+            `)
+
+        res.json(rows)
+    } catch (error) {
+        console.log('Error retrieving transactions: ', error);
+        res.status(500).json({ message: "Database error, could not retrieve transactions" })
+
+    }
+})
+
+
+router.get('/api/count_transaction', async (req, res) => {
+    try {
+        const [rows] = await db.promise().query(`
+            SELECT 
+                COUNT(bt.transaction_id) AS total_transactions
+            FROM 
+                bank_transactions bt
+            WHERE 
+                bt.status = "success";
+            `)
+        res.json(rows)
+    } catch (error) {
+        console.log('Error retrieving count transactions: ', error);
+        res.status(500).json({ message: "Database error, could not retrieve transactions" })
+    }
+})
 module.exports = router;
