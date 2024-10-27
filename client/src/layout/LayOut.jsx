@@ -23,18 +23,21 @@ import FAQ from "../pages/admin/faq";
 import Bar from "../pages/admin/bar";
 import Pie from "../pages/admin/pie";
 import Line from "../pages/admin/line";
+import AdminProfile from "../pages/admin/profile";
+
 import ManagerProduct from "../pages/admin/manageProduct";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import UserChatbox from "../components/Chatbox/UserChatbox";
 import AdminChatbox from "../components/Chatbox/AdminChatbox";
-// import Dashboard from "../components/userDashboard/pages/Dashboard";
 
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
-import ProfilePage from "../components/Profile";
+
+import UserDashboard from "../components/UserMenu/UserDashboard";
+import UserProfile from "../components/UserMenu/UserProfile";
 
 const LayOut = () => {
   return (
@@ -76,7 +79,6 @@ const LayOut = () => {
           ></Route>
           <Route path="/products/search" element={<ProductSearch />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/cart" element={<CartPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
         </Route>
@@ -88,7 +90,6 @@ const LayOut = () => {
         {/* <Route path="/admin" element={<AdminChatbox userId="admin" />} /> */}
 
         <Route path="admins" element={<Admin />}>
-          <Route index element={<DashBoard />} />
           <Route path="dashBoard" element={<DashBoard />} />
           <Route path="team" element={<Team />} />
           {/* <Route path="contacts" element={<Contacts />} /> */}
@@ -103,6 +104,7 @@ const LayOut = () => {
           <Route path="line" element={<Line />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="adprofile" element={<AdminProfile />} />
           {/* <Route path="/geography" element={<Geography />} /> */}
         </Route>
 
@@ -111,6 +113,14 @@ const LayOut = () => {
 
         {/* Admin route */}
         
+        {/* User route */}
+        <Route path="/dashboard" element={<UserDashboard />}>
+          <Route path="profile" element={<UserProfile />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="wishlist" element={<WishlistPage />} />
+          {/* <Route path="history" element={<HistoryPage />} />
+          <Route path="setting" element={<SettingPage />} /> */}
+        </Route>
       </Routes>
 
       <ToastContainer

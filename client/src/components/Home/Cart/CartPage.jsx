@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Image, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { FaTrashAlt } from "react-icons/fa";
 import axios from "../../../utils/axios.customize";
 import "./CartPage.scss";
 
 function CartPage() {
   const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingAction, setLoadingAction] = useState(false); // New action loading state
-  const [userId] = useState(3);
-  // const [userId, setUserId] = useState(null);
+  const [loading, setLoading] = useState(true); 
+  const [loadingAction, setLoadingAction] = useState(false);
+  const [userId, setUserId] = useState(null);
   const shippingFee = 0;
-  const sale = "99.9%";
-  const discount = 100000;
+  const sale = '99.9%';
+  const discount = 200000;
 
   const parsePrice = (price) => Number(price.replaceAll(",", ""));
   const formatPrice = (price) => `${price.toLocaleString("vi-VN")}₫`;
@@ -21,14 +20,23 @@ function CartPage() {
     cart.reduce((acc, item) => acc + parsePrice(item.price) * item.quantity, 0);
 
   const subtotal = calculateSubtotal();
-  const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
+  // const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
+  const total = (subtotal + shippingFee - discount);
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+    if (userData && userData.user_id) {
+      setUserId(userData.user_id); // Set userId from userData
+      console.log(userData.user_id);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchCart = async () => {
+      if (!userId) return; // Don't fetch if userId is not set
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/cart/${userId}`
-        );
+        console.log(userId);
+        const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
         setCart(response.data || []); // Handle empty or null data
       } catch (error) {
         console.error(
@@ -41,17 +49,19 @@ function CartPage() {
       }
     };
 
-    if (userId) fetchCart();
-  }, [userId]);
+    fetchCart();
+  }, [userId])
+  ;
 
   const handleQuantityChange = async (id, newQuantity) => {
-    if (newQuantity < 1) return;
+    // if (newQuantity < 1) return;
+    if (newQuantity < 1 || newQuantity > 10) {
+      console.warn('Quantity must be between 1 and 10.');
+      return;
+    }
 
     try {
-      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, {
-        quantity: newQuantity,
-      });
-
+      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, { quantity: newQuantity });
       setCart((prevCart) =>
         prevCart.map((item) =>
           item.cart_item_id === id ? { ...item, quantity: newQuantity } : item
@@ -106,7 +116,7 @@ function CartPage() {
             {cart.map((item) => (
               <div className="cart-item" key={item.cart_item_id}>
                 <img
-                  src={item.card_color || item.cart_color}
+                  src={item.cart_color || item.cart_color}
                   alt={item.name}
                   className="item-image"
                 />
@@ -130,7 +140,7 @@ function CartPage() {
                   />
                   <FaTrashAlt
                     onClick={() => handleRemove(item.cart_item_id)}
-                    className="remove-button"
+                    className="remove-button" 
                   />
                 </div>
               </div>
@@ -138,21 +148,11 @@ function CartPage() {
           </Col>
           <Col md={4} className="order-summary">
             <h4>Order Summary</h4>
-            <p>
-              Subtotal: <strong>{formatPrice(subtotal)}</strong>
-            </p>
-            <p>
-              Shipping: <strong>Free</strong>
-            </p>
-            <p>
-              Sale: <strong>{sale}</strong>
-            </p>
-            <p>
-              Discount: <strong>-{formatPrice(discount)}</strong>
-            </p>
-            <h5>
-              Total: <strong>{formatPrice(total)}</strong>
-            </h5>
+            <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
+            <p>Shipping: <strong>Free</strong></p>
+            {/* <p>Sale: <strong>{sale}</strong></p> */}
+            <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
+            <h5>Total: <strong>{formatPrice(total)}</strong></h5>
             <Button
               variant="dark"
               className="w-100 mt-3 checkout-button"

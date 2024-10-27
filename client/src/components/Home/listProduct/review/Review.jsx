@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-// import axios from "axios";
-import axios from "../../../../utils/axios.customize";
-import "./Review.scss";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import './Review.scss';
+import { useNavigate } from 'react-router-dom';
 
-const Review = ({ productId }) => {
+const Review = ({ productId, userId }) => {
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -12,10 +12,11 @@ const Review = ({ productId }) => {
   const [notification, setNotification] = useState(null);
   const [timeoutId, setTimeoutId] = useState(null); // State to hold the timeout ID
   const [error, setError] = useState({ comment: false, rating: false }); // State to track errors
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchReviews();
-  }, [productId]);
+  }, [productId, userId]);
 
   const fetchReviews = async () => {
     try {
@@ -31,6 +32,9 @@ const Review = ({ productId }) => {
   };
 
   const handleAddReview = async () => {
+    if (userId == 0) {
+      navigate("/login");
+    }
     // Reset errors
     setError({ comment: false, rating: false });
 
@@ -50,8 +54,8 @@ const Review = ({ productId }) => {
     }
 
     try {
-      const { data } = await axios.post("http://localhost:5000/add-review", {
-        userId: 3, // Demo user ID
+      const { data } = await axios.post('http://localhost:5000/add-review', {
+        userId: userId,
         productId,
         rating,
         comment,

@@ -98,7 +98,7 @@ const Header = () => {
 
                   {isDropdownOpen && (
                     <div className="dropdown-profile">
-                      <NavLink to="/profile">Profile</NavLink>
+                      <NavLink to="/dashboard/profile">Account</NavLink>
                       <NavLink to="/setting">Setting</NavLink>
                       <button className="butLogout" onClick={handleLogout}>
                         Log Out
@@ -488,26 +488,21 @@ const Header = () => {
                   </NavLink>
                 </Nav>
 
-                <div className="navbar-right-content">
-                  <span
-                    className="icon-bag rounded-circle"
-                    onClick={goToWishlistPage}
-                  >
-                    <FaHeart />
-                  </span>
-                  <span
-                    className="icon-bag rounded-circle"
-                    onClick={goToCartPage}
-                  >
-                    <IoBagHandleOutline />
-                  </span>
-                  <SearchBar onSearchResults={handleSearchResults}></SearchBar>
-                </div>
-              </Navbar.Collapse>
-            </Container>
-          </Navbar>
-        </>
-      )}
+            <div className="navbar-right-content">
+              <span
+                className="icon-bag rounded-circle"
+                onClick={goToWishlistPage}
+              >
+                <FaHeart />
+              </span>
+              <span className="icon-bag rounded-circle" onClick={goToCartPage}>
+                <IoBagHandleOutline />
+              </span>
+              <SearchBar onSearchResults={handleSearchResults}></SearchBar>
+            </div>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
     </>
   );
 };

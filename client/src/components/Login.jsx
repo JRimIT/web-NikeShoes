@@ -3,15 +3,10 @@ import axios from "axios";
 import "../assets/styles/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword } from "../utils/validation";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; // Import Toastify
 
 const Login = () => {
   useEffect(() => {
-    // Remember
-    const savedEmail = localStorage.getItem("email");
-    if (savedEmail) {
-      setEmail(savedEmail);
-    }
     document.body.classList.add("login-background");
 
     return () => {
@@ -22,24 +17,21 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // const emailError = validateEmail(email);
-    // if (emailError) {
-    //   setErrorMessage(emailError);
-    //   return;
-    // }
+    const emailError = validateEmail(email);
+    if (emailError) {
+      toast.error(emailError); // Hiển thị thông báo lỗi
+      return;
+    }
 
-    // const passwordError = validatePassword(password);
-    // if (passwordError) {
-    //   setErrorMessage(passwordError);
-    //   return;
-    // }
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      toast.error(passwordError); // Hiển thị thông báo lỗi
+      return;
+    }
 
     try {
       const response = await axios.post("http://localhost:5000/login", {
@@ -48,38 +40,21 @@ const Login = () => {
       });
 
       if (response.data.message === "Login successful!") {
-        localStorage.setItem("token", response.data.token); // Lưu token vào localStorage
         localStorage.setItem("user", JSON.stringify(response.data.user));
-
-        const rememberExpiration = rememberMe
-          ? 1 * 24 * 60 * 60 * 1000
-          : 1 * 60 * 1000;
         localStorage.setItem(
           "sessionExpiration",
-          new Date().getTime() + 10 * 60 * 1000 + rememberExpiration
+          new Date().getTime() + 10 * 60 * 1000
         );
-        if (rememberMe) {
-          localStorage.setItem("email", email);
-        } else {
-          localStorage.removeItem("email");
-        }
-        // toast.success("Login successful!");
-        // setSuccessMessage("Login successful!");
-        setErrorMessage("");
+        toast.success("Login successful!"); // Hiển thị thông báo thành công
 
         const roleId = response.data.user.role_id;
         if (roleId === 1) {
           navigate("/");
         } else if (roleId === 2) {
           navigate("/admins");
-        } else if (roleId === 3) {
-          navigate("/ship");
-        } else if (roleId === 4) {
-          navigate("/distributor");
         }
       } else {
-        setErrorMessage(response.data.message);
-        setSuccessMessage("");
+        toast.error(response.data.message); // Hiển thị thông báo lỗi
         setEmail("");
         setPassword("");
       }
@@ -88,20 +63,14 @@ const Login = () => {
         "Login error:",
         error.response ? error.response.data : error.message
       );
-      setErrorMessage(
+      toast.error(
         error.response
           ? error.response.data.message
           : "Something went wrong when logging in."
-      );
-      setSuccessMessage("");
+      ); // Hiển thị thông báo lỗi
       setEmail("");
       setPassword("");
     }
-  };
-
-  const handleCloseAlert = () => {
-    setErrorMessage("");
-    setSuccessMessage("");
   };
 
   return (
@@ -110,17 +79,6 @@ const Login = () => {
         <div className="login-header">
           <span>LOGIN</span>
         </div>
-        {(errorMessage || successMessage) && (
-          <div
-            className={`custom-alert ${errorMessage ? "error-alert" : "success-alert"
-              }`}
-          >
-            {errorMessage || successMessage}
-            <span className="alert-close" onClick={handleCloseAlert}>
-              &times;
-            </span>
-          </div>
-        )}
         <form onSubmit={handleLogin}>
           <div className="input_box">
             <input
@@ -148,13 +106,7 @@ const Login = () => {
           </div>
           <div className="remember-forgot">
             <div className="remember-me">
-              <input
-                type="checkbox"
-                id="remember"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
-                state
-              />
+              <input type="checkbox" id="remember" />
               <label htmlFor="remember">Remember Me</label>
             </div>
             <Link to={`/forgot?email=${email}`} className="forgot-password">

@@ -16,6 +16,7 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ChatIcon from '@mui/icons-material/Chat';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -42,7 +43,7 @@ const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   return (
-    <Box 
+    <Box
       sx={{
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
@@ -61,7 +62,7 @@ const Sidebar = () => {
         },
       }}
     >
-       <ProSidebar collapsed={isCollapsed}>
+      <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
           <MenuItem
@@ -225,15 +226,25 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             /> */}
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Setting
+            </Typography>
+            <Item
+              title="Edit profile"
+              to="adprofile"
+              icon={<SettingsOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
           </Box>
-
-        
-
-
         </Menu>
       </ProSidebar>
     </Box>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

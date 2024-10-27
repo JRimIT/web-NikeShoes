@@ -1,21 +1,22 @@
 // server/server.js
 require("dotenv").config();
-const express = require('express');
-const { Server } = require('socket.io');
-const http = require('http');
-const cors = require('cors');
+const express = require("express");
+const { Server } = require("socket.io");
+const http = require("http");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
 const { registerUser, loginUser } = require("./controller/authController");
 const sendResetPassword = require("./controller/sendResetCode");
 const db = require("./config/db");
-const productRoutes = require('./routes/products'); // Import đúng router
-const handleSocket = require('./sockets/chatSocket');
-const cartRoutes = require('./routes/cart');
-const wishlistRoutes = require('./routes/wishlist');
-const reviewRoutes = require('./routes/review');
-const adminRoutes = require('./routes/admin');
+const productRoutes = require("./routes/products"); // Import đúng router
+const handleSocket = require("./sockets/chatSocket");
+const cartRoutes = require("./routes/cart");
+const wishlistRoutes = require("./routes/wishlist");
+const reviewRoutes = require("./routes/review");
+const adminRoutes = require("./routes/admin");
+const userRoutes = require("./routes/user");;
 const { authenticateJWT } = require("./middlewares/authMiddlewares");
 
 const routerAPI = express.Router();
@@ -41,8 +42,8 @@ const upload = multer({ storage: storage });
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST'],
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
   },
 });
 
@@ -53,23 +54,25 @@ handleSocket(io);
 
 // Routes cho sản phẩm và các routes khác
 
-app.use('/products', productRoutes);
-app.post("/register", upload.single('user_image'), registerUser);
+app.use("/products", productRoutes);
+app.post("/register", upload.single("user_image"), registerUser);
 app.post("/login", loginUser);
 // app.get("/products/:id", getProductById);
 app.use(sendResetPassword); // Route cho reset password
 // Sử dụng routes cho sản phẩm (middleware đúng)
-// app.use('/', cartRoutes);
-// // app.use('/', cartRoutes); 
+// app.use("/', cartRoutes);
+// // app.use('/", cartRoutes); 
 // app.use('/', wishlistRoutes);
-// app.use('/', reviewRoutes);
+// app.use("/", reviewRoutes);
 
 // app.use('/', adminRoutes);
 
-app.use('/', authenticateJWT, cartRoutes);  // Cart routes require authentication
-app.use('/', authenticateJWT, wishlistRoutes);  // Wishlist routes require authentication
-app.use('/', authenticateJWT, reviewRoutes);  // Review routes require authentication
-app.use('/', authenticateJWT, adminRoutes);  // Admin routes require authentication
+app.use("/", authenticateJWT, cartRoutes); // Cart routes require authentication
+app.use("/", authenticateJWT, wishlistRoutes);  // Wishlist routes require authentication
+app.use("/", authenticateJWT, reviewRoutes);  // Review routes require authentication
+app.use("/", authenticateJWT, adminRoutes);  // Admin routes require authentication
+
+app.use("/api/user", userRoutes);
 
 // Cấu hình cors
 app.use(
@@ -87,6 +90,3 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
-
