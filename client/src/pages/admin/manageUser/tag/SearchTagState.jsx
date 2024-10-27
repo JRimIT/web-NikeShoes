@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useMemo } from "react";
 import { useEffect } from "react";
 import { MockDataCountry } from "../../../../data/admin/mockData";
-const SearchTag = (props) => {
+const SearchTagState = (props) => {
   const { users, initialUsers, setInitialUsers, setUsers } = props;
   const [listTag, setListTag] = useState([]);
 
@@ -60,7 +60,7 @@ const SearchTag = (props) => {
                 {...params}
                 variant="standard"
                 label="City"
-                placeholder="Choose"
+                placeholder="Favorites"
               />
             </>
           );
@@ -70,4 +70,4 @@ const SearchTag = (props) => {
   );
 };
 
-export default SearchTag;
+export default SearchTagState;

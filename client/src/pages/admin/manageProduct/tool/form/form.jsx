@@ -111,19 +111,29 @@ function FormForEdit(props) {
     formData.append("folder", FOLDER_NAME);
     formData.append("file", file);
 
-    await axios
-      .post(api, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        // setProduct({
-        //     ...product, primary_image: res.data.url
-        // })
-        primary_image = res.data.url;
-      })
-      .catch((err) => console.log(err));
+    try {
+      const response = await fetch(api, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      primary_image = data.url;
+    } catch (error) {
+      console.error("Error uploading primary image:", error);
+    }
+    // await axios
+    //   .post(api, formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   })
+    //   .then((res) => {
+    //     // setProduct({
+    //     //     ...product, primary_image: res.data.url
+    //     // })
+    //     primary_image = res.data.url;
+    //   })
+    //   .catch((err) => console.log(err));
   };
 
   const handleUploadListColor_Image = async () => {
@@ -143,17 +153,32 @@ function FormForEdit(props) {
     for (const file of files) {
       formData.append("file", file);
 
-      await axios
-        .post(api, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          url_Color.push(res.data.url);
-        })
-        .catch((err) => console.log(err));
+      try {
+        const response = await fetch(api, {
+          method: "POST",
+          body: formData,
+        });
+        const data = await response.json();
+        url_Color.push(data.url);
+      } catch (error) {
+        console.error("Error uploading color image:", error);
+      }
     }
+
+    // for (const file of files) {
+    //   formData.append("file", file);
+
+    //   await axios
+    //     .post(api, formData, {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //     })
+    //     .then((res) => {
+    //       url_Color.push(res.data.url);
+    //     })
+    //     .catch((err) => console.log(err));
+    // }
     // setUrl_Color(url_Color.length > 0 ? url_Color.join("; ") : "")
   };
 

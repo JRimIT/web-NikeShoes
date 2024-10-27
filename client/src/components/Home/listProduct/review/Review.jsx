@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import axios from "../../../../utils/axios.customize";
 import "./Review.scss";
+import { useSelector } from "react-redux";
 
 const Review = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
@@ -11,8 +12,9 @@ const Review = ({ productId }) => {
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [timeoutId, setTimeoutId] = useState(null); // State to hold the timeout ID
-  const [error, setError] = useState({ comment: false, rating: false }); // State to track errors
-
+  const [error, setError] = useState({ comment: false, rating: false });
+  // State to track errors
+  const user = useSelector((state) => state.userInfo);
   useEffect(() => {
     fetchReviews();
   }, [productId]);
@@ -51,7 +53,7 @@ const Review = ({ productId }) => {
 
     try {
       const { data } = await axios.post("http://localhost:5000/add-review", {
-        userId: 3, // Demo user ID
+        userId: user.user_id, // Demo user ID
         productId,
         rating,
         comment,

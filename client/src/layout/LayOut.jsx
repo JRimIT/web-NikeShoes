@@ -24,6 +24,7 @@ import Bar from "../pages/admin/bar";
 import Pie from "../pages/admin/pie";
 import Line from "../pages/admin/line";
 import ManagerProduct from "../pages/admin/manageProduct";
+import ManagerUser from "../pages/admin/manageUser";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -35,6 +36,9 @@ import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
 import ProfilePage from "../components/Profile";
+import NotFound from "../pages/NotFoundPages/NotFound";
+import DenyAccess from "../pages/NotFoundPages/DenyAccess";
+import ErrorPage from "../pages/NotFoundPages/errorPage";
 
 const LayOut = () => {
   return (
@@ -92,6 +96,7 @@ const LayOut = () => {
           <Route path="team" element={<Team />} />
           {/* <Route path="contacts" element={<Contacts />} /> */}
           <Route path="manageProduct" element={<ManagerProduct />} />
+          <Route path="manageUser" element={<ManagerUser />} />
           <Route path="invoices" element={<Invoices />} />
           <Route path="form" element={<Form />} />
           <Route path="bar" element={<Bar />} />
@@ -110,11 +115,16 @@ const LayOut = () => {
           path="/admin-chatbox"
           element={<AdminChatbox userId="admin" />}
         />
+
+        <Route path="/DenyAccess" element={<DenyAccess></DenyAccess>}></Route>
+        <Route path="/errorPage" element={<ErrorPage></ErrorPage>}></Route>
+
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
 
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

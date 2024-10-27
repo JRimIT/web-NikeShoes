@@ -1,0 +1,14 @@
+.Not-Found-page {
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    h2{
+        color: white;
+        font-size: 100px;
+    }
+}

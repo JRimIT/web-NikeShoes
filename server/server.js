@@ -16,7 +16,8 @@ const cartRoutes = require('./routes/cart');
 const wishlistRoutes = require('./routes/wishlist');
 const reviewRoutes = require('./routes/review');
 const adminRoutes = require('./routes/admin');
-const { authenticateJWT } = require("./middlewares/authMiddlewares");
+const userRoutes = require('./routes/user');
+const { authenticateJWT, checkRole } = require("./middlewares/authMiddlewares");
 
 const routerAPI = express.Router();
 
@@ -69,7 +70,8 @@ app.use(sendResetPassword); // Route cho reset password
 app.use('/', authenticateJWT, cartRoutes);  // Cart routes require authentication
 app.use('/', authenticateJWT, wishlistRoutes);  // Wishlist routes require authentication
 app.use('/', authenticateJWT, reviewRoutes);  // Review routes require authentication
-app.use('/', authenticateJWT, adminRoutes);  // Admin routes require authentication
+app.use('/', authenticateJWT, userRoutes);  // Review routes require authentication
+app.use('/', authenticateJWT, checkRole('2'), adminRoutes);  // Admin routes require authentication
 
 // Cấu hình cors
 app.use(
