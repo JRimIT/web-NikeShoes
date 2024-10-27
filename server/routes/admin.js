@@ -1,7 +1,8 @@
 const express = require('express');
 const db = require('../config/db'); // Import kết nối MySQL
 const router = express.Router();
-
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 router.put('/api/products/:id', async (req, res) => {
     const { id } = req.params;
@@ -209,6 +210,126 @@ router.get("/api/orders", async (req, res) => {
     }
 
 });
+// -------- user
+
+router.delete('/api/user/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = `
+        DELETE FROM Users 
+        WHERE user_id = ?;
+    `;
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Error deleting user:", err);
+            return res.status(500).json({ message: "Server error" });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({ message: "User deleted successfully" });
+    });
+});
+
+router.get('/api/order_Of_user', async (req, res) => {
+    const { id } = req.query;
+    const sql = `
+        SELECT 
+            o.order_id,
+            DATE_FORMAT(o.order_date, '%d-%m-%Y') AS order_date,
+            o.order_status,
+            o.total_amount,
+            p.payment_method,
+            p.payment_status,
+            p.amount AS payment_amount,
+            oi.product_id,
+            pr.name AS product_name,
+            oi.quantity,
+            oi.size,
+            oi.color,
+            pr.price AS product_price
+        FROM 
+            Orders o
+        JOIN 
+            Payments p ON o.order_id = p.order_id
+        JOIN 
+            Order_Items oi ON o.order_id = oi.order_id
+        JOIN 
+            Products pr ON oi.product_id = pr.product_id
+        LEFT JOIN 
+            User_Addresses ua ON o.user_id = ua.user_id
+        WHERE 
+            o.user_id = ?
+        ORDER BY 
+            o.order_date DESC;
+    `
+
+    try {
+        const [rows] = await db.promise().query(sql, [id]);
+        return res.json(rows);
+    } catch (error) {
+        res.status(401).json({ message: 'error get order by user_id' });
+    }
+})
+
+
+router.get('/api/user', (req, res) => {
+    const { id } = req.query;
+    const sql = `
+        SELECT *
+        FROM Users
+        WHERE user_id = ?;
+    `;
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);  // Log the error for debugging
+            return res.status(500).json({ message: "An error occurred", error: err.message });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.json(result);
+    });
+});
+
+
+router.get('/api/allUser', async (req, res) => {
+    const sql = `
+        SELECT
+            u.user_id,
+            u.username,
+            u.user_image,
+            u.email,
+            u.phone,
+            u.role_id,
+            DATE_FORMAT(u.created_at, '%d-%m-%Y') AS created_at,
+            a.address_line,
+            a.city,
+            a.state,
+            a.country,
+            a.postal_code
+        FROM
+            Users u
+        LEFT JOIN
+            User_Addresses a ON u.user_id = a.user_id
+        WHERE
+            u.role_id = 1;
+    `
+    try {
+        const [rows] = await db.promise().query(sql);
+        return res.json(rows);
+    } catch (error) {
+        res.status(401).json({ message: 'error get user by id' });
+    }
+})
+
+
 
 router.post("/api/user", async (req, res) => {
     const {
