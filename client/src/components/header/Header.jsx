@@ -114,7 +114,7 @@ const Header = () => {
 
                       {isDropdownOpen && (
                         <div className="dropdown-profile">
-                          <NavLink to="/profile">Profile</NavLink>
+                          <NavLink to="/dashboard/profile">Profile</NavLink>
                           <NavLink to="/setting">Setting</NavLink>
                           <NavLink to="/admins">Admin page</NavLink>
                           <button className="butLogout" onClick={handleLogout}>
@@ -134,7 +134,7 @@ const Header = () => {
 
                       {isDropdownOpen && (
                         <div className="dropdown-profile">
-                          <NavLink to="/profile">Profile</NavLink>
+                          <NavLink to="/dashboard/profile">Profile</NavLink>
                           <NavLink to="/setting">Setting</NavLink>
                           <button className="butLogout" onClick={handleLogout}>
                             Log Out

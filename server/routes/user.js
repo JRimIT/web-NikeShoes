@@ -2,7 +2,7 @@
 // const router = express.Router();
 // const bcrypt = require("bcrypt");
 // const db = require("../config/db");
-module.exports = router;
+
 const express = require('express');
 const db = require('../config/db'); // Import kết nối MySQL
 const router = express.Router();
@@ -283,7 +283,7 @@ router.put("/password/update/:userId", async (req, res) => {
 
 
 
-router.get('/api/userinfo', async (req, res) => {
+router.get('/userinfo', async (req, res) => {
     try {
         const token = req.headers.authorization.split(' ')[1];
         if (!token) return res.status(401).json({ message: "No token provided" })

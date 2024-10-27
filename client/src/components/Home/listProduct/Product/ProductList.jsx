@@ -1,11 +1,10 @@
 import axios from "../../../../utils/axios.customize";
-import './ProductList.scss';
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import React, { useState, useEffect, forwardRef } from "react";
-
 import { FixedSizeGrid as Grid } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
-import { useNavigate, useLocation } from "react-router-dom";
+
 import "./ProductList.scss";
 
 const ProductList = ({

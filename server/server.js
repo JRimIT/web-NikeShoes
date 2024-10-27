@@ -17,7 +17,7 @@ const wishlistRoutes = require("./routes/wishlist");
 const reviewRoutes = require("./routes/review");
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");;
-const { authenticateJWT } = require("./middlewares/authMiddlewares");
+const { authenticateJWT, checkRole } = require("./middlewares/authMiddlewares");
 
 const routerAPI = express.Router();
 

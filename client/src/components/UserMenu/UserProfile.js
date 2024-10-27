@@ -19,7 +19,7 @@ import {
 } from "../../utils/validation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import axios from "../../utils/axios.customize";
 
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -105,28 +105,54 @@ function UserProfile() {
     formData.append("upload_preset", PRESET_NAME);
     formData.append("folder", FOLDER_NAME);
     formData.append("file", selectedFile);
-
     try {
-      const res = await axios.post(api, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      const imageUrl = res.data.url;
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dzbhzlwoe/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await res.json();
+      console.log(data);
+      const imageUrl = data.url;
+      
 
-      setProfileImage(res.data.url);
+      setProfileImage(data.url);
       setIsEditingImage(false);
       toast.success("Avatar uploaded successfully!");
-      const updatedUser = { ...user, user_image: res.data.url };
+      const updatedUser = { ...user, user_image: data.url };
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
       const userId = user?.user_id;
       await axios.put(`http://localhost:5000/api/user/avatar/${userId}`, {
         user_image: imageUrl,
       });
-    } catch (err) {
-      // toast.error("Please choose picture to upload avatar.");
+    } catch (error) {
+      console.error("Image upload error:", error);
     }
+
+    // try {
+    //   const res = await axios.post(api, formData, {
+    //     headers: {
+    //       "Content-Type": "multipart/form-data",
+    //     },
+    //   });
+    //   const imageUrl = res.data.url;
+
+    //   setProfileImage(res.data.url);
+    //   setIsEditingImage(false);
+    //   toast.success("Avatar uploaded successfully!");
+    //   const updatedUser = { ...user, user_image: res.data.url };
+    //   localStorage.setItem("user", JSON.stringify(updatedUser));
+    //   setUser(updatedUser);
+    //   const userId = user?.user_id;
+    //   await axios.put(`http://localhost:5000/api/user/avatar/${userId}`, {
+    //     user_image: imageUrl,
+    //   });
+    // } catch (err) {
+    //   // toast.error("Please choose picture to upload avatar.");
+    // }
   };
 
   const handleUserInfoChange = (e) => {

@@ -94,6 +94,7 @@ const LayOut = () => {
         {/* <Route path="/admin" element={<AdminChatbox userId="admin" />} /> */}
 
         <Route path="admins" element={<Admin />}>
+          <Route index element={<DashBoard />} />
           <Route path="dashBoard" element={<DashBoard />} />
           <Route path="team" element={<Team />} />
           {/* <Route path="contacts" element={<Contacts />} /> */}
