@@ -99,7 +99,7 @@ const WishlistPage = () => {
       {wishlist.length === 0 ? (
         <div className="text-center">
           <h4>No products in favourite.</h4>
-          <Button variant="primary" href="/products-men/All">
+          <Button variant="primary" href="/products-men/All" className="button">
             Shop Now
           </Button>
         </div>

@@ -18,7 +18,7 @@ root.render(
     <BrowserRouter>
       <ScrollToTop></ScrollToTop>
       <LayOut></LayOut>
-    </BrowserRouter>,
+    </BrowserRouter>
 
   </Provider>
 );

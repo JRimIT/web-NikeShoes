@@ -101,11 +101,11 @@ function CartPage() {
 
   return (
     <Container className="cart-container">
-      <h2 className="mb-4">Shopping Cart</h2>
+      <h2>Shopping Cart</h2>
       {cart.length === 0 ? (
         <div className="text-center">
           <h4>Your cart is empty.</h4>
-          <Button variant="primary" href="/products-men/All">
+          <Button variant="primary" href="/products-men/All" className="button">
             Shop Now
           </Button>
         </div>

@@ -73,9 +73,6 @@ function Footer() {
                 {/* <MDBIcon icon="envelope" className="me-3" /> */}
                 fpt@example.com
               </p>
-              <p>
-                <MDBIcon icon="phone" className="me-3" /> +01 234 567 88
-              </p>
             </MDBCol>
           </MDBRow>
         </MDBContainer>
