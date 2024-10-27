@@ -53,7 +53,9 @@ const io = new Server(server, {
 handleSocket(io);
 
 // Routes cho sản phẩm và các routes khác
-
+app.get('/', (req, res) => {
+  res.json("Hello This is Backend")
+})
 app.use('/products', productRoutes);
 app.post("/register", upload.single('user_image'), registerUser);
 app.post("/login", loginUser);
