@@ -1,17 +1,4 @@
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
-import { useParams, useNavigate } from "react-router-dom";
-// import axios from "axios";
-import axios from "../../../../utils/axios.customize";
-
-import "./ProductDetailPage.scss";
-import { FaHeart } from "react-icons/fa";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Footer from '../../footer/Footer';
-import Review from '../review/Review';
-// import { useNavigate } from 'react-router-dom';
-=======
 import { Navigate, useParams } from "react-router-dom";
 import axios from "../../../../utils/axios.customize";
 import "./ProductDetailPage.scss";
@@ -21,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../footer/Footer";
 import Review from "../review/Review";
 import { useNavigate } from "react-router-dom";
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -84,32 +70,19 @@ const ProductDetailPage = () => {
     }
 
     try {
-<<<<<<< HEAD
-      const { data } = await axios.post('http://localhost:5000/add-to-cart', {
-        userId,
-=======
       const { data } = await axios.post("http://localhost:5000/add-to-cart", {
         userId: userId,
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
         productId: product.product_id,
         size: selectedSize,
         color: selectedColor || product.primary_image,
         quantity,
       });
-<<<<<<< HEAD
-  
-      toast.success(data.message);
-    } catch (error) {
-      console.error('Error adding to cart:', error.response?.data || error);
-  
-=======
 
       toast.success(data.message); // Display success message
     } catch (error) {
       console.error("Error adding to cart:", error.response?.data || error);
 
       // Handle quantity limit error
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.message;
 
@@ -129,7 +102,6 @@ const ProductDetailPage = () => {
   
     if (!product) {
       toast.error("Product details not available.");
-<<<<<<< HEAD
       return;
     }
   
@@ -161,7 +133,6 @@ const ProductDetailPage = () => {
           "Failed to add product to Wishlist";
         toast.error(`Failed to add product to Wishlist: ${errorMessage}`);
       }
-=======
       return;
     }
 
@@ -186,7 +157,6 @@ const ProductDetailPage = () => {
       console.error("Error adding to wishlist:", error.response?.data || error);
       toast.error(`Failed to add product to Wishlist!`);
       // navigate(`/login`);
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
     }
   };
 

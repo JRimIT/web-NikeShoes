@@ -33,18 +33,11 @@ const authenticateJWT = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-<<<<<<< HEAD
-        return res.sendStatus(401).json({
-          message: "Token is expired"
-        });
-        ; // Token không hợp lệ
-=======
         if (err.name === 'TokenExpiredError') {
           // Token has expired, send a custom message
           return res.status(401).json({ message: "Token expired. Please login again." });
         }
         return res.status(403).json({ message: "Invalid token." });
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
       }
       req.user = user; // Lưu thông tin user sau khi giải mã token
       console.log("User: ", user);

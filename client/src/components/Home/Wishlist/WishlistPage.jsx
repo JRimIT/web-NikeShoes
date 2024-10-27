@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import axios from "../../../utils/axios.customize";
-<<<<<<< HEAD
-import { FaShoppingCart, FaTrashAlt } from "react-icons/fa"; // Import icons
-=======
 import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./WishlistPage.scss";

@@ -15,13 +15,10 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-<<<<<<< HEAD
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
-=======
 
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 import ChatIcon from '@mui/icons-material/Chat';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {

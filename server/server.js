@@ -10,15 +10,6 @@ const bcrypt = require("bcryptjs");
 const { registerUser, loginUser } = require("./controller/authController");
 const sendResetPassword = require("./controller/sendResetCode");
 const db = require("./config/db");
-<<<<<<< HEAD
-const productRoutes = require('./routes/products'); // Import đúng router
-const handleSocket = require('./sockets/chatSocket');
-const cartRoutes = require('./routes/cart');
-const wishlistRoutes = require('./routes/wishlist');
-const reviewRoutes = require('./routes/review');
-const adminRoutes = require('./routes/admin');
-const { authenticateJWT } = require("./middlewares/authMiddlewares");
-=======
 const productRoutes = require("./routes/products"); // Import đúng router
 const handleSocket = require("./sockets/chatSocket");
 const cartRoutes = require("./routes/cart");
@@ -27,7 +18,6 @@ const reviewRoutes = require("./routes/review");
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");;
 const { authenticateJWT, checkRole } = require("./middlewares/authMiddlewares");
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 
 const routerAPI = express.Router();
 
@@ -64,30 +54,12 @@ handleSocket(io);
 
 // Routes cho sản phẩm và các routes khác
 
-<<<<<<< HEAD
-app.use('/products', productRoutes);
-app.post("/register", upload.single('user_image'), registerUser);
-=======
 app.use("/products", productRoutes);
 app.post("/register", upload.single("user_image"), registerUser);
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 app.post("/login", loginUser);
 // app.get("/products/:id", getProductById);
 app.use(sendResetPassword); // Route cho reset password
 // Sử dụng routes cho sản phẩm (middleware đúng)
-<<<<<<< HEAD
-// app.use('/', cartRoutes);
-// // app.use('/', cartRoutes); 
-// app.use('/', wishlistRoutes);
-// app.use('/', reviewRoutes);
-
-// app.use('/', adminRoutes);
-
-app.use('/', authenticateJWT, cartRoutes);  // Cart routes require authentication
-app.use('/', authenticateJWT, wishlistRoutes);  // Wishlist routes require authentication
-app.use('/', authenticateJWT, reviewRoutes);  // Review routes require authentication
-app.use('/', authenticateJWT, adminRoutes);  // Admin routes require authentication
-=======
 // app.use("/', cartRoutes);
 // // app.use('/", cartRoutes); 
 // app.use('/', wishlistRoutes);
@@ -102,7 +74,6 @@ app.use("/api/user", authenticateJWT, userRoutes);  // Review routes require aut
 app.use('/', authenticateJWT, checkRole('2'), adminRoutes);  // Admin routes require authentication
 
 // app.use("/api/user", userRoutes);
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 
 // Cấu hình cors
 app.use(

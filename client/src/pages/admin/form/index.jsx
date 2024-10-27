@@ -8,10 +8,7 @@ import { FcPlus } from "react-icons/fc";
 import "./scss/index.scss";
 import axios from "../../../utils/axios.customize";
 import { toast } from "react-toastify";
-<<<<<<< HEAD
-=======
 import BounceLoader from "react-spinners/BounceLoader";
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -56,62 +53,6 @@ const Form = () => {
     formData.append("folder", FOLDER_NAME);
     formData.append("file", file);
 
-<<<<<<< HEAD
-    await axios
-      .post(api, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        // console.log(res.data.url);
-        // setImage(res.data.url);
-
-        user_image = res.data.url;
-
-        // console.log("=[>>>> Image: ", image);
-
-        // setInfoUser({...infoUser, image: image})
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const handleUpdateUserState = (value) => {
-    return new Promise((resolve) => {
-      setInfoUser((prev) => {
-        const updateUserState = { ...prev, ...value };
-        resolve(updateUserState);
-        return updateUserState;
-      });
-    });
-  };
-
-  const handleSubmitUser = async (event) => {
-    event.preventDefault();
-    try {
-      await handleUploadImage();
-      console.log("url image: ", user_image);
-
-      const updateInfoUser_Image = await handleUpdateUserState({
-        user_image: user_image,
-      });
-      console.log("Submit form: ", updateInfoUser_Image);
-
-      const res = await axios.post(
-        "http://localhost:5000/api/user",
-        updateInfoUser_Image
-      );
-      toast.success(res.data.message);
-    } catch (err) {
-      if (err.response && err.response.data.error) {
-        toast.error(err.response.data.error);
-        // Error message from server
-      } else {
-        toast.error("Something went wrong while creating the user");
-      }
-    }
-  };
-=======
     try {
       const response = await fetch(
         "https://api.cloudinary.com/v1_1/dzbhzlwoe/image/upload",
@@ -179,7 +120,6 @@ const Form = () => {
       }
     }, 3000);
   };
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
   const handlePreviewImage = (event) => {
     const file = event.target.files[0]; // Get the first selected file
     if (file) {
@@ -217,15 +157,12 @@ const Form = () => {
   const handleChangeInput = (e) => {
     setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-<<<<<<< HEAD
-=======
 
   const override = {
     display: "block",
     margin: "0 auto",
     borderColor: "red",
   };
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
   return (
     <Box m="20px">
       <Header title="CREATE USER" subtitle="Create a New User Profile" />
@@ -402,10 +339,6 @@ const Form = () => {
                 color="secondary"
                 variant="contained"
                 onClick={(event) => handleSubmitUser(event)}
-<<<<<<< HEAD
-              >
-                Create New User
-=======
                 disabled={loading ? true : false}
               >
                 {loading ? (
@@ -420,7 +353,6 @@ const Form = () => {
                 ) : (
                   <>Create New user</>
                 )}
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
               </Button>
             </Box>
           </form>

@@ -57,11 +57,9 @@ const HomePage = () => {
                   enough.
                 </p>
 
-<<<<<<< HEAD
             <Button href="/products-men/Running" className="shop-button">
               Shop
             </Button>
-=======
                 <button className="btn">Shop</button>
               </div>
               <div className="content">
@@ -69,7 +67,6 @@ const HomePage = () => {
               </div>
             </div>
             <Footer></Footer>
->>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
           </div>
         </>
       )}
