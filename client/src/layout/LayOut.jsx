@@ -23,6 +23,8 @@ import FAQ from "../pages/admin/faq";
 import Bar from "../pages/admin/bar";
 import Pie from "../pages/admin/pie";
 import Line from "../pages/admin/line";
+import AdminProfile from "../pages/admin/profile";
+
 import ManagerProduct from "../pages/admin/manageProduct";
 import ManagerUser from "../pages/admin/manageUser";
 import { ToastContainer } from "react-toastify";
@@ -30,12 +32,13 @@ import "react-toastify/dist/ReactToastify.css";
 
 import UserChatbox from "../components/Chatbox/UserChatbox";
 import AdminChatbox from "../components/Chatbox/AdminChatbox";
-// import Dashboard from "../components/userDashboard/pages/Dashboard";
 
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
-import ProfilePage from "../components/Profile";
+
+import UserDashboard from "../components/UserMenu/UserDashboard";
+import UserProfile from "../components/UserMenu/UserProfile";
 import NotFound from "../pages/NotFoundPages/NotFound";
 import DenyAccess from "../pages/NotFoundPages/DenyAccess";
 import ErrorPage from "../pages/NotFoundPages/errorPage";
@@ -43,6 +46,7 @@ import ErrorPage from "../pages/NotFoundPages/errorPage";
 const LayOut = () => {
   return (
     <>
+        <UserChatbox/>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -79,7 +83,6 @@ const LayOut = () => {
           ></Route>
           <Route path="/products/search" element={<ProductSearch />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/cart" element={<CartPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
         </Route>
@@ -98,23 +101,32 @@ const LayOut = () => {
           <Route path="manageProduct" element={<ManagerProduct />} />
           <Route path="manageUser" element={<ManagerUser />} />
           <Route path="invoices" element={<Invoices />} />
+          <Route path="adminChatbox"
+          element={<AdminChatbox userId="admin"/>}
+        />
           <Route path="form" element={<Form />} />
           <Route path="bar" element={<Bar />} />
           <Route path="pie" element={<Pie />} />
           <Route path="line" element={<Line />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="adprofile" element={<AdminProfile />} />
           {/* <Route path="/geography" element={<Geography />} /> */}
         </Route>
 
         {/* Dynamic route for User with userId */}
-        <Route path="/user-chatbox" element={<UserChatbox />} />
+        
 
         {/* Admin route */}
-        <Route
-          path="/admin-chatbox"
-          element={<AdminChatbox userId="admin" />}
-        />
+        
+        {/* User route */}
+        <Route path="/dashboard" element={<UserDashboard />}>
+          <Route path="profile" element={<UserProfile />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="wishlist" element={<WishlistPage />} />
+          {/* <Route path="history" element={<HistoryPage />} />
+          <Route path="setting" element={<SettingPage />} /> */}
+        </Route>
 
         <Route path="/DenyAccess" element={<DenyAccess></DenyAccess>}></Route>
         <Route path="/errorPage" element={<ErrorPage></ErrorPage>}></Route>

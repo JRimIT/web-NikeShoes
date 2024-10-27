@@ -6,7 +6,6 @@ import { validateEmail, validatePassword } from "../utils/validation";
 import { toast } from "react-toastify";
 
 const Login = () => {
-
   useEffect(() => {
     // Remember
     const savedEmail = localStorage.getItem("email");
@@ -26,7 +25,6 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -65,7 +63,7 @@ const Login = () => {
         } else {
           localStorage.removeItem("email");
         }
-        toast.success("Login successful!");
+        // toast.success("Login successful!");
         // setSuccessMessage("Login successful!");
         setErrorMessage("");
 

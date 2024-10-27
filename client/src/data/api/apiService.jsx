@@ -104,7 +104,7 @@ export const getCountSuccessTransactions = async () => {
 
 export const getUserByToken = async () => {
   try {
-    const res = await axios.get("/api/userinfo");
+    const res = await axios.get("/api/user/userinfo");
     return res;
   } catch (error) {
     console.log(error);

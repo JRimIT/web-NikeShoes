@@ -1,10 +1,11 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import axios from "../../../../utils/axios.customize";
 import "./Review.scss";
 import { useSelector } from "react-redux";
 
-const Review = ({ productId }) => {
+const Review = ({ productId, userId }) => {
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -14,10 +15,11 @@ const Review = ({ productId }) => {
   const [timeoutId, setTimeoutId] = useState(null); // State to hold the timeout ID
   const [error, setError] = useState({ comment: false, rating: false });
   // State to track errors
+  const navigate = useNavigate();
   const user = useSelector((state) => state.userInfo);
   useEffect(() => {
     fetchReviews();
-  }, [productId]);
+  }, [productId, userId]);
 
   const fetchReviews = async () => {
     try {
@@ -33,6 +35,9 @@ const Review = ({ productId }) => {
   };
 
   const handleAddReview = async () => {
+    if (userId == 0) {
+      navigate("/login");
+    }
     // Reset errors
     setError({ comment: false, rating: false });
 
@@ -52,8 +57,8 @@ const Review = ({ productId }) => {
     }
 
     try {
-      const { data } = await axios.post("http://localhost:5000/add-review", {
-        userId: user.user_id, // Demo user ID
+      const { data } = await axios.post('http://localhost:5000/add-review', {
+        userId: userId,
         productId,
         rating,
         comment,
