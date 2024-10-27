@@ -30,7 +30,19 @@ const Register = () => {
   const [user_image, setUserImage] = useState(null);
   const [role_id] = useState(1); // Default 1
   const [errorMessage, setErrorMessage] = useState("");
+  const [previewImage, setPreviewImage] = useState(null); // Thêm state cho preview
 
+  const handlePreviewImage = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setUserImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImage(reader.result); // Lưu trữ ảnh đã preview
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -64,12 +76,12 @@ const Register = () => {
       formData.append("country", country);
       formData.append("postalCode", postalCode);
       if (user_image) {
-        formData.append("user_image", user_image);
+        formData.append("user_image", user_image); // Append the image file
       }
-      console.log("Form Data:", formData);
+      console.log("Form data to be sent:", formData); // Debugging
 
       const response = await axios.post(
-        "http://localhost:5000/auth/register",
+        "http://localhost:5000/register",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
