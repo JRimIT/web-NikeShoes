@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './Payment.scss'; // Import the SCSS file
 import axiosClient from "../../api/axiosClient";
-import axios from 'axios';
+import axios from '../../utils/axios.customize';
 // import { useLocation } from 'react-router-dom';
 import { CartContext } from '../../context/CartContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const PayPalCheckout = () => {
     const [payPalClientId] = useState("AY4dA0xUDuJJp3NHKXFexARyfmqx5VdovdVJMuJbKTHhZujK39081EiUS1P-a5Bqb4fcEnOwDQfNk433");
-    // const { cartRequest } = useContext(CartContext);
+    const { cartRequest } = useContext(CartContext);
     const [orderId, setOrderId] = useState(null);
     const location = useLocation();
-    const { cartRequest } = location.state || {};
+    // const { cartRequest } = location.state || {};
+    const { id } = location.state || {};
     const navigate = useNavigate();    
     
     useEffect(() => {
@@ -33,21 +34,36 @@ const PayPalCheckout = () => {
             try {
                 const total = parseFloat((cartRequest.TotalAmount / 25405).toFixed(2)).toString();
                 const response = await axios.post(`https://localhost:7167/api/paypal/order?amount=${total}`);
-                setOrderId(response.data.orderId);
+                
+                const newOrderId = response?.data?.orderId;
+                if (!newOrderId) throw new Error("Order ID is undefined");
+                setOrderId(newOrderId);
             }
             catch (error) {
                 console.error("Error fetching data", error);
             }
             try {
                 const captureResponse = await axios.post(`http://localhost:7167/api/paypal/capture?orderId=${orderId.id}`);
-                if (!captureResponse.ok) {
+                if (captureResponse.status !== 201) {
                     throw new Error('Capture failed');
                 }
-                window.location.href = '/success';
+                console.log("Capture successful, proceeding with patch and delete...");
+            }
+            catch (error) {
+                console.error("Error capturing data or handling subsequent requests: ", error);
+            }
+            try {
+                // window.location.href = '/success';
+                console.log(id.data);
+                await axiosClient.patch(`orders/${id}`, { orderStatus: "processing"});
+                console.log("Order status updated successfully");
+
+                await axiosClient.delete(`carts/${cartRequest.CartId}`);
+                console.log(`Cart ${cartRequest.CartId} deleted successfully`);
                 // logic here
             }
             catch (error) {
-                console.error("Error capturing data", error);
+                console.error("Error patch or delete data: ", error);
             }
             document.body.appendChild(script);
 

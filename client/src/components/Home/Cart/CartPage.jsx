@@ -26,7 +26,7 @@ function CartPage() {
     cart.reduce((acc, item) => acc + parsePrice(item.price) * item.quantity, 0);
 
   const subtotal = calculateSubtotal();
-  const _total = (subtotal + shippingFee - discount) * (1 - 10 / 1000);
+  const total = (subtotal + shippingFee - discount) * (1 - 10 / 1000);
   // const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
   // const total = (subtotal + shippingFee - discount);
 
@@ -96,20 +96,11 @@ function CartPage() {
   };
 
   const handleCheckout = async () => {
-    // await axiosClient.post(`paypal/order`, cart)
-    //   .then(response => {
-    //     console.log('Order created: ', response.data);
-    //     navigate('/payment');
-    //   })
-    //   .catch(error => console.error('Error creating order: ', error));
-    if (cart.length === 0) {
-      console.error('Empty cart');
-      return;
-    }
     const cartRequest = {
-      CartItems: cart.map(item => ({
+      UserId: userId,
+      CartId: cart.length > 0 ? cart[0].cart_id : null,
+      CartItems: cart.map(item => ({        
         CartItemId: item.cart_item_id,
-        CartId: item.cart_id,
         ProductId: item.product_id,
         Quantity: item.quantity,
         ProductName: item.name,
@@ -121,26 +112,24 @@ function CartPage() {
         ProductSize: item.available_sizes,
         Description: item.description
       })),
-      TotalAmount: _total
+      TotalAmount: total
     };
     setCartRequest(cartRequest);
-    const cartId = cart[1]?.cart_id;
-    if (cartId) {
-      try {
-        await axiosClient.delete(`carts/${cartId}`);
-        await axiosClient.post(`orders/`, cartRequest);
-        navigate('/payment', { state: { cartRequest } });
-        // await axios.post(`http://localhost:7167/api/paypal/order`, {
-        //   total: total
-        // });
-        // , { state: { CartRequest }}
-      } catch (error) {
-        console.error('Error navigating to payment page: ', error);
-      }
-    } else {
-      console.error('No cartId found to delete.');
-    }
+    console.log('cartRequest: ', cartRequest);
     
+    // if (!cartId) {
+    //   console.error('No cartId found to delete.');
+    //   return;
+    // }
+    // fix here
+    try {
+      const orderResponse = await axiosClient.post(`orders/`, cartRequest);
+      console.log('Order created: ', orderResponse);
+
+      navigate('/payment', { state: { cartRequest } });
+    } catch (error) {
+      console.error('Error navigating to payment page: ', error);
+    }   
   };
 
   if (loading) return <p>Loading...</p>;
@@ -198,7 +187,7 @@ function CartPage() {
               <p>Shipping: <strong>Free</strong></p>
               <p>Sale: <strong>{sale}</strong></p>
               <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
-              <h5>Total: <strong>{formatPrice(_total)}</strong></h5>
+              <h5>Total: <strong>{formatPrice(total)}</strong></h5>
               {/* <PayPalCheckout total={total}/> */}
               <Button
                 variant="dark"

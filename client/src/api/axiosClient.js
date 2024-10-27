@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../src/utils/axios.customize';
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_DOTNET_API_URL,

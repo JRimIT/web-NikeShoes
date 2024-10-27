@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
+
 function App() {
   return (
     <>
@@ -20,7 +21,7 @@ function App() {
           <div className="sidenav-container"></div>
           <div className="app-content">
             {/* Outlet có trách nhiệm gọi các component con của app khi đc gọi và nó sẻ thế ngay vị trị của Outlet */}
-              <Outlet/>
+            <Outlet></Outlet>
           </div>
         </div>
       </div>

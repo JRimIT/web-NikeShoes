@@ -87,3 +87,25 @@
     }
   }
 }
+.order-popup {
+  position: absolute; // Position the popup relative to the orders container
+  background-color: white; // Background color for the popup
+  border: 1px solid #ccc; // Optional: border for the popup
+  padding: 10px; // Padding inside the popup
+  border-radius: 5px; // Rounded corners
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Optional: shadow effect
+  z-index: 1000; // Ensure it's above other elements
+}
+
+// Adjust the positioning of the popup
+.orders-grid {
+  position: relative; // Needed to position the popup
+}
+
+.order-card {
+  position: relative; // Needed for absolute positioning of the popup
+  cursor: pointer; // Change cursor to pointer on hover
+}
+
+// You can add more styles as needed for the popup
+
