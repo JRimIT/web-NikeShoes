@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Header.scss";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { IoBagHandleOutline } from "react-icons/io5";
@@ -11,12 +11,45 @@ import SearchBar from "./SearchBar";
 import logo from "../../pic/Logo.jpg";
 import ClipLoader from "react-spinners/ClipLoader";
 
+import axios from "axios";
+import { getUserByToken } from "../../data/api/apiService";
+import { useDispatch } from "react-redux";
+import UserSlice from "../../redux/userInfo/userSlice";
+
 const Header = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [user, setUser] = useState(null);
+  
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const dispatch = useDispatch();
+
+  
+  // Get user data from localStorage
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    console.log("token: ", token);
+
+    if (token) {
+      fetchUserInfo();
+    } else {
+      setUser(null);
+      dispatch(UserSlice.actions.setUser(null));
+    }
+  }, [token]);
+
+  const fetchUserInfo = async () => {
+    try {
+      const res = await getUserByToken();
+      // console.log(res.data);
+      setUser(res.data);
+      dispatch(UserSlice.actions.setUser(res.data));
+    } catch (error) {
+      console.log(error.response ? error.response.data.message : error.message);
+    }
+  };
 
   const handleSearchResults = (searchResults) => setProducts(searchResults);
 
@@ -59,15 +92,56 @@ const Header = () => {
                   Sign In <FaUserAlt />
                 </span>
               ) : (
-                <div className="user-container" onMouseEnter={handleDropdownToggle} onMouseLeave={handleDropdownToggle}>
-                  <span className="username">Hi, {user.username}</span>
-                  <img src={user.user_image} alt="User Avatar" className="user-avatar" />
-                  {isDropdownOpen && (
-                    <div className="dropdown-profile">
-                      <NavLink to="/dashboard/profile">Account</NavLink>
-                      <NavLink to="/setting">Setting</NavLink>
-                      <button className="butLogout" onClick={handleLogout}>Log Out</button>
-                    </div>
+                // <NavLink to="/login">
+
+                // </NavLink>
+
+                // If user is logged in
+
+                <div
+                  className="user-container"
+                  onMouseEnter={handleDropdownToggle}
+                  onMouseLeave={handleDropdownToggle}
+                >
+                  {user.role_id === 2 ? (
+                    <>
+                      <span className="username">Admin, {user.username}</span>
+                      <img
+                        src={user.user_image}
+                        alt="User Avatar"
+                        className="user-avatar"
+                      />
+
+                      {isDropdownOpen && (
+                        <div className="dropdown-profile">
+                          <NavLink to="/profile">Profile</NavLink>
+                          <NavLink to="/setting">Setting</NavLink>
+                          <NavLink to="/admins">Admin page</NavLink>
+                          <button className="butLogout" onClick={handleLogout}>
+                            Log Out
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <span className="username">Hi, {user.username}</span>
+                      <img
+                        src={user.user_image}
+                        alt="User Avatar"
+                        className="user-avatar"
+                      />
+
+                      {isDropdownOpen && (
+                        <div className="dropdown-profile">
+                          <NavLink to="/profile">Profile</NavLink>
+                          <NavLink to="/setting">Setting</NavLink>
+                          <button className="butLogout" onClick={handleLogout}>
+                            Log Out
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}

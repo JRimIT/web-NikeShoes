@@ -1,4 +1,5 @@
 import axios from "axios";
+// import { useNavigate } from "react-router-dom";
 
 const instance = axios.create({
   baseURL: "http://localhost:5000/",
@@ -35,10 +36,33 @@ instance.interceptors.response.use(
     // Do something with response error
     console.log("Run error: ", error.response);
 
-    return error && error.response && error.response.data
-      ? error.response.data
-      : Promise.reject(error);
-    // return error;
+    // Check if the error response status is 401 and contains a token expired message
+    if (error.response && error.response.status === 401) {
+      const message = error.response.data?.message;
+
+      if (message === "Token expired. Please login again.") {
+        alert(message);
+        // Clear the token from local storage and redirect to the login page
+        localStorage.clear();
+        window.location.href = "/login"; // Redirect to login
+      }
+    }
+
+    if (error.response && error.response.status === 403) {
+      const message = error.response.data?.message;
+      if (message === "Permission Denied") {
+        window.location.href = "/DenyAccess";
+      } else if (message === "Invalid token.") {
+        window.location.href = "/DenyAccess";
+      }
+    }
+
+    // if (error.response && error.response.status === 500) {
+    //   window.location.href = "/errorPage";
+    // }
+
+    // Return the error object or message for further handling
+    return Promise.reject(error.response?.data || error);
   }
 );
 

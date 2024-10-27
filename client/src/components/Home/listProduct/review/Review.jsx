@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Review.scss';
+;
 import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+// import axios from "axios";
+import axios from "../../../../utils/axios.customize";
+import "./Review.scss";
+import { useSelector } from "react-redux";
 
 const Review = ({ productId, userId }) => {
   const [reviews, setReviews] = useState([]);
@@ -11,9 +15,10 @@ const Review = ({ productId, userId }) => {
   const [loading, setLoading] = useState(true);
   const [notification, setNotification] = useState(null);
   const [timeoutId, setTimeoutId] = useState(null); // State to hold the timeout ID
-  const [error, setError] = useState({ comment: false, rating: false }); // State to track errors
+  const [error, setError] = useState({ comment: false, rating: false });
+  // State to track errors
   const navigate = useNavigate();
-
+  const user = useSelector((state) => state.userInfo);
   useEffect(() => {
     fetchReviews();
   }, [productId, userId]);

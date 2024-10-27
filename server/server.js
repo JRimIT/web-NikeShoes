@@ -70,9 +70,10 @@ app.use(sendResetPassword); // Route cho reset password
 app.use("/", authenticateJWT, cartRoutes); // Cart routes require authentication
 app.use("/", authenticateJWT, wishlistRoutes);  // Wishlist routes require authentication
 app.use("/", authenticateJWT, reviewRoutes);  // Review routes require authentication
-app.use("/", authenticateJWT, adminRoutes);  // Admin routes require authentication
+app.use("/api/user", authenticateJWT, userRoutes);  // Review routes require authentication
+app.use('/', authenticateJWT, checkRole('2'), adminRoutes);  // Admin routes require authentication
 
-app.use("/api/user", userRoutes);
+// app.use("/api/user", userRoutes);
 
 // Cấu hình cors
 app.use(
