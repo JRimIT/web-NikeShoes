@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
 import { Container, Row, Col, Button, Image, Form } from "react-bootstrap";
+=======
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
+>>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 import { FaTrashAlt } from "react-icons/fa";
 import axios from "../../../utils/axios.customize";
 import "./CartPage.scss";

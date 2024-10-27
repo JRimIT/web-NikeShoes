@@ -6,7 +6,6 @@ import { validateEmail, validatePassword } from "../utils/validation";
 import { toast } from "react-toastify";
 
 const Login = () => {
-
   useEffect(() => {
     // Remember
     const savedEmail = localStorage.getItem("email");
@@ -26,7 +25,10 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -73,7 +75,7 @@ const Login = () => {
         if (roleId === 1) {
           navigate("/");
         } else if (roleId === 2) {
-          navigate("/admins");
+          navigate("/");
         } else if (roleId === 3) {
           navigate("/ship");
         } else if (roleId === 4) {

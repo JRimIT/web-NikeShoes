@@ -23,19 +23,34 @@ import FAQ from "../pages/admin/faq";
 import Bar from "../pages/admin/bar";
 import Pie from "../pages/admin/pie";
 import Line from "../pages/admin/line";
+import AdminProfile from "../pages/admin/profile";
+
 import ManagerProduct from "../pages/admin/manageProduct";
+import ManagerUser from "../pages/admin/manageUser";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import UserChatbox from "../components/Chatbox/UserChatbox";
 import AdminChatbox from "../components/Chatbox/AdminChatbox";
+<<<<<<< HEAD
 // import Dashboard from "../components/userDashboard/pages/Dashboard";
+=======
+>>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
+<<<<<<< HEAD
 import ProfilePage from "../components/Profile";
 import HelpPage from "../components/Home/Help/HelpPage";
+=======
+
+import UserDashboard from "../components/UserMenu/UserDashboard";
+import UserProfile from "../components/UserMenu/UserProfile";
+import NotFound from "../pages/NotFoundPages/NotFound";
+import DenyAccess from "../pages/NotFoundPages/DenyAccess";
+import ErrorPage from "../pages/NotFoundPages/errorPage";
+>>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 
 const LayOut = () => {
   return (
@@ -77,7 +92,6 @@ const LayOut = () => {
           ></Route>
           <Route path="/products/search" element={<ProductSearch />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/cart" element={<CartPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/help" element={<HelpPage />} />
@@ -95,6 +109,10 @@ const LayOut = () => {
           <Route path="team" element={<Team />} />
           {/* <Route path="contacts" element={<Contacts />} /> */}
           <Route path="manageProduct" element={<ManagerProduct />} />
+<<<<<<< HEAD
+=======
+          <Route path="manageUser" element={<ManagerUser />} />
+>>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
           <Route path="invoices" element={<Invoices />} />
           <Route path="adminChatbox"
           element={<AdminChatbox userId="admin"/>}
@@ -105,6 +123,10 @@ const LayOut = () => {
           <Route path="line" element={<Line />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="calendar" element={<Calendar />} />
+<<<<<<< HEAD
+=======
+          <Route path="adprofile" element={<AdminProfile />} />
+>>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
           {/* <Route path="/geography" element={<Geography />} /> */}
         </Route>
 
@@ -113,11 +135,24 @@ const LayOut = () => {
 
         {/* Admin route */}
         
+        {/* User route */}
+        <Route path="/dashboard" element={<UserDashboard />}>
+          <Route path="profile" element={<UserProfile />} />
+          <Route path="cart" element={<CartPage />} />
+          <Route path="wishlist" element={<WishlistPage />} />
+          {/* <Route path="history" element={<HistoryPage />} />
+          <Route path="setting" element={<SettingPage />} /> */}
+        </Route>
+
+        <Route path="/DenyAccess" element={<DenyAccess></DenyAccess>}></Route>
+        <Route path="/errorPage" element={<ErrorPage></ErrorPage>}></Route>
+
+        <Route path="*" element={<NotFound />}></Route>
       </Routes>
 
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

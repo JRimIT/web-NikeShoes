@@ -1,12 +1,21 @@
 // Variables
 $background-color: #f8f9fa;
 $text-color: #333;
+<<<<<<< HEAD
 $primary-color: black; 
 $secondary-color: #f1f3f5;
 $hover-color: grey; 
 $accent-color: #d33918; 
 $border-radius: 16px; 
 $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); 
+=======
+$primary-color: #6c757d;
+$secondary-color: #f1f3f5;
+$hover-color: #495057;
+$accent-color: #d33918;
+$border-radius: 16px;
+$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+>>>>>>> 5394466e2f357ff7d74e7a8ee2bd13000e5ac89b
 $transition: all 0.3s ease-in-out;
 
 // Mixins
@@ -71,7 +80,7 @@ $transition: all 0.3s ease-in-out;
 
   .thumbnail-images {
     display: flex;
-    gap: 10px; 
+    gap: 10px;
     overflow-x: auto;
     padding: 8px;
 
@@ -117,7 +126,7 @@ $transition: all 0.3s ease-in-out;
 
   h2 {
     font-size: 2.2rem;
-    margin: 0; 
+    margin: 0;
     color: $text-color;
     font-weight: bold;
   }
@@ -153,13 +162,13 @@ $transition: all 0.3s ease-in-out;
     line-height: 1.6;
     font-size: 0.9rem;
     text-align: justify;
-    font-family: 'Georgia', serif;
+    font-family: "Georgia", serif;
     margin: 0;
   }
 
   h3 {
-    margin: 10px 0 5px; 
-    font-size: 1.4rem; 
+    margin: 10px 0 5px;
+    font-size: 1.4rem;
     color: $text-color;
   }
 
@@ -201,7 +210,7 @@ $transition: all 0.3s ease-in-out;
   }
 
   .color-swatch {
-    width: 45px; 
+    width: 45px;
     height: 45px;
     border-radius: 50%;
     border: 2px solid transparent;

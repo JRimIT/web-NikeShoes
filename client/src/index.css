@@ -34,3 +34,13 @@ body,
 ::-webkit-scrollbar-track:hover {
   background: #555;
 }
+
+.Loading-Page{
+    position: fixed;
+      display: flex;
+      background-color: #f1f1f1;
+      width: 100vw;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+}
