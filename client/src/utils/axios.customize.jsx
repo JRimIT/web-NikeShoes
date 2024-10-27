@@ -50,12 +50,11 @@ instance.interceptors.response.use(
 
     if (error.response && error.response.status === 403) {
       const message = error.response.data?.message;
-      // if (message === "Permission Denied") {
-      //   window.location.href = "/DenyAccess";
-      // }
-      // else if (message === "Invalid token.") {
-      //   window.location.href = "/DenyAccess";
-      // }
+      if (message === "Permission Denied") {
+        window.location.href = "/DenyAccess";
+      } else if (message === "Invalid token.") {
+        window.location.href = "/DenyAccess";
+      }
     }
 
     // if (error.response && error.response.status === 500) {
