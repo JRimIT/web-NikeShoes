@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../../../../utils/axios.customize";
 import "./ProductDetailPage.scss";
 import { FaHeart } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from "../../../../utils/axios.customize";
 import './ProductList.scss';
 import { useNavigate, useLocation } from 'react-router-dom';
 
