@@ -151,6 +151,7 @@ const Orders = () => {
     const [popupVisible, setPopupVisible] = useState(false);
     const [popupContent, setPopupContent] = useState(null);
     const [userId, setUserId] = useState(null);
+    const { cartRequest } = useContext(CartContext);
 
     const END_POINT = {
         ORDERS: "orders"
@@ -179,12 +180,8 @@ const Orders = () => {
         fetchData();
     }, [userId]);
 
-    const handleOrdersClick = (id, status) => {
-        if (status === 'pending') {
-            navigate('/payment', { state: { id } });
-        } else {
+    const handleOrdersClick = (id) => {
             navigate(`/order-items/${id}`);
-        }
     };
 
     // Functions to show and hide the popup

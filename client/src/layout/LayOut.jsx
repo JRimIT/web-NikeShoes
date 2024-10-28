@@ -9,6 +9,7 @@ import ProductDetailPage from "../components/Home/listProduct/Product/ProductDet
 import Orders from "../components/orders/Orders";
 import OrderItems from "../components/orders/OrderItems";
 import Payment from "../components/payment/Payment";
+import Success from "../components/payment/Success";
 import ProductFeaturedPage from "../components/Home/listProduct/featured/ProductFeaturedPage";
 
 import ProductSearch from "../components/Home/listProduct/Product/ProductSearch";
@@ -41,7 +42,6 @@ import AdminChatbox from "../components/Chatbox/AdminChatbox";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
-import ProfilePage from "../components/Profile";
 import HelpPage from "../components/Home/Help/HelpPage";
 
 import UserDashboard from "../components/UserMenu/UserDashboard";
@@ -94,7 +94,7 @@ const LayOut = () => {
                 <Route path="/orders" element={<Orders/>}></Route>
                 <Route path="/order-items/:id" element={<OrderItems/>}></Route>
                 <Route path="/payment" element={<Payment></Payment>}></Route>
-                <Route path="/profile" element={<ProfilePage />}></Route>
+                <Route path="/success" element={<Success/>}/>
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/help" element={<HelpPage />} />

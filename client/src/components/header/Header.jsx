@@ -12,13 +12,11 @@ import { FaCreditCard } from "react-icons/fa";
 import { IoMdSearch } from "react-icons/io";
 import SearchBar from "./SearchBar";
 import logo from "../../pic/Logo.jpg";
-import { FaUserAlt } from "react-icons/fa";
 import { Typography } from "@mui/material";
 import ClipLoader from "react-spinners/ClipLoader";
 
 import loadingGif from "../../assets/Double Ring@1x-1.0s-200px-200px.gif";
 
-import ClipLoader from "react-spinners/ClipLoader";
 
 import axios from "axios";
 import { getUserByToken } from "../../data/api/apiService";
