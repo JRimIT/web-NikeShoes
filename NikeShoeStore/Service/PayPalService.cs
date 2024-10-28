@@ -82,8 +82,6 @@ namespace NikeShoeStore.Service
             var request = new HttpRequestMessage(HttpMethod.Post, "/v2/checkout/orders");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.access_token);
 
-            Console.WriteLine(amount.ToString() + "abc");
-
             var orderRequest = new CreateOrderRequest
             {
                 intent = "CAPTURE",
@@ -95,7 +93,7 @@ namespace NikeShoeStore.Service
                         amount = new Amount()
                         {
                             currency_code = "USD",
-                            value = amount.ToString()
+                            value = amount
                         }
                     }
                 }
