@@ -44,7 +44,6 @@ namespace NikeShoeStore.Controllers
             var reference = GetRandomInvoiceNumber();
             //var total = decimal.Parse(amount).ToString("F2");
             var total = amount.ToString("F2", CultureInfo.InvariantCulture);
-            Console.WriteLine(total + "abc");
             var orderId = await _payPalService.CreateOrderAsync(total, reference);
             return Ok(orderId);
         }
@@ -55,6 +54,7 @@ namespace NikeShoeStore.Controllers
             try
             {
                 var result = await _payPalService.CaptureOrderAsync(orderId);
+                Console.WriteLine(result.ToString());
 
                 if (result == null) 
                     return BadRequest(new { error = "Order capture failed." });
