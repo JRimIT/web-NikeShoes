@@ -107,7 +107,6 @@ namespace NikeShoeStore.Service
             };
             //var json = JsonConvert.SerializeObject(orderRequest);
             var json = JsonSerializer.Serialize(orderRequest, options);
-            Console.WriteLine(json);
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var httpResponse = await _httpClient.SendAsync(request);
@@ -169,17 +168,24 @@ namespace NikeShoeStore.Service
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"/v2/checkout/orders/{orderId}/capture");
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken.access_token);
-            //request.Content = new StringContent(orderId, Encoding.UTF8, "application/json");
-            request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
+            var content = new { orderId };
+            request.Content = new StringContent(JsonSerializer.Serialize(content, options), Encoding.UTF8, "application/json");
+            //request.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 
             var httpResponse = await _httpClient.SendAsync(request);
             var jsonResponse = await httpResponse.Content.ReadAsStringAsync();
+            Console.WriteLine("PayPal response: " + jsonResponse);
 
             if (httpResponse.IsSuccessStatusCode)
             {
                 try
                 {
-                    var response = JsonSerializer.Deserialize<CaptureOrderResponse>(jsonResponse);
+                    var response = JsonSerializer.Deserialize<CaptureOrderResponse>(jsonResponse, options);
                     //var response = JsonConvert.DeserializeObject<CaptureOrderResponse>(jsonResponse);
                     return response;
                 }

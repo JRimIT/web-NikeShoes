@@ -53,84 +53,25 @@ namespace NikeShoeStore.Controllers
         {
             try
             {
-                var result = await _payPalService.CaptureOrderAsync(orderId);
-                Console.WriteLine(result.ToString());
+                if (string.IsNullOrEmpty(orderId))
+                {
+                    return BadRequest(new { error = "Order ID cannot be null or empty." });
+                }
 
-                if (result == null) 
+                var result = await _payPalService.CaptureOrderAsync(orderId);
+                Console.WriteLine("result: " + result);
+
+                if (result == null)
                     return BadRequest(new { error = "Order capture failed." });
-                return Ok(new { result });
+                return Ok(result);
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Error capturing order: " + ex.Message);
                 return StatusCode(500, new { error = ex.Message });
             }
-            
+
         }
-
-        //[HttpPost("order")]
-        //public async Task<ActionResult> CreateOrder(decimal total, CancellationToken cancellationToken)
-        //{
-        //    //if (cart == null || !cart.Any())
-        //    //{
-        //    //    return BadRequest("Cart cannot be null or empty");
-        //    //}
-        //    //if (request.TotalAmount <= 0)
-        //    //{
-        //    //    return BadRequest("Total amount must be greater than zero");
-        //    //}
-        //    try
-        //    {
-        //        //var totalAmount = (cart.Product.Price * cart.Quantity).ToString();
-        //        //var totalAmount = cart.Sum(item => item.Product.Price * item.Quantity).ToString();
-        //        //TotalAmount = request.TotalAmount.ToString();
-        //        TotalAmount = total.ToString();
-        //        TempData["TotalAmount"] = TotalAmount;
-        //        var currency = "USD";
-        //        var reference = GetRandomInvoiceNumber();
-        //        var response = await _payPalService.CreateOrder(TotalAmount, currency, reference);
-        //        if (response == null || string.IsNullOrEmpty(response.id))
-        //        {
-        //            return BadRequest("Invalid response from PayPal service");
-        //        }
-        //        //_logger.LogInformation("Creating order with data: {data}", cart);
-        //        //_logger.LogInformation($"Received total: {request.TotalAmount}", request.TotalAmount);
-        //        _logger.LogInformation($"PayPal order response: {response}", response);
-        //        await _context.SaveChangesAsync();
-        //        return Ok(response); // Return the PayPal order response
-        //    }
-        //    catch (System.Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Error while creating PayPal order");
-        //        return StatusCode(500, "Internal Server Error" + ex.Message);
-        //    }
-        //}
-
-        //[HttpPost("capture")]
-        //public async Task<IActionResult> Capture(string orderId, CancellationToken cancellationToken)
-        //{
-        //    try
-        //    {
-        //        var response = await _payPalService.CaptureOrder(orderId);
-
-        //        var reference = response.purchase_units[0].reference_id;
-
-        //        // Put your logic to save the transaction here
-        //        // You can use the "reference" variable as a transaction key
-        //        _logger.LogInformation("PayPal order response: {response}", response);
-
-        //        return Ok(response);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        var error = new
-        //        {
-        //            e.GetBaseException().Message
-        //        };
-
-        //        return StatusCode(500, "Internal Server Error" + e.Message);
-        //    }
-        //}
-
         private string GetRandomInvoiceNumber()
         {
             return new Random().Next(999999).ToString();
