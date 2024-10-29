@@ -9,7 +9,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 const PayPalCheckout = () => {
     const [payPalClientId] = useState("AY4dA0xUDuJJp3NHKXFexARyfmqx5VdovdVJMuJbKTHhZujK39081EiUS1P-a5Bqb4fcEnOwDQfNk433");
     // const { cartRequest } = useContext(CartContext);
-    const [orderId, setOrderId] = useState(null);
     const location = useLocation();
     const { cartRequest } = location.state || {};
     const { id } = location.state || {};
@@ -17,6 +16,7 @@ const PayPalCheckout = () => {
     
     useEffect(() => {
         const fetchData = async () => {
+            
             const script = document.createElement('script');
             script.src = `https://www.paypal.com/sdk/js?client-id=${payPalClientId}&currency=USD`;
             script.async = true;
@@ -28,55 +28,72 @@ const PayPalCheckout = () => {
                         layout: 'vertical',
                         color: 'silver',
                         tagline: 'false'
+                    },
+                    createOrder: async () => {
+                        try {
+                            const total = parseFloat((cartRequest.TotalAmount / 25405).toFixed(2)).toString();
+                            const response = await axiosClient.post(`paypal/order?amount=${total}`);
+                            if (response.id) {
+                                const orderID = response.id;
+                                console.log(orderID);
+                                return orderID;
+                            } 
+                            else 
+                            {
+                                throw new Error("Order ID not found in response");
+                            }
+                            
+                        } 
+                        catch (error)
+                        {
+                            console.error("Error creating order", error);
+                            alert("Failed to create PayPal order.");
+                        }
+                    },
+                    onApprove: async (data) => {
+                        try {
+                            const approvedOrderId = data.orderID;
+                            console.log(approvedOrderId);
+                            if (!approvedOrderId) {
+                                throw new Error("No order ID found.");
+                            }
+                            const captureResponse = await axiosClient.post(`paypal/capture?orderId=${approvedOrderId}`);
+                            
+                            if (captureResponse.status === 200) {
+                                // navigate(`/success`, { state: { id } });
+                                return captureResponse;
+                            }
+                            console.log("Capture successful, proceeding with patch and delete...");
+                        }
+                        catch (error) {
+                            console.error("Error capturing data or handling subsequent requests: ", error);
+                        }
                     }
                 }).render('#paypal-button-container');
             }
-            try {
-                const total = parseFloat((cartRequest.TotalAmount / 25405).toFixed(2)).toString();
-                const response = await axiosClient.post(`paypal/order?amount=${total}`);
-                
-                setOrderId(response);
-                // const orderResponse = await axiosClient.post(`orders/`, cartRequest);
-                // console.log('Order created: ', orderResponse);
-            }
-            catch (error) {
-                console.error("Error fetching data", error);
-            }
-            
-            try {
-                const captureResponse = await axios.post(`http://localhost:7167/api/paypal/capture?orderId=${orderId.id}`);
-                
-                if (captureResponse.status === 201) {
-                    // navigate(`/success`, { state: { id } });
-                }
-                console.log("Capture successful, proceeding with patch and delete...");
-            }
-            catch (error) {
-                console.error("Error capturing data or handling subsequent requests: ", error);
-            }
-            
-            try {
-                console.log(id.data);
-                await axiosClient.patch(`orders/${id}`, { orderStatus: "processing"});
-                console.log("Order status updated successfully");
-                
-                await axiosClient.delete(`carts/${cartRequest.CartId}`);
-                console.log(`Cart ${cartRequest.CartId} deleted successfully`);
-
-            }
-            catch (error) {
-                console.error("Error patch data: ", error);
-            }
             document.body.appendChild(script);
+            // 
+            
+            // try {
+            //     console.log(id.data);
+            //     await axiosClient.patch(`orders/${id}`, { orderStatus: "processing"});
+            //     console.log("Order status updated successfully");
+                
+            //     await axiosClient.delete(`carts/${cartRequest.CartId}`);
+            //     console.log(`Cart ${cartRequest.CartId} deleted successfully`);
 
-            return () => {
-                const paypalButtonsContainer = document.querySelector('#paypal-button-container');
-                if (paypalButtonsContainer) {
-                    paypalButtonsContainer.innerHTML = ''; // Clean up the buttons
-                }
-            };
+            // }
+            // catch (error) {
+            //     console.error("Error patch data: ", error);
+            // }
         };
         fetchData();
+        return () => {
+            const paypalButtonsContainer = document.querySelector('#paypal-button-container');
+            if (paypalButtonsContainer) {
+                paypalButtonsContainer.innerHTML = ''; // Clean up the buttons
+            }
+        };
     }, [payPalClientId, cartRequest, navigate, id]);
 
     return (
