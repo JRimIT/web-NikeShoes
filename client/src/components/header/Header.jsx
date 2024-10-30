@@ -23,7 +23,6 @@ const Header = () => {
 
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   // Get user data from localStorage
@@ -45,8 +44,11 @@ const Header = () => {
       const res = await getUserByToken();
       // console.log(res.data);
       setUser(res.data);
+      console.log("USer: ", user);
       dispatch(UserSlice.actions.setUser(res.data));
     } catch (error) {
+      console.log("USer: ", "DEo co");
+
       console.log(error.response ? error.response.data.message : error.message);
     }
   };
@@ -104,7 +106,6 @@ const Header = () => {
                 // </NavLink>
 
                 // If user is logged in
-
                 <div
                   className="user-container"
                   onMouseEnter={handleDropdownToggle}
@@ -521,16 +522,17 @@ const Header = () => {
                       </div>
                     </div>
                   </div>
-                  <NavLink className="nav-link" to="/sale">
+                  {/* <NavLink className="nav-link" to="/sale">
                     Sale
-                  </NavLink>
+                  </NavLink> */}
                   <NavLink className="nav-link" to="/help">
                     Help
                   </NavLink>
-                  <NavLink className="nav-link" to="/join">
+                  {/* <NavLink className="nav-link" to="/join">
                     Join Us
-                  </NavLink>
+                  </NavLink> */}
                 </Nav>
+
                 <div className="navbar-right-content">
                   <span
                     className="icon-bag rounded-circle"
@@ -544,7 +546,7 @@ const Header = () => {
                   >
                     <IoBagHandleOutline />
                   </span>
-                  <SearchBar onSearchResults={handleSearchResults} />
+                  <SearchBar onSearchResults={handleSearchResults}></SearchBar>
                 </div>
               </Navbar.Collapse>
             </Container>

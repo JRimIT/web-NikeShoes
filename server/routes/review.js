@@ -32,7 +32,9 @@ router.get('/api/reviews/:productId', (req, res) => {
   const { productId } = req.params;
 
   const query = `
-    SELECT r.review_id, r.rating, r.comment, r.review_date, u.user_id, u.username
+    SELECT r.review_id, r.rating, r.comment, 
+    DATE_FORMAT(r.review_date, '%d-%m-%Y') AS review_date,
+    u.user_id, u.username, u.user_image
     FROM Reviews r
     JOIN Users u ON r.user_id = u.user_id
     WHERE r.product_id = ?

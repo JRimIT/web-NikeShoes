@@ -45,6 +45,8 @@ import NotFound from "../pages/NotFoundPages/NotFound";
 import DenyAccess from "../pages/NotFoundPages/DenyAccess";
 import ErrorPage from "../pages/NotFoundPages/errorPage";
 import HelpPage from "../components/Home/Help/HelpPage";
+import BlackList from "../pages/admin/manageBlackList";
+import BanedPage from "../pages/NotFoundPages/BanedPage";
 
 const LayOut = () => {
   return (
@@ -143,6 +145,7 @@ const LayOut = () => {
           <Route path="line" element={<Line />} />
           <Route path="faq" element={<FAQ />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="backList" element={<BlackList></BlackList>}></Route>
           <Route path="adprofile" element={<AdminProfile />} />
           {/* <Route path="/geography" element={<Geography />} /> */}
         </Route>
@@ -162,6 +165,7 @@ const LayOut = () => {
 
         <Route path="/DenyAccess" element={<DenyAccess></DenyAccess>}></Route>
         <Route path="/errorPage" element={<ErrorPage></ErrorPage>}></Route>
+        <Route path="/banedPage" element={<BanedPage></BanedPage>}></Route>
 
         <Route path="*" element={<NotFound />}></Route>
       </Routes>

@@ -3,9 +3,24 @@ import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import axios from "../../../../utils/axios.customize";
 import "./Review.scss";
+import Avatar from "@mui/material/Avatar";
 import { useSelector } from "react-redux";
+import { IconButton, Stack } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { GiBootKick } from "react-icons/gi";
+import {
+  addUserToBlackList,
+  deleteAllReviewsByUserId,
+  deleteReview,
+  getUserById,
+} from "../../../../data/api/apiService";
+import ModalKickUser from "./content/ModalKickUser";
 
 const Review = ({ productId, userId }) => {
+  const [showModalKick, setShowModalKick] = useState(false);
+  const [dataKickUser, setDataKickUser] = useState({});
+
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
@@ -35,7 +50,7 @@ const Review = ({ productId, userId }) => {
   };
 
   const handleAddReview = async () => {
-    if (userId == 0) {
+    if (userId === 0) {
       navigate("/login");
     }
     // Reset errors
@@ -86,74 +101,135 @@ const Review = ({ productId, userId }) => {
     setTimeoutId(newTimeoutId);
   };
 
+  const btnDeleteReview = (id) => {
+    const res = deleteReview(id);
+    console.log(res);
+    fetchReviews();
+  };
+
+  const btnKickUser = async (userId) => {
+    setShowModalKick(true);
+    const dataUser = await getUserById(userId);
+    console.log("Data kick: ", dataUser.data);
+    setDataKickUser(dataUser.data[0]);
+    // const res = addUserToBlackList(userId, reason);
+    // deleteAllReviewsByUserId(userId);
+    // // deleteReview(id);
+    // console.log(res);
+    // fetchReviews();
+  };
   return (
-    <div className="review-container">
-      <h3>Customer Reviews</h3>
-
-      {loading ? (
-        <p>Loading reviews...</p>
-      ) : reviews?.length === 0 ? (
-        <p>No reviews yet. Be the first to leave a review!</p>
-      ) : (
-        reviews?.map((review) => (
-          <div key={review.review_id} className="review">
-            <p>
-              <strong>{review.username}</strong> -
-              <span className="stars">{"★".repeat(review.rating)}</span>
-            </p>
-            <p>{review.comment}</p>
-            <p className="review-date">
-              {new Date(review.review_date).toLocaleString()}
-            </p>
-          </div>
-        ))
-      )}
-
-      <div className="add-review">
-        <h4>Add Your Review</h4>
-
-        <div
-          className="star-rating"
-          style={{ color: error.rating ? "red" : "inherit" }}
-        >
-          {[1, 2, 3, 4, 5]?.map((star) => (
-            <span
-              key={star}
-              className={`star ${star <= (hover || rating) ? "filled" : ""}`}
-              onClick={() => setRating(star)}
-              onMouseEnter={() => setHover(star)}
-              onMouseLeave={() => setHover(0)}
-            >
-              ★
-            </span>
-          ))}
-        </div>
-        {error.rating && (
-          <p style={{ color: "red" }}>Please provide a rating.</p>
+    <>
+      <div className="review-container">
+        <h3>Customer Reviews</h3>
+        {loading ? (
+          <p>Loading reviews...</p>
+        ) : reviews?.length === 0 ? (
+          <p>No reviews yet. Be the first to leave a review!</p>
+        ) : (
+          reviews?.map((review) => (
+            <div key={review.review_id} className="review">
+              <p className="d-flex flex-row justify-content-between">
+                <strong>
+                  <Stack
+                    // direction="row"
+                    spacing={1}
+                    display="flex"
+                    flexDirection="row"
+                    alignContent="center"
+                    textAlign="center"
+                  >
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={review.user_image}
+                      className="me-2"
+                    />
+                    <p>{review.username} -</p>
+                    {/* {review.username}- */}
+                    <span className="stars">{"★".repeat(review.rating)}</span>
+                  </Stack>
+                </strong>{" "}
+                {user && user.role_id === 2 ? (
+                  <div>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => btnDeleteReview(review.review_id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton onClick={() => btnKickUser(review.user_id)}>
+                      <GiBootKick />
+                    </IconButton>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </p>
+              <p>{review.comment}</p>
+              <p className="review-date">{review.review_date}</p>
+            </div>
+          ))
         )}
+        <div className="add-review">
+          <h4>Add Your Review</h4>
 
-        <textarea
-          placeholder="Write your comment..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          style={{ borderColor: error.comment ? "red" : "inherit" }}
-        />
-        {error.comment && (
-          <p style={{ color: "red" }}>Please enter a comment.</p>
-        )}
-
-        <button onClick={handleAddReview}>Submit Review</button>
-
-        {notification && (
           <div
-            className={`notification ${notification.type}`}
-            style={{ marginTop: "10px" }}
+            className="star-rating"
+            style={{ color: error.rating ? "red" : "inherit" }}
           >
-            {notification.message}
+            {[1, 2, 3, 4, 5]?.map((star) => (
+              <span
+                key={star}
+                className={`star ${star <= (hover || rating) ? "filled" : ""}`}
+                onClick={() => setRating(star)}
+                onMouseEnter={() => setHover(star)}
+                onMouseLeave={() => setHover(0)}
+              >
+                ★
+              </span>
+            ))}
           </div>
-        )}
+          {error.rating && (
+            <p style={{ color: "red" }}>Please provide a rating.</p>
+          )}
+
+          <textarea
+            placeholder="Write your comment..."
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            style={{ borderColor: error.comment ? "red" : "inherit" }}
+          />
+          {error.comment && (
+            <p style={{ color: "red" }}>Please enter a comment.</p>
+          )}
+
+          <button onClick={handleAddReview} disabled={user ? false : true}>
+            {user ? (
+              <>
+                Submit Review <SendIcon></SendIcon>
+              </>
+            ) : (
+              <>Please Login before Comment</>
+            )}
+          </button>
+
+          {notification && (
+            <div
+              className={`notification ${notification.type}`}
+              style={{ marginTop: "10px" }}
+            >
+              {notification.message}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <ModalKickUser
+        show={showModalKick}
+        setShow={setShowModalKick}
+        dataKickUser={dataKickUser}
+        fetchReviews={fetchReviews}
+      ></ModalKickUser>
+    </>
   );
 };
 
