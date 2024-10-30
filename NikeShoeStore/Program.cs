@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using NikeShoeStore.Data;
-using NikeShoeStore.Service;
+using NikeShoeStore.Service;    
 
 var builder = WebApplication.CreateBuilder(args);
 
