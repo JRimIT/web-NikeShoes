@@ -7,6 +7,7 @@ import Footer from "../footer/Footer";
 import "./HomePageWoman.scss";
 import Slider from "react-slick";
 import HomePageWomanContent from "./HomePageWomanContent";
+import { Button } from "react-bootstrap";
 
 function HomePageWoman() {
   const settingsHead = {
@@ -56,8 +57,10 @@ function HomePageWoman() {
               All.
             </p>
 
-            <div className="list-for-men pt-2">
-              <span>Choose your shoes </span>
+            <div className="list-for-women pt-2">
+              <Button href="/products-women/Women's Road Running Shoes" className="button">
+                Choose your shoes
+              </Button>
             </div>
           </div>
           <div className="content">

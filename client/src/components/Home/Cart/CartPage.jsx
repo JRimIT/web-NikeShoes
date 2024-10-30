@@ -6,11 +6,11 @@ import "./CartPage.scss";
 
 function CartPage() {
   const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [loadingAction, setLoadingAction] = useState(false);
   const [userId, setUserId] = useState(null);
   const shippingFee = 0;
-  const sale = '99.9%';
+  const sale = "99.9%";
   const discount = 200000;
 
   const parsePrice = (price) => Number(price.replaceAll(",", ""));
@@ -21,7 +21,7 @@ function CartPage() {
 
   const subtotal = calculateSubtotal();
   // const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
-  const total = (subtotal + shippingFee - discount);
+  const total = subtotal + shippingFee - discount;
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
@@ -33,10 +33,12 @@ function CartPage() {
 
   useEffect(() => {
     const fetchCart = async () => {
-      if (!userId) return; // Don't fetch if userId is not set
+      // if (!userId) return; // Don't fetch if userId is not set
       try {
         console.log(userId);
-        const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/cart/${userId}`
+        );
         setCart(response.data || []); // Handle empty or null data
       } catch (error) {
         console.error(
@@ -50,18 +52,19 @@ function CartPage() {
     };
 
     fetchCart();
-  }, [userId])
-  ;
+  }, [userId]);
 
   const handleQuantityChange = async (id, newQuantity) => {
     // if (newQuantity < 1) return;
     if (newQuantity < 1 || newQuantity > 10) {
-      console.warn('Quantity must be between 1 and 10.');
+      console.warn("Quantity must be between 1 and 10.");
       return;
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, { quantity: newQuantity });
+      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, {
+        quantity: newQuantity,
+      });
       setCart((prevCart) =>
         prevCart.map((item) =>
           item.cart_item_id === id ? { ...item, quantity: newQuantity } : item
@@ -102,7 +105,7 @@ function CartPage() {
 
   return (
     <Container className="cart-container">
-      <h2 className="mb-4">Shopping Cart</h2>
+      <h2>Shopping Cart</h2>
       {cart.length === 0 ? (
         <div className="text-center">
           <h4>Your cart is empty.</h4>
@@ -140,7 +143,7 @@ function CartPage() {
                   />
                   <FaTrashAlt
                     onClick={() => handleRemove(item.cart_item_id)}
-                    className="remove-button" 
+                    className="remove-button"
                   />
                 </div>
               </div>
@@ -148,11 +151,19 @@ function CartPage() {
           </Col>
           <Col md={4} className="order-summary">
             <h4>Order Summary</h4>
-            <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
-            <p>Shipping: <strong>Free</strong></p>
+            <p>
+              Subtotal: <strong>{formatPrice(subtotal)}</strong>
+            </p>
+            <p>
+              Shipping: <strong>Free</strong>
+            </p>
             {/* <p>Sale: <strong>{sale}</strong></p> */}
-            <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
-            <h5>Total: <strong>{formatPrice(total)}</strong></h5>
+            <p>
+              Discount: <strong>-{formatPrice(discount)}</strong>
+            </p>
+            <h5>
+              Total: <strong>{formatPrice(total)}</strong>
+            </h5>
             <Button
               variant="dark"
               className="w-100 mt-3 checkout-button"

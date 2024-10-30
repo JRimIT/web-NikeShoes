@@ -24,6 +24,7 @@ const authenticateJWT = (req, res, next) => {
   if (authHeader) {
     const token = authHeader.split(' ')[1]; // Lấy token từ "Bearer <token>"
 
+
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
         if (err.name === 'TokenExpiredError') {

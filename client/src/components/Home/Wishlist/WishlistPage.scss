@@ -3,12 +3,12 @@
   margin: 0 auto;
   padding: 20px;
 
-  h1 {
-    text-align: left;
-    margin-bottom: 30px;
-    font-size: 2.5rem;
-    color: #333;
+  h2 {
     font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: left;
+    color: #333;
   }
 
   .wishlist-grid {
@@ -18,6 +18,20 @@
     padding-bottom: 40px;
 
     // Items will automatically wrap to the next line
+  }
+
+  .button{
+    border: 1px solid black;
+    background-color: black;
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    &:hover{
+        background-color: grey;
+        color: white;
+        transition: all 1s;
+    }
   }
 
   .wishlist-item {
@@ -46,10 +60,9 @@
     }
 
     h4 {
-      font-size: 1.4rem;
-      margin: 10px 0;
-      color: #222;
-      font-weight: 600;
+      margin-bottom: 15px;
+      font-weight: bold;
+      font-size: 1.5rem;
     }
 
     p {

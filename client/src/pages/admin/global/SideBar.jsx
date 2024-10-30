@@ -18,7 +18,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import ChatIcon from '@mui/icons-material/Chat';
+import ChatIcon from "@mui/icons-material/Chat";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();

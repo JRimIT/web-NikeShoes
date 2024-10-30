@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import axios from "../../../../utils/axios.customize";
@@ -57,7 +57,7 @@ const Review = ({ productId, userId }) => {
     }
 
     try {
-      const { data } = await axios.post('http://localhost:5000/add-review', {
+      const { data } = await axios.post("http://localhost:5000/add-review", {
         userId: userId,
         productId,
         rating,
