@@ -66,6 +66,7 @@ const WishlistPage = () => {
         "Error moving product to cart:",
         error.response?.data || error
       );
+      console.log(error);
       toast.error("Failed to add product to cart.");
     } finally {
       setOperationLoading(false); // Stop loading
@@ -93,7 +94,7 @@ const WishlistPage = () => {
 
   return (
     <div className="wishlist-container">
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick={true}/>
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick={true} />
       <h2>Favourites</h2>
 
       {wishlist.length === 0 ? (
@@ -105,13 +106,12 @@ const WishlistPage = () => {
         </div>
       ) : (
         <div
-          className={`wishlist-grid ${
-            wishlist.length === 1
+          className={`wishlist-grid ${wishlist.length === 1
               ? "one-item"
               : wishlist.length === 2
-              ? "two-items"
-              : ""
-          }`}
+                ? "two-items"
+                : ""
+            }`}
         >
           {wishlist.map((product) => (
             <div key={product.wishlist_id} className="wishlist-item">

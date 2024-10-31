@@ -11,6 +11,14 @@ function ProductListPageWomen() {
   const [totalProducts, setTotalProducts] = useState(0); // State to hold total products count
   const [filtersVisible, setFiltersVisible] = useState(true); // State for filters visibility
   const [sortBy, setSortBy] = useState('featured');
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+    if (userData && userData.user_id) {
+      setUserId(userData.user_id); // Set userId from userData
+    }
+  }, []);
 
   // Function to handle category change   
   const onCategoryChange = (selectedCategory) => {
@@ -32,7 +40,7 @@ function ProductListPageWomen() {
 
   return (
     <>
-      <CategoryBar 
+      <CategoryBar
         category={category}
         totalProducts={totalProducts}
         onToggleFilters={toggleFilters} // Truyền hàm toggle visibility của filters
@@ -42,11 +50,12 @@ function ProductListPageWomen() {
       <div className="product-page">
         {filtersVisible && <SidebarWomen onCategoryChange={onCategoryChange} />} {/* Conditionally render Sidebar */}
         <div className="product-list-container">
-        <ProductList 
-            category={category} 
+          <ProductList
+            category={category}
             onTotalProductsChange={setTotalProducts} // Pass function to update total products
             sortBy={sortBy}
-          /> 
+            userId={userId} // Pass userId down to ProductList
+          />
         </div>
       </div>
     </>
