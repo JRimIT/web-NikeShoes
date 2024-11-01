@@ -55,7 +55,7 @@ const addToCart = (cartId, productId, size, color, quantity, res) => {
 
   db.query(checkItemQuery, [cartId, productId, size, color], (err, rows) => {
     if (err) {
-      return res.status(500).json({ message: 'Error checking cart item' });
+      return res.status(500).json({ message: 'Error checking cart item.' });
     }
 
     if (rows.length > 0) {
@@ -67,7 +67,7 @@ const addToCart = (cartId, productId, size, color, quantity, res) => {
         if (err) {
           return res.status(500).json({ message: 'Error updating cart item' });
         }
-        res.status(200).json({ message: 'Cart item updated successfully' });
+        res.status(200).json({ message: 'Cart item updated successfully.' });
       });
     } else {
       const insertQuery = `
@@ -77,9 +77,9 @@ const addToCart = (cartId, productId, size, color, quantity, res) => {
       db.query(insertQuery, [cartId, productId, size, color, quantity], (err) => {
         if (err) {
           console.error('Error adding product to cart:', err);
-          return res.status(500).json({ message: 'Error adding product to cart' });
+          return res.status(500).json({ message: 'Error adding product to cart.' });
         }
-        res.status(200).json({ message: 'Product added to cart successfully' });
+        res.status(200).json({ message: 'Product added to cart successfully.' });
       });
     }
   });
