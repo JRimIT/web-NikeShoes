@@ -34,7 +34,6 @@ import AdminChatbox from "../components/Chatbox/AdminChatbox";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
-import ProfilePage from "../components/Profile";
 
 const LayOut = () => {
   return (
@@ -75,7 +74,6 @@ const LayOut = () => {
           ></Route>
           <Route path="/products/search" element={<ProductSearch />} />
           <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/profile" element={<ProfilePage />}></Route>
           <Route path="/cart" element={<CartPage />} />
           <Route path="/wishlist" element={<WishlistPage />} />
         </Route>
