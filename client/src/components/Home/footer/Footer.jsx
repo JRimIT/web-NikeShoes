@@ -74,7 +74,8 @@ function Footer() {
                 fpt@example.com
               </p>
               <p>
-                <MDBIcon icon="phone" className="me-3" /> +01 234 567 88
+                {/* <MDBIcon icon="phone" className="me-3" /> +01 234 567 88 */}
+                +01 234 567 88
               </p>
             </MDBCol>
           </MDBRow>

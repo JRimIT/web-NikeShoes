@@ -21,6 +21,13 @@ const authenticateJWT = (req, res, next) => {
   console.log("Check req 2 : ", req.originalUrl);
 
 
+  if (white_lists.includes(req.originalUrl)) {
+    return next(); // Allow access to whitelisted routes
+  }
+  console.log("Check req: ", req.originalUrl);
+  console.log("Check authHead: ", authHeader);
+
+
   if (authHeader) {
     const token = authHeader.split(' ')[1]; // Lấy token từ "Bearer <token>"
 

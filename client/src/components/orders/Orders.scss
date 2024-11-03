@@ -1,0 +1,111 @@
+.order-container {
+  padding: 20px;
+  background-color: #f7f7f7;
+
+  .title {
+    text-align: center;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .no-orders {
+    text-align: center;
+    color: #999;
+    font-size: 1.2rem;
+  }
+
+  .orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .order-card {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 {
+        font-size: 1.2rem;
+        margin: 0;
+      }
+
+      .status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        color: black;
+        font-size: 0.9rem;
+
+        &.shipped {
+          background-color: #28a745;
+        }
+
+        &.delivered {
+            background-color: aqua;
+        }
+
+        &.pending {
+          background-color: #ffc107;
+        }
+
+        &.processing {
+            background-color: blueviolet;
+        }
+
+        &.canceled {
+          background-color: #dc3545;
+        }
+      }
+    }
+
+    .order-details {
+      margin-top: 10px;
+
+      p {
+        margin: 5px 0;
+        font-size: 1rem;
+
+        .amount {
+          font-weight: bold;
+          color: #000;
+        }
+      }
+    }
+  }
+}
+.order-popup {
+  position: absolute; // Position the popup relative to the orders container
+  background-color: white; // Background color for the popup
+  border: 1px solid #ccc; // Optional: border for the popup
+  padding: 10px; // Padding inside the popup
+  border-radius: 5px; // Rounded corners
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Optional: shadow effect
+  z-index: 1000; // Ensure it's above other elements
+}
+
+// Adjust the positioning of the popup
+.orders-grid {
+  position: relative; // Needed to position the popup
+}
+
+.order-card {
+  position: relative; // Needed for absolute positioning of the popup
+  cursor: pointer; // Change cursor to pointer on hover
+}
+
+// You can add more styles as needed for the popup
+
