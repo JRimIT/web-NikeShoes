@@ -12,20 +12,21 @@ import Header from "../../../components/AdminSide/Header";
 
 import SearchIcon from "@mui/icons-material/Search";
 import InputBase from "@mui/material/InputBase";
-import SearchTag from "./tag/SearchTag";
+
 import { useEffect } from "react";
 import {
+  getAllBlackList,
   getOrderOfUser,
-  getAllUser,
   getUserById,
+  getUserFromBlackList,
 } from "../../../data/api/apiService";
 import { useState } from "react";
-import Search from "./search/searchByInput";
+
 import { MdDeleteForever } from "react-icons/md";
 import { Button } from "react-bootstrap";
 import InfoIcon from "@mui/icons-material/Info";
-import ModalDetailOrderOfUser from "./tool/ModalDetailOrdersOfUser";
-import ModalDeleteUser from "./tool/ModalDeleteUser";
+import ModalDeleteUser from "../manageUser/tool/ModalDeleteUser";
+import ModalUnKickUser from "./tool/ModalUnKickUser";
 
 const ManagerUser = () => {
   const [users, setUsers] = useState([]);
@@ -41,7 +42,7 @@ const ManagerUser = () => {
     fetchAllUsers();
   }, []);
   const fetchAllUsers = async () => {
-    let res = await getAllUser();
+    let res = await getAllBlackList();
     console.log("All users: ", res);
 
     if (res.status === 200) {
@@ -58,20 +59,9 @@ const ManagerUser = () => {
     }
   };
 
-  const handleClickDetailBtn = async (id) => {
-    const res = await getOrderOfUser(id);
-    const orderByUser = res.data.map((order) => ({
-      id: order.order_id,
-      ...order,
-    }));
-    console.log("order by user: ", res.data);
-    setShowModalDetail(true);
-    setDataDetail(orderByUser);
-  };
-
   const handleClickDeleteBtn = async (id) => {
-    const res = await getUserById(id);
-    console.log("USer delete: ", res.data[0]);
+    const res = await getUserFromBlackList(id);
+    console.log("UnKick: ", res.data[0]);
 
     setUserDelete(res.data[0]);
     setShowModalDelete(true);
@@ -96,44 +86,25 @@ const ManagerUser = () => {
       cellClassName: "name-column--cell",
     },
     {
-      field: "phone",
-      headerName: "Phone",
-      type: "number",
-      headerAlign: "left",
-      align: "left",
-    },
-    {
-      field: "address_line",
-      headerName: "Address",
+      field: "reason",
+      headerName: "reason",
       flex: 1,
+      cellClassName: "name-column--cell",
     },
     {
-      field: "city",
-      headerName: "City",
+      field: "added_at",
+      headerName: "removed_at",
       flex: 1,
+      cellClassName: "name-column--cell",
     },
-    {
-      field: "state",
-      headerName: "state",
-      flex: 1,
-    },
-    {
-      field: "country",
-      headerName: "country",
-      flex: 0.5,
-    },
+
     {
       headerName: "Tool",
       flex: 0.6,
       renderCell: (params) => (
         <>
           {/* <Button variant="contained">Contained</Button> */}
-          <Button
-            variant="info"
-            onClick={() => handleClickDetailBtn(params.row.id)}
-          >
-            <InfoIcon />
-          </Button>{" "}
+
           <Button
             variant="danger"
             onClick={() => handleClickDeleteBtn(params.row.id)}
@@ -147,21 +118,8 @@ const ManagerUser = () => {
 
   return (
     <Box m="20px">
-      <Header title="MANAGE USERS" subtitle="List of users" />
-      <Box display="flex" justifyContent="space-between">
-        <SearchTag
-          users={users}
-          initialUsers={initialUsers}
-          setInitialUsers={setInitialUsers}
-          setUsers={setUsers}
-        ></SearchTag>
-        <Search
-          users={users ? users : []}
-          initialUsers={initialUsers ? initialUsers : []}
-          setInitialUsers={setInitialUsers}
-          setUsers={setUsers}
-        ></Search>
-      </Box>
+      <Header title="BLACKLIST" subtitle="List of users" />
+      <Box display="flex" justifyContent="space-between"></Box>
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -201,17 +159,12 @@ const ManagerUser = () => {
         />
       </Box>
 
-      <ModalDetailOrderOfUser
-        show={showModalDetail}
-        setShow={setShowModalDetail}
-        data={dataDetail}
-      ></ModalDetailOrderOfUser>
-      <ModalDeleteUser
+      <ModalUnKickUser
         show={showModalDelete}
         setShow={setShowModalDelete}
         data={userDelete}
         fetchAllUsers={fetchAllUsers}
-      ></ModalDeleteUser>
+      ></ModalUnKickUser>
     </Box>
   );
 };

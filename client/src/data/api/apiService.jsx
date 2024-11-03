@@ -120,7 +120,7 @@ export const getAllUser = async () => {
   }
 };
 
-export const getAllOrderOfUser = async (id) => {
+export const getOrderOfUser = async (id) => {
   try {
     const res = await axios.get(`/api/order_Of_user?id=${id}`);
     return res;
@@ -141,6 +141,72 @@ export const deleteUserById = async (id) => {
 export const getUserById = async (id) => {
   try {
     const res = await axios.get(`/api/user?id=${id}`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAllBlackList = async () => {
+  try {
+    const res = await axios.get(`/api/blackList`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getUserFromBlackList = async (id) => {
+  try {
+    const res = await axios.get(`/api/get_user_blacklist?id=${id}`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteUserFromBlackList = async (id) => {
+  try {
+    const res = await axios.delete(`/api/blacklist?id=${id}`);
+    return res;
+  } catch (error) {
+    console.log();
+  }
+};
+
+export const deleteReview = async (id) => {
+  try {
+    const res = await axios.delete(`/api/reviews/${id}`);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteAllReviewsByUserId = async (user_id) => {
+  try {
+    const response = await axios.delete(`/api/reviews/user/${user_id}`);
+    console.log(response.data.message);
+  } catch (error) {
+    console.error("Error deleting reviews:", error);
+  }
+};
+
+export const addUserToBlackList = async (user_id, reason) => {
+  try {
+    const res = await axios.post(`/api/blacklist`, {
+      user_id: user_id,
+      reason: reason,
+    });
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const sendEmailBaned = async (body) => {
+  try {
+    const res = await axios.post("/email/sendEmail", body);
     return res;
   } catch (error) {
     console.log(error);

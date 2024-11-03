@@ -19,7 +19,8 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import ChatIcon from '@mui/icons-material/Chat';
+import ChatIcon from "@mui/icons-material/Chat";
+import NoAccountsIcon from "@mui/icons-material/NoAccounts";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -177,6 +178,14 @@ const Sidebar = (props) => {
               selected={selected}
               setSelected={setSelected}
             />
+
+            <Item
+              title="BlackList Users"
+              to="backList"
+              icon={<NoAccountsIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -227,13 +236,13 @@ const Sidebar = (props) => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="Line Chart"
               to="line"
               icon={<TimelineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             {/* <Item
               title="Geography Chart"
               to="/geography"

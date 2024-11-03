@@ -12,7 +12,7 @@ function CartPage() {
   const { setCartRequest } = useContext(CartContext);
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(true);
   const [loadingAction, setLoadingAction] = useState(false);
   const [userId, setUserId] = useState(null);
   const shippingFee = 0;
@@ -28,7 +28,7 @@ function CartPage() {
   const subtotal = calculateSubtotal();
   const total = (subtotal + shippingFee - discount) * (1 - 10 / 1000);
   // const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
-  // const total = (subtotal + shippingFee - discount);
+  const total = subtotal + shippingFee - discount;
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
@@ -62,12 +62,14 @@ function CartPage() {
   const handleQuantityChange = async (id, newQuantity) => {
     // if (newQuantity < 1) return;
     if (newQuantity < 1 || newQuantity > 10) {
-      console.warn('Quantity must be between 1 and 10.');
+      console.warn("Quantity must be between 1 and 10.");
       return;
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, { quantity: newQuantity });
+      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, {
+        quantity: newQuantity,
+      });
       setCart((prevCart) =>
         prevCart.map((item) =>
           item.cart_item_id === id ? { ...item, quantity: newQuantity } : item
@@ -136,7 +138,7 @@ function CartPage() {
 
   return (
     <Container className="cart-container">
-      <h2 className="mb-4">Shopping Cart</h2>
+      <h2>Shopping Cart</h2>
       {cart.length === 0 ? (
         <div className="text-center">
           <h4>Your cart is empty.</h4>
@@ -174,7 +176,7 @@ function CartPage() {
                   />
                   <FaTrashAlt
                     onClick={() => handleRemove(item.cart_item_id)}
-                    className="remove-button" 
+                    className="remove-button"
                   />
                 </div>
               </div>

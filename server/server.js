@@ -17,8 +17,9 @@ const wishlistRoutes = require("./routes/wishlist");
 const reviewRoutes = require("./routes/review");
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");;
-const { authenticateJWT, checkRole } = require("./middlewares/authMiddlewares");
-
+const { authenticateJWT, checkRole, checkBlacklist } = require("./middlewares/authMiddlewares");
+const cron = require('node-cron');
+const axios = require('axios');
 const routerAPI = express.Router();
 
 const app = express();
@@ -53,9 +54,11 @@ const io = new Server(server, {
 handleSocket(io);
 
 // Routes cho sản phẩm và các routes khác
-
-app.use("/products", productRoutes);
-app.post("/register", upload.single("user_image"), registerUser);
+app.get('/', (req, res) => {
+  res.json("Hello This is Backend")
+})
+app.use('/products', productRoutes);
+app.post("/register", upload.single('user_image'), registerUser);
 app.post("/login", loginUser);
 // app.get("/products/:id", getProductById);
 app.use(sendResetPassword); // Route cho reset password
@@ -66,7 +69,7 @@ app.use(sendResetPassword); // Route cho reset password
 // app.use("/", reviewRoutes);
 
 // app.use('/', adminRoutes);
-
+app.use("/", authenticateJWT, checkBlacklist);
 app.use("/", authenticateJWT, cartRoutes); // Cart routes require authentication
 app.use("/", authenticateJWT, wishlistRoutes);  // Wishlist routes require authentication
 app.use("/", authenticateJWT, reviewRoutes);  // Review routes require authentication

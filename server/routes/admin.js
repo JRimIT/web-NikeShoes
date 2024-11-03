@@ -3,6 +3,7 @@ const db = require('../config/db'); // Import kết nối MySQL
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { sendEmail } = require('../controller/emailController');
 
 router.put('/api/products/:id', async (req, res) => {
     const { id } = req.params;
@@ -568,4 +569,132 @@ router.get('/api/count_transaction', async (req, res) => {
         res.status(500).json({ message: "Database error, could not retrieve transactions" })
     }
 })
+
+router.get('/api/blackList', async (req, res) => {
+    const sql = `
+        SELECT
+            u.user_id,
+            u.username,
+            u.user_image,
+            u.email,
+            b.reason,
+            DATE_FORMAT(b.added_at, '%d-%m-%Y') AS added_at,
+            DATE_FORMAT(b.removed_at, '%d-%m-%Y') AS removed_at
+        FROM
+            blacklist b
+        JOIN
+            users u ON b.user_id = u.user_id;
+    `
+    try {
+        const [rows] = await db.promise().query(sql)
+        res.json(rows)
+
+    } catch (error) {
+        console.log('Error retrieving all blackList: ', error);
+        res.status(500).json({ message: "Database error, could not retrieve all blackList!" })
+    }
+})
+
+router.get('/api/get_user_blacklist', async (req, res) => {
+    const { id } = req.query;
+    const sql = `
+        SELECT
+            u.user_id,
+            u.username,
+            u.user_image,
+            u.email,
+            b.reason,
+            DATE_FORMAT(b.added_at, '%d-%m-%Y') AS added_at,
+            DATE_FORMAT(b.removed_at, '%d-%m-%Y') AS removed_at
+        FROM
+            blacklist b
+        JOIN
+            users u ON b.user_id = u.user_id
+        WHERE 
+            u.user_id = ?
+    `;
+    try {
+        const [rows] = await db.promise().query(sql, [id]);
+        res.json(rows);
+    } catch (error) {
+        console.log('Error retrieving user from blackList: ', error);
+        res.status(500).json({ message: "Database error, could not retrieve user from blackList!" });
+    }
+});
+
+router.delete('/api/blacklist', async (req, res) => {
+    const { id } = req.query;
+
+    if (!id) {
+        return res.status(400).json({ message: "User ID is required to delete from blacklist" });
+    }
+
+    const sql = `
+        DELETE FROM blacklist
+        WHERE user_id = ?;
+    `;
+
+    try {
+        const [result] = await db.promise().query(sql, [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "User not found in blacklist" });
+        }
+        res.json({ message: "User successfully removed from blacklist" });
+    } catch (error) {
+        console.log("Error removing user from blacklist: ", error);
+        res.status(500).json({ message: "Database error, could not remove user from blacklist!" });
+    }
+});
+
+// review
+router.delete("/api/reviews/:review_id", async (req, res) => {
+    const { review_id } = req.params;
+
+    try {
+        const [result] = await db.promise().execute(
+            "DELETE FROM reviews WHERE review_id = ?",
+            [review_id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Review không tồn tại." });
+        }
+
+        res.status(200).json({ message: "Xoá review thành công!" });
+    } catch (error) {
+        console.error("Lỗi khi xoá review:", error);
+        res.status(500).json({ message: "Lỗi server khi xoá review." });
+    }
+});
+
+router.delete('/api/reviews/user/:user_id', async (req, res) => {
+    const { user_id } = req.params;
+    const sql = `DELETE FROM reviews WHERE user_id = ?`;
+
+    try {
+        const [result] = await db.promise().query(sql, [user_id]);
+        res.json({ message: `Deleted ${result.affectedRows} reviews for user_id ${user_id}.` });
+    } catch (error) {
+        console.error("Error deleting reviews:", error);
+        res.status(500).json({ message: "Failed to delete reviews." });
+    }
+});
+
+router.post("/api/blacklist", async (req, res) => {
+    const { user_id, reason } = req.body;
+    try {
+        await db.promise().query(
+            "INSERT INTO blacklist (user_id, reason) VALUES (?, ?)",
+            [user_id, reason]
+        );
+        res.status(200).json({ message: "Người dùng đã được thêm vào blacklist!" });
+    } catch (error) {
+        console.error("Lỗi khi thêm vào blacklist:", error);
+        res.status(500).json({ message: "Lỗi server khi thêm vào blacklist." });
+    }
+});
+
+router.post("/email/sendEmail", sendEmail);
+
 module.exports = router;

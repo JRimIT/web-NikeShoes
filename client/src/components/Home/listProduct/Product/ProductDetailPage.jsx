@@ -49,17 +49,18 @@ const ProductDetailPage = () => {
 
   const checkLoginAndNavigate = (userId, navigate) => {
     if (userId === 0) {
-      toast.info('Please log in to continue.');
+      toast.info("Please log in to continue.");
       navigate("/login");
       return false;
     }
     return true;
   };
-  
+
   const handleAddToCart = async () => {
     if (!checkLoginAndNavigate(userId, navigate)) return;
-  
+
     if (!product) {
+      toast.error("Product details not available.");
       toast.error("Product details not available.");
       return;
     }
@@ -96,10 +97,10 @@ const ProductDetailPage = () => {
       }
     }
   };
-  
+
   const handleToggleFavourite = async () => {
     if (!checkLoginAndNavigate(userId, navigate)) return;
-  
+
     if (!product) {
       toast.error("Product details not available.");
       return;
