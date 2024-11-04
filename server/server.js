@@ -8,12 +8,10 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
 const { registerUser, loginUser } = require("./controller/authController");
-const sendResetPassword = require("./controller/sendResetCode");
-const resetPassword = require("./controller/resetPassword");
-const authRoutes = require("./routes/auth"); // Import route auth.js
+const authRoutes = require("./routes/auth");
 
 const db = require("./config/db");
-const productRoutes = require("./routes/products"); // Import đúng router
+const productRoutes = require("./routes/products");
 const handleSocket = require("./sockets/chatSocket");
 const cartRoutes = require("./routes/cart");
 const wishlistRoutes = require("./routes/wishlist");
@@ -75,8 +73,6 @@ app.post("/login", loginUser);
 // // app.use('/", cartRoutes);
 // app.use('/', wishlistRoutes);
 // app.use("/", reviewRoutes);
-app.use("/api", sendResetPassword); // Route gửi mã reset password
-app.use("/api", resetPassword); // Route đặt lại mật khẩu
 app.use("/auth", authRoutes);
 
 // app.use('/', adminRoutes);

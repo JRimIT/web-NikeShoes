@@ -212,13 +212,3 @@ export const sendEmailBaned = async (body) => {
     console.log(error);
   }
 };
-
-// export const sendEmailResetPass = async (email) => {
-//   try {
-//     const response = await axios.post("/email/sendResetCode", { email });
-//     return response.data;
-//   } catch (error) {
-//     console.error("Failed to send reset code:", error);
-//     throw new Error(error.response?.data?.message || "Server error");
-//   }
-// };

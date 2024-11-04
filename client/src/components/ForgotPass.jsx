@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../assets/styles/ForgotPass.css";
 import { validatePassword } from "../utils/validation";
 import axios from "axios";
-// import { sendEmailResetPass } from "../data/api/apiService";
+import { sendEmailResetPass } from "../data/api/apiService";
 
 const ForgotPass = () => {
   const navigate = useNavigate();
@@ -26,30 +26,17 @@ const ForgotPass = () => {
     };
   }, []);
 
-  // const handleSendCode = async () => {
-  //   if (isCodeSent) return; // Prevent sending the code multiple times
-  //   try {
-  //     const response = await sendEmailResetPass(email);
-  //     setGeneratedCode(response.code);
-  //     setSuccessMessage("Code has been sent to your email!");
-  //     setErrorMessage("");
-  //     setIsCodeSent(true); // Set to true after sending
-  //   } catch (error) {
-  //     setErrorMessage(
-  //       error.message || "Failed to send the code. Please check your email."
-  //     );
-  //     setSuccessMessage("");
-  //   }
-  // };
-
   const handleSendCode = async () => {
-    if (isCodeSent) return; // Prevent sending the code multiple times
+    if (isCodeSent) return;
     if (!email) {
       setErrorMessage("Please enter an email address.");
       return;
     }
     try {
-      const response = await axios.post("/auth/email/sendResetCode", { email });
+      const response = await axios.post(
+        "http://localhost:5000/auth/email/sendResetCode",
+        { email }
+      );
       setGeneratedCode(response.data.resetCode);
       setSuccessMessage("Code has been sent to your email!");
       setErrorMessage("");
@@ -63,7 +50,7 @@ const ForgotPass = () => {
     }
   };
 
-  // Gọi send code khi email thay đổi
+  // Call send code when edit email
   useEffect(() => {
     if (email) handleSendCode();
   }, [email]);
@@ -80,8 +67,9 @@ const ForgotPass = () => {
       return;
     }
     try {
-      await axios.post("reset-password", {
+      await axios.post("http://localhost:5000/auth/reset-password", {
         email,
+        code,
         newPassword,
       });
       alert("Password has been successfully updated!");
