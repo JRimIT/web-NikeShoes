@@ -2,41 +2,64 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Header.scss";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { IoBagHandleOutline } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa";
+import { FaUser, FaHeart, FaUserAlt } from "react-icons/fa";
 import SearchBar from "./SearchBar";
 import logo from "../../pic/Logo.jpg";
-import { FaUserAlt } from "react-icons/fa";
-import { Typography } from "@mui/material";
 import ClipLoader from "react-spinners/ClipLoader";
 
-import loadingGif from "../../assets/Double Ring@1x-1.0s-200px-200px.gif";
+import axios from "axios";
+import { getUserByToken } from "../../data/api/apiService";
+import { useDispatch } from "react-redux";
+import UserSlice from "../../redux/userInfo/userSlice";
 
 const Header = () => {
-  const [products, setProducts] = useState([]); // State để lưu kết quả tìm kiếm
+  const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  // Hàm xử lý kết quả tìm kiếm từ SearchBar
-  const handleSearchResults = (searchResults) => {
-    setProducts(searchResults); // Cập nhật state với sản phẩm tìm kiếm được
-    console.log(searchResults); // Kiểm tra kết quả tìm kiếm
-  };
+  const [user, setUser] = useState(null);
+
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const goToCartPage = () => navigate("/cart"); // Navigate to CartPage
-  const goToWishlistPage = () => navigate("/wishlist"); // Navigate to WishlistPage
   // Get user data from localStorage
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    console.log("token: ", token);
 
-  const handleDropdownToggle = () => {
-    setDropdownOpen(!isDropdownOpen);
+    if (token) {
+      fetchUserInfo();
+    } else {
+      setUser(null);
+      dispatch(UserSlice.actions.setUser(null));
+    }
+  }, [token]);
+
+  const fetchUserInfo = async () => {
+    try {
+      const res = await getUserByToken();
+      // console.log(res.data);
+      setUser(res.data);
+      console.log("USer: ", user);
+      dispatch(UserSlice.actions.setUser(res.data));
+    } catch (error) {
+      console.log("USer: ", "DEo co");
+
+      console.log(error.response ? error.response.data.message : error.message);
+    }
   };
 
-  // Handle user logout
+  const handleSearchResults = (searchResults) => setProducts(searchResults);
+
+  const goToCartPage = () => navigate("/cart");
+  const goToWishlistPage = () => navigate("/wishlist");
+
+  const handleDropdownToggle = () => setDropdownOpen(!isDropdownOpen);
+
   const handleLogout = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -47,9 +70,7 @@ const Header = () => {
     }, 3000);
   };
 
-  const signIn = () => {
-    navigate("/login");
-  };
+  const signIn = () => navigate("/login");
 
   const override = {
     display: "block",
@@ -57,6 +78,7 @@ const Header = () => {
     position: "absolute",
     backgroundColor: "#f1f1f1",
   };
+
   return (
     <>
       {isLoading ? (
@@ -75,7 +97,7 @@ const Header = () => {
           <div className="head">
             <div className="container-login">
               {!user ? (
-                <span onClick={() => signIn()}>
+                <span onClick={signIn}>
                   Sign In <FaUserAlt />
                 </span>
               ) : (
@@ -89,21 +111,45 @@ const Header = () => {
                   onMouseEnter={handleDropdownToggle}
                   onMouseLeave={handleDropdownToggle}
                 >
-                  <span className="username">Hi, {user.username}</span>
-                  <img
-                    src={user.user_image}
-                    alt="User Avatar"
-                    className="user-avatar"
-                  />
+                  {user.role_id === 2 ? (
+                    <>
+                      <span className="username">Admin, {user.username}</span>
+                      <img
+                        src={user.user_image}
+                        alt="User Avatar"
+                        className="user-avatar"
+                      />
 
-                  {isDropdownOpen && (
-                    <div className="dropdown-profile">
-                      <NavLink to="/profile">Profile</NavLink>
-                      <NavLink to="/setting">Setting</NavLink>
-                      <button className="butLogout" onClick={handleLogout}>
-                        Log Out
-                      </button>
-                    </div>
+                      {isDropdownOpen && (
+                        <div className="dropdown-profile">
+                          <NavLink to="/dashboard/profile">Profile</NavLink>
+                          <NavLink to="/setting">Setting</NavLink>
+                          <NavLink to="/admins">Admin page</NavLink>
+                          <button className="butLogout" onClick={handleLogout}>
+                            Log Out
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <span className="username">Hi, {user.username}</span>
+                      <img
+                        src={user.user_image}
+                        alt="User Avatar"
+                        className="user-avatar"
+                      />
+
+                      {isDropdownOpen && (
+                        <div className="dropdown-profile">
+                          <NavLink to="/dashboard/profile">Profile</NavLink>
+                          <NavLink to="/setting">Setting</NavLink>
+                          <button className="butLogout" onClick={handleLogout}>
+                            Log Out
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -226,42 +272,42 @@ const Header = () => {
                           </NavLink>
                         </div>
                         <div className="mega-dropdown-column">
-                          <NavLink className="dropdown-title" to="/shopbysport">
+                          <NavLink className="dropdown-title">
                             Shop By Sports
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/running"
+                            to="/products-men/Men's Road Running Shoes"
                           >
                             Running
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/football"
+                            to="/products-men/Football"
                           >
                             Football
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/baseball"
+                            to="/products-men/Basketball"
                           >
-                            Baseball
+                            Basketball
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/training-and-gym"
+                            to="/products-men/Men's Workout Shoes"
                           >
                             Training And Gym
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/tennis"
+                            to="/products-men/Men's Hard Court Tennis Shoes"
                           >
                             Tennis
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/skateboarding"
+                            to="/products-men/Skate"
                           >
                             Skateboarding
                           </NavLink>
@@ -302,7 +348,6 @@ const Header = () => {
                       </div>
                     </div>
                   </div>
-
                   <div className="dropdown">
                     <NavLink className="nav-link" to="/women">
                       Women
@@ -407,42 +452,42 @@ const Header = () => {
                           </NavLink>
                         </div>
                         <div className="mega-dropdown-column">
-                          <NavLink className="dropdown-title" to="/shopbysport">
+                          <NavLink className="dropdown-title">
                             Shop By Sports
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/running"
+                            to="/products-women/Women's Trail-Running Shoes"
                           >
                             Running
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/football"
+                            to="/products-women/Football"
                           >
                             Football
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/baseball"
+                            to="/products-women/Basketball"
                           >
-                            Baseball
+                            Basketball
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/training-and-gym"
+                            to="/products-women/Women's Workout Shoes"
                           >
                             Training And Gym
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/tennis"
+                            to="/products-women/Women's Hard Court Tennis Shoes"
                           >
                             Tennis
                           </NavLink>
                           <NavLink
                             className="dropdown-item"
-                            to="/shopbysport/skateboarding"
+                            to="/products-women/Skate"
                           >
                             Skateboarding
                           </NavLink>
@@ -477,15 +522,15 @@ const Header = () => {
                       </div>
                     </div>
                   </div>
-                  <NavLink className="nav-link" to="/sale">
+                  {/* <NavLink className="nav-link" to="/sale">
                     Sale
-                  </NavLink>
+                  </NavLink> */}
                   <NavLink className="nav-link" to="/help">
                     Help
                   </NavLink>
-                  <NavLink className="nav-link" to="/join">
+                  {/* <NavLink className="nav-link" to="/join">
                     Join Us
-                  </NavLink>
+                  </NavLink> */}
                 </Nav>
 
                 <div className="navbar-right-content">

@@ -3,7 +3,9 @@ import React from "react";
 import "./HomePage.scss";
 import HomePageContent from "./HomePageContent";
 import Footer from "./footer/Footer";
-
+import { useState } from "react";
+import { useEffect } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 const HomePage = () => {
   return (
     <>

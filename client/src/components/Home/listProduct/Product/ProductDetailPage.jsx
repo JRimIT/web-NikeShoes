@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-// import axios from "axios";
+import { Navigate, useParams } from "react-router-dom";
 import axios from "../../../../utils/axios.customize";
-
 import "./ProductDetailPage.scss";
 import { FaHeart } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../footer/Footer";
 import Review from "../review/Review";
+import { useNavigate } from "react-router-dom";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -18,7 +17,10 @@ const ProductDetailPage = () => {
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [userId, setUserId] = useState(0); // Initialize userId as null
+  const navigate = useNavigate();
 
+  //fetch id for product
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
@@ -37,8 +39,28 @@ const ProductDetailPage = () => {
     fetchProductDetails();
   }, [id]);
 
+  //fetch id for user
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+    if (userData && userData.user_id) {
+      setUserId(userData.user_id); // Set userId from userData
+    }
+  }, [userId]);
+
+  const checkLoginAndNavigate = (userId, navigate) => {
+    if (userId === 0) {
+      toast.info("Please log in to continue.");
+      navigate("/login");
+      return false;
+    }
+    return true;
+  };
+
   const handleAddToCart = async () => {
+    if (!checkLoginAndNavigate(userId, navigate)) return;
+
     if (!product) {
+      toast.error("Product details not available.");
       toast.error("Product details not available.");
       return;
     }
@@ -50,20 +72,35 @@ const ProductDetailPage = () => {
 
     try {
       const { data } = await axios.post("http://localhost:5000/add-to-cart", {
-        userId: 3,
+        userId: userId,
         productId: product.product_id,
         size: selectedSize,
         color: selectedColor || product.primary_image,
         quantity,
       });
-      toast.success(data.message);
+
+      toast.success(data.message); // Display success message
     } catch (error) {
       console.error("Error adding to cart:", error.response?.data || error);
-      toast.error("Failed to add product to cart.");
+
+      // Handle quantity limit error
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.message;
+
+        if (errorMessage.includes("maximum quantity")) {
+          toast.error("You cannot add more than 10 of this product.");
+        } else {
+          toast.error(errorMessage);
+        }
+      } else {
+        toast.error("An error occurred. Please try again.");
+      }
     }
   };
 
   const handleToggleFavourite = async () => {
+    if (!checkLoginAndNavigate(userId, navigate)) return;
+
     if (!product) {
       toast.error("Product details not available.");
       return;
@@ -78,28 +115,18 @@ const ProductDetailPage = () => {
       const { data } = await axios.post(
         "http://localhost:5000/add-to-wishlist",
         {
-          userId: 3,
+          userId: userId,
           productId: product.product_id,
           size: selectedSize,
           color: selectedColor || product.primary_image,
           quantity,
         }
       );
-
       toast.success(data.message);
     } catch (error) {
-      if (error) {
-        toast.error("Product is already in your wishlist.");
-      } else if (error?.response?.status === 409) {
-        toast.error("Product is already in your wishlist.");
-      } else {
-        // Safely handle other errors
-        const errorMessage =
-          error.response?.data?.message ||
-          error.message ||
-          "Failed to add product to Wishlist";
-        toast.error(`Failed to add product to Wishlist: ${errorMessage}`);
-      }
+      console.error("Error adding to wishlist:", error.response?.data || error);
+      toast.error(`Failed to add product to Wishlist!`);
+      // navigate(`/login`);
     }
   };
 
@@ -119,7 +146,7 @@ const ProductDetailPage = () => {
       <div className="product-detail-container">
         <ToastContainer
           position="top-right"
-          autoClose={2000}
+          autoClose={1500}
           hideProgressBar={false}
           closeOnClick={true}
         />
@@ -191,7 +218,7 @@ const ProductDetailPage = () => {
           </p>
         </div>
       </div>
-      <Review productId={id} />
+      <Review productId={id} userId={userId} />
       <Footer />
     </>
   );

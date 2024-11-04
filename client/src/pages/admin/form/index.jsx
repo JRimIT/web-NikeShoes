@@ -8,10 +8,11 @@ import { FcPlus } from "react-icons/fc";
 import "./scss/index.scss";
 import axios from "../../../utils/axios.customize";
 import { toast } from "react-toastify";
+import BounceLoader from "react-spinners/BounceLoader";
 
 const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-
+  const [loading, setLoading] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
   const [image, setImage] = useState("");
   let user_image = "";
@@ -52,23 +53,19 @@ const Form = () => {
     formData.append("folder", FOLDER_NAME);
     formData.append("file", file);
 
-    await axios
-      .post(api, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        // console.log(res.data.url);
-        // setImage(res.data.url);
-
-        user_image = res.data.url;
-
-        // console.log("=[>>>> Image: ", image);
-
-        // setInfoUser({...infoUser, image: image})
-      })
-      .catch((err) => console.log(err));
+    try {
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dzbhzlwoe/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const data = await response.json();
+      user_image = data.url;
+    } catch (error) {
+      console.error("Image upload error:", error);
+    }
   };
 
   const handleUpdateUserState = (value) => {
@@ -81,30 +78,47 @@ const Form = () => {
     });
   };
 
-  const handleSubmitUser = async (event) => {
+  const handleSubmitUser = (event) => {
     event.preventDefault();
-    try {
-      await handleUploadImage();
-      console.log("url image: ", user_image);
+    setLoading(true);
+    setTimeout(async () => {
+      setLoading(false);
 
-      const updateInfoUser_Image = await handleUpdateUserState({
-        user_image: user_image,
-      });
-      console.log("Submit form: ", updateInfoUser_Image);
+      try {
+        await handleUploadImage();
+        console.log("url image: ", user_image);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/user",
-        updateInfoUser_Image
-      );
-      toast.success(res.data.message);
-    } catch (err) {
-      if (err.response && err.response.data.error) {
-        toast.error(err.response.data.error);
-        // Error message from server
-      } else {
-        toast.error("Something went wrong while creating the user");
+        const updateInfoUser_Image = await handleUpdateUserState({
+          user_image: user_image,
+        });
+        console.log("Submit form: ", updateInfoUser_Image);
+
+        const res = await axios.post(
+          "http://localhost:5000/api/user",
+          updateInfoUser_Image
+        );
+        toast.success(res.data.message);
+        setInfoUser({
+          username: "",
+          email: "",
+          password: "",
+          phone: "",
+          address_line: "",
+          city: "",
+          state: "",
+          country: "",
+          role_id: 1,
+          user_image: "",
+        });
+      } catch (err) {
+        if (err.response && err.response.data.error) {
+          toast.error(err.response.data.error);
+          // Error message from server
+        } else {
+          toast.error("Something went wrong while creating the user");
+        }
       }
-    }
+    }, 3000);
   };
   const handlePreviewImage = (event) => {
     const file = event.target.files[0]; // Get the first selected file
@@ -142,6 +156,12 @@ const Form = () => {
 
   const handleChangeInput = (e) => {
     setInfoUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const override = {
+    display: "block",
+    margin: "0 auto",
+    borderColor: "red",
   };
   return (
     <Box m="20px">
@@ -319,8 +339,20 @@ const Form = () => {
                 color="secondary"
                 variant="contained"
                 onClick={(event) => handleSubmitUser(event)}
+                disabled={loading ? true : false}
               >
-                Create New User
+                {loading ? (
+                  <BounceLoader
+                    color={"#ffffff"}
+                    loading={loading}
+                    cssOverride={override}
+                    size={40}
+                    aria-label="Loading Spinner"
+                    data-testid="loader"
+                  />
+                ) : (
+                  <>Create New user</>
+                )}
               </Button>
             </Box>
           </form>

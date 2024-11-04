@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import axios from "../../../utils/axios.customize";
-import { FaShoppingCart, FaTrashAlt } from "react-icons/fa"; // Import icons
+import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./WishlistPage.scss";
 
 const WishlistPage = () => {
   const [wishlist, setWishlist] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [operationLoading, setOperationLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [userId] = useState(3);
   const [quantity] = useState(1);
+  const [userId, setUserId] = useState(null); // Initialize userId as null
 
+  // Fetch the wishlist when userId is available
   useEffect(() => {
     const fetchWishlist = async () => {
+      // if (!userId) return;
       try {
+        console.log(userId);
         const response = await axios.get(
           `http://localhost:5000/api/wishlist/${userId}`
         );
@@ -29,15 +32,25 @@ const WishlistPage = () => {
       }
     };
 
-    if (userId) fetchWishlist();
+    fetchWishlist();
   }, [userId]);
 
+  // Get user ID from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+    if (userData && userData.user_id) {
+      setUserId(userData.user_id); // Set userId from userData
+      console.log(userData.user_id);
+    }
+  }, []);
+
+  // Move product to cart
   const handleMoveToBag = async (product) => {
     setOperationLoading(true); // Start loading
 
     try {
       const { data } = await axios.post("http://localhost:5000/move-to-cart", {
-        userId,
+        userId: userId,
         productId: product.product_id,
         size: product.size,
         color: product.image,
@@ -61,6 +74,7 @@ const WishlistPage = () => {
     }
   };
 
+  // Remove item from wishlist
   const handleRemove = async (wishlistId) => {
     try {
       await axios.delete(
@@ -81,13 +95,18 @@ const WishlistPage = () => {
 
   return (
     <div className="wishlist-container">
-      <ToastContainer />
-      <h1>Favourites</h1>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        closeOnClick={true}
+      />
+      <h2>Favourites</h2>
 
       {wishlist.length === 0 ? (
         <div className="text-center">
-          <p>No products in favourite.</p>
-          <Button variant="primary" href="/products-men/All">
+          <h4>No products in favourite.</h4>
+          <Button variant="primary" href="/products-men/All" className="button">
             Shop Now
           </Button>
         </div>

@@ -1,7 +1,9 @@
 const express = require('express');
 const db = require('../config/db'); // Import kết nối MySQL
 const router = express.Router();
-
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { sendEmail } = require('../controller/emailController');
 
 router.put('/api/products/:id', async (req, res) => {
     const { id } = req.params;
@@ -209,6 +211,126 @@ router.get("/api/orders", async (req, res) => {
     }
 
 });
+// -------- user
+
+router.delete('/api/user/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = `
+        DELETE FROM Users 
+        WHERE user_id = ?;
+    `;
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Error deleting user:", err);
+            return res.status(500).json({ message: "Server error" });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({ message: "User deleted successfully" });
+    });
+});
+
+router.get('/api/order_Of_user', async (req, res) => {
+    const { id } = req.query;
+    const sql = `
+        SELECT 
+            o.order_id,
+            DATE_FORMAT(o.order_date, '%d-%m-%Y') AS order_date,
+            o.order_status,
+            o.total_amount,
+            p.payment_method,
+            p.payment_status,
+            p.amount AS payment_amount,
+            oi.product_id,
+            pr.name AS product_name,
+            oi.quantity,
+            oi.size,
+            oi.color,
+            pr.price AS product_price
+        FROM 
+            Orders o
+        JOIN 
+            Payments p ON o.order_id = p.order_id
+        JOIN 
+            Order_Items oi ON o.order_id = oi.order_id
+        JOIN 
+            Products pr ON oi.product_id = pr.product_id
+        LEFT JOIN 
+            User_Addresses ua ON o.user_id = ua.user_id
+        WHERE 
+            o.user_id = ?
+        ORDER BY 
+            o.order_date DESC;
+    `
+
+    try {
+        const [rows] = await db.promise().query(sql, [id]);
+        return res.json(rows);
+    } catch (error) {
+        res.status(401).json({ message: 'error get order by user_id' });
+    }
+})
+
+
+router.get('/api/user', (req, res) => {
+    const { id } = req.query;
+    const sql = `
+        SELECT *
+        FROM Users
+        WHERE user_id = ?;
+    `;
+
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);  // Log the error for debugging
+            return res.status(500).json({ message: "An error occurred", error: err.message });
+        }
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.json(result);
+    });
+});
+
+
+router.get('/api/allUser', async (req, res) => {
+    const sql = `
+        SELECT
+            u.user_id,
+            u.username,
+            u.user_image,
+            u.email,
+            u.phone,
+            u.role_id,
+            DATE_FORMAT(u.created_at, '%d-%m-%Y') AS created_at,
+            a.address_line,
+            a.city,
+            a.state,
+            a.country,
+            a.postal_code
+        FROM
+            Users u
+        LEFT JOIN
+            User_Addresses a ON u.user_id = a.user_id
+        WHERE
+            u.role_id = 1;
+    `
+    try {
+        const [rows] = await db.promise().query(sql);
+        return res.json(rows);
+    } catch (error) {
+        res.status(401).json({ message: 'error get user by id' });
+    }
+})
+
+
 
 router.post("/api/user", async (req, res) => {
     const {
@@ -447,4 +569,132 @@ router.get('/api/count_transaction', async (req, res) => {
         res.status(500).json({ message: "Database error, could not retrieve transactions" })
     }
 })
+
+router.get('/api/blackList', async (req, res) => {
+    const sql = `
+        SELECT
+            u.user_id,
+            u.username,
+            u.user_image,
+            u.email,
+            b.reason,
+            DATE_FORMAT(b.added_at, '%d-%m-%Y') AS added_at,
+            DATE_FORMAT(b.removed_at, '%d-%m-%Y') AS removed_at
+        FROM
+            blacklist b
+        JOIN
+            users u ON b.user_id = u.user_id;
+    `
+    try {
+        const [rows] = await db.promise().query(sql)
+        res.json(rows)
+
+    } catch (error) {
+        console.log('Error retrieving all blackList: ', error);
+        res.status(500).json({ message: "Database error, could not retrieve all blackList!" })
+    }
+})
+
+router.get('/api/get_user_blacklist', async (req, res) => {
+    const { id } = req.query;
+    const sql = `
+        SELECT
+            u.user_id,
+            u.username,
+            u.user_image,
+            u.email,
+            b.reason,
+            DATE_FORMAT(b.added_at, '%d-%m-%Y') AS added_at,
+            DATE_FORMAT(b.removed_at, '%d-%m-%Y') AS removed_at
+        FROM
+            blacklist b
+        JOIN
+            users u ON b.user_id = u.user_id
+        WHERE 
+            u.user_id = ?
+    `;
+    try {
+        const [rows] = await db.promise().query(sql, [id]);
+        res.json(rows);
+    } catch (error) {
+        console.log('Error retrieving user from blackList: ', error);
+        res.status(500).json({ message: "Database error, could not retrieve user from blackList!" });
+    }
+});
+
+router.delete('/api/blacklist', async (req, res) => {
+    const { id } = req.query;
+
+    if (!id) {
+        return res.status(400).json({ message: "User ID is required to delete from blacklist" });
+    }
+
+    const sql = `
+        DELETE FROM blacklist
+        WHERE user_id = ?;
+    `;
+
+    try {
+        const [result] = await db.promise().query(sql, [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "User not found in blacklist" });
+        }
+        res.json({ message: "User successfully removed from blacklist" });
+    } catch (error) {
+        console.log("Error removing user from blacklist: ", error);
+        res.status(500).json({ message: "Database error, could not remove user from blacklist!" });
+    }
+});
+
+// review
+router.delete("/api/reviews/:review_id", async (req, res) => {
+    const { review_id } = req.params;
+
+    try {
+        const [result] = await db.promise().execute(
+            "DELETE FROM reviews WHERE review_id = ?",
+            [review_id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Review không tồn tại." });
+        }
+
+        res.status(200).json({ message: "Xoá review thành công!" });
+    } catch (error) {
+        console.error("Lỗi khi xoá review:", error);
+        res.status(500).json({ message: "Lỗi server khi xoá review." });
+    }
+});
+
+router.delete('/api/reviews/user/:user_id', async (req, res) => {
+    const { user_id } = req.params;
+    const sql = `DELETE FROM reviews WHERE user_id = ?`;
+
+    try {
+        const [result] = await db.promise().query(sql, [user_id]);
+        res.json({ message: `Deleted ${result.affectedRows} reviews for user_id ${user_id}.` });
+    } catch (error) {
+        console.error("Error deleting reviews:", error);
+        res.status(500).json({ message: "Failed to delete reviews." });
+    }
+});
+
+router.post("/api/blacklist", async (req, res) => {
+    const { user_id, reason } = req.body;
+    try {
+        await db.promise().query(
+            "INSERT INTO blacklist (user_id, reason) VALUES (?, ?)",
+            [user_id, reason]
+        );
+        res.status(200).json({ message: "Người dùng đã được thêm vào blacklist!" });
+    } catch (error) {
+        console.error("Lỗi khi thêm vào blacklist:", error);
+        res.status(500).json({ message: "Lỗi server khi thêm vào blacklist." });
+    }
+});
+
+router.post("/email/sendEmail", sendEmail);
+
 module.exports = router;

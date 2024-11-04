@@ -1,42 +1,75 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
-
-// import Dashboard from "./scenes/dashboard";
-// import Team from "./scenes/team";
-// import Invoices from "./scenes/invoices";
-// import Contacts from "./scenes/contacts";
-// import Bar from "./scenes/bar";
-// import Form from "./scenes/form";
-// import Line from "./scenes/line";
-// import Pie from "./scenes/pie";
-// import FAQ from "./scenes/faq";
-// import Geography from "./scenes/geography";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "../../theme";
 import Topbar from "./global/Topbar";
 import Sidebar from "./global/SideBar";
-import DashBoard from "./dashboard";
-import Team from "./team";
-// import Calendar from "./scenes/calendar";
+import ClipLoader from "react-spinners/ClipLoader";
+import { getUserByToken } from "../../data/api/apiService";
 
 function Admin() {
   const [theme, colorMode] = useMode();
   const [isSidebar, setIsSidebar] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      fetchUserInfo();
+    } else {
+      setIsLoading(false);
+    }
+  }, [token]);
+
+  const fetchUserInfo = async () => {
+    try {
+      const res = await getUserByToken();
+      setUser(res.data); // Cập nhật `user` khi nhận dữ liệu
+    } catch (error) {
+      console.log(error.response ? error.response.data.message : error.message);
+    } finally {
+      setIsLoading(false); // Tắt loading
+    }
+  };
+
+  const override = {
+    display: "block",
+    margin: "0 auto",
+    position: "absolute",
+    backgroundColor: "#f1f1f1",
+  };
 
   return (
-    <ColorModeContext.Provider value={colorMode}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline>
-          <div className="app-admin">
-            <Sidebar isSidebar={isSidebar} />
-            <main className="content-admin">
-              <Topbar setIsSidebar={setIsSidebar} />
-              <Outlet></Outlet>
-            </main>
-          </div>
-        </CssBaseline>
-      </ThemeProvider>
-    </ColorModeContext.Provider>
+    <>
+      {isLoading ? (
+        <div className="Loading-Page">
+          <ClipLoader
+            cssOverride={override}
+            color={"#000000"}
+            loading={isLoading}
+            size={50}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      ) : (
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline>
+              <div className="app-admin">
+                {user && <Sidebar userInfo={user} isSidebar={isSidebar} />}
+                <main className="content-admin">
+                  <Topbar setIsSidebar={setIsSidebar} />
+                  <Outlet />
+                </main>
+              </div>
+            </CssBaseline>
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      )}
+    </>
   );
 }
 

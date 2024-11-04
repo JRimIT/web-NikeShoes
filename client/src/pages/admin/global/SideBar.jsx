@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, IconButton, Typography, useTheme } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../../theme";
@@ -15,7 +15,11 @@ import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import ChatIcon from "@mui/icons-material/Chat";
+import NoAccountsIcon from "@mui/icons-material/NoAccounts";
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -35,13 +39,14 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   );
 };
 
-const Sidebar = () => {
+const Sidebar = (props) => {
+  const { userInfo } = props;
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
   return (
-    <Box 
+    <Box
       sx={{
         "& .pro-sidebar-inner": {
           background: `${colors.primary[400]} !important`,
@@ -60,7 +65,7 @@ const Sidebar = () => {
         },
       }}
     >
-       <ProSidebar collapsed={isCollapsed}>
+      <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
           {/* LOGO AND MENU ICON */}
           <MenuItem
@@ -91,12 +96,17 @@ const Sidebar = () => {
           {!isCollapsed && (
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
-                <img
+                {/* <img
                   alt="profile-user"
                   width="100px"
                   height="100px"
-                  src={`../../assets/user.png`}
+                  src={userInfo.user_image}
                   style={{ cursor: "pointer", borderRadius: "50%" }}
+                /> */}
+                <Avatar
+                  alt="Remy Sharp"
+                  src={userInfo.user_image}
+                  sx={{ width: 120, height: 120 }}
                 />
               </Box>
               <Box textAlign="center">
@@ -106,10 +116,10 @@ const Sidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Ed Roh
+                  {userInfo ? userInfo.username : "Not have user name"}
                 </Typography>
                 <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
+                  Admin
                 </Typography>
               </Box>
             </Box>
@@ -152,7 +162,29 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            <Item
+              title="Users Contact"
+              to="adminChatbox"
+              icon={<ChatIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
 
+            <Item
+              title="Manage User"
+              to="manageUser"
+              icon={<ManageAccountsIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="BlackList Users"
+              to="backList"
+              icon={<NoAccountsIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             <Typography
               variant="h6"
               color={colors.grey[300]}
@@ -203,13 +235,13 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            <Item
+            {/* <Item
               title="Line Chart"
               to="line"
               icon={<TimelineOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
-            />
+            /> */}
             {/* <Item
               title="Geography Chart"
               to="/geography"
@@ -217,15 +249,25 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             /> */}
+            <Typography
+              variant="h6"
+              color={colors.grey[300]}
+              sx={{ m: "15px 0 5px 20px" }}
+            >
+              Setting
+            </Typography>
+            <Item
+              title="Edit profile"
+              to="adprofile"
+              icon={<SettingsOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
           </Box>
-
-        
-
-
         </Menu>
       </ProSidebar>
     </Box>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

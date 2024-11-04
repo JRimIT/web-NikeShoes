@@ -1,23 +1,32 @@
 // server/server.js
 require("dotenv").config();
-const express = require('express');
-const { Server } = require('socket.io');
-const http = require('http');
-const cors = require('cors');
+const express = require("express");
+const { Server } = require("socket.io");
+const http = require("http");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
 const { registerUser, loginUser } = require("./controller/authController");
 const sendResetPassword = require("./controller/sendResetCode");
-const db = require("./config/db");
-const productRoutes = require('./routes/products'); // Import đúng router
-const handleSocket = require('./sockets/chatSocket');
-const cartRoutes = require('./routes/cart');
-const wishlistRoutes = require('./routes/wishlist');
-const reviewRoutes = require('./routes/review');
-const adminRoutes = require('./routes/admin');
-const { authenticateJWT } = require("./middlewares/authMiddlewares");
+const resetPassword = require("./controller/resetPassword");
+const authRoutes = require("./routes/auth"); // Import route auth.js
 
+const db = require("./config/db");
+const productRoutes = require("./routes/products"); // Import đúng router
+const handleSocket = require("./sockets/chatSocket");
+const cartRoutes = require("./routes/cart");
+const wishlistRoutes = require("./routes/wishlist");
+const reviewRoutes = require("./routes/review");
+const adminRoutes = require("./routes/admin");
+const userRoutes = require("./routes/user");
+const {
+  authenticateJWT,
+  checkRole,
+  checkBlacklist,
+} = require("./middlewares/authMiddlewares");
+const cron = require("node-cron");
+const axios = require("axios");
 const routerAPI = express.Router();
 
 const app = express();
@@ -52,24 +61,33 @@ const io = new Server(server, {
 handleSocket(io);
 
 // Routes cho sản phẩm và các routes khác
-
-app.use('/products', productRoutes);
-app.post("/register", upload.single('user_image'), registerUser);
+app.get("/", (req, res) => {
+  res.json("Hello This is Backend");
+});
+app.use("/products", productRoutes);
+app.post("/register", upload.single("user_image"), registerUser);
 app.post("/login", loginUser);
+
 // app.get("/products/:id", getProductById);
-app.use(sendResetPassword); // Route cho reset password
+// app.use(sendResetPassword); // Route cho reset password
 // Sử dụng routes cho sản phẩm (middleware đúng)
-// app.use('/', cartRoutes);
-// // app.use('/', cartRoutes); 
+// app.use("/', cartRoutes);
+// // app.use('/", cartRoutes);
 // app.use('/', wishlistRoutes);
-// app.use('/', reviewRoutes);
+// app.use("/", reviewRoutes);
+app.use("/api", sendResetPassword); // Route gửi mã reset password
+app.use("/api", resetPassword); // Route đặt lại mật khẩu
+app.use("/auth", authRoutes);
 
 // app.use('/', adminRoutes);
+app.use("/", authenticateJWT, checkBlacklist);
+app.use("/", authenticateJWT, cartRoutes); // Cart routes require authentication
+app.use("/", authenticateJWT, wishlistRoutes); // Wishlist routes require authentication
+app.use("/", authenticateJWT, reviewRoutes); // Review routes require authentication
+app.use("/api/user", authenticateJWT, userRoutes); // Review routes require authentication
+app.use("/", authenticateJWT, checkRole("2"), adminRoutes); // Admin routes require authentication
 
-app.use('/', authenticateJWT, cartRoutes);  // Cart routes require authentication
-app.use('/', authenticateJWT, wishlistRoutes);  // Wishlist routes require authentication
-app.use('/', authenticateJWT, reviewRoutes);  // Review routes require authentication
-app.use('/', authenticateJWT, adminRoutes);  // Admin routes require authentication
+// app.use("/api/user", userRoutes);
 
 // Cấu hình cors
 app.use(
@@ -87,6 +105,3 @@ const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-
-

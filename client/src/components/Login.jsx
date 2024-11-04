@@ -51,7 +51,7 @@ const Login = () => {
         if (roleId === 1) {
           navigate("/");
         } else if (roleId === 2) {
-          navigate("/admin");
+          navigate("/admins");
         }
       } else {
         toast.error(response.data.message); // Hiển thị thông báo lỗi

@@ -5,43 +5,49 @@ import { useParams } from 'react-router-dom';
 import './UserChatbox.scss';
 
 const UserChatbox = () => {
-  const { userId } = useParams(); // Lấy userId từ URL
+  const { userId } = useParams(); 
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Trạng thái xác thực
+  const [isAuthenticated, setIsAuthenticated] = useState(false); 
+  const [newMessageCount, setNewMessageCount] = useState(0); 
+  const [roleId, setRoleId] = useState(null); // Thêm state để lưu role_id
   const messagesEndRef = useRef(null);
-  const socket = useRef(null); // Sử dụng useRef để lưu socket
+  const socket = useRef(null);
   
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Lấy JWT từ localStorage
+    const token = localStorage.getItem('token');
     if (token) {
-      // Kết nối socket với token để xác thực
       socket.current = io('http://localhost:5000', {
-        auth: { token } // Gửi token qua socket auth
+        auth: { token }
       });
 
-      // Lắng nghe sự kiện kết nối thành công
       socket.current.on('connect', () => {
         console.log('Socket connected!');
-        setIsAuthenticated(true); // Đã kết nối thành công
-        socket.current.emit('user_login', { userId }); // Phát sự kiện login
+        setIsAuthenticated(true); 
+        socket.current.emit('user_login', { userId });
       });
 
-      // Nhận tin nhắn
+      // Nhận role_id từ server
+      socket.current.on('user_role', ({ role_id }) => {
+        setRoleId(role_id); // Lưu role_id vào state
+      });
+
       socket.current.on('receive_message', (message) => {
         setMessages((prevMessages) => [...prevMessages, message]);
+        if (!isOpen) {
+          setNewMessageCount((prevCount) => prevCount + 1);
+        }
       });
 
       return () => {
-        socket.current.disconnect(); // Ngắt kết nối khi component unmount
+        socket.current.disconnect();
       };
     } else {
-      setIsAuthenticated(false); // Không có token
+      setIsAuthenticated(false); 
     }
-  }, [userId]);
+  }, [userId, isOpen]);
 
-  // Auto-scroll khi tin nhắn mới được thêm
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -52,12 +58,12 @@ const UserChatbox = () => {
     if (newMessage.trim()) {
       const message = { receiverId: 'admin', text: newMessage, senderId: userId };
       if (socket.current) {
-        socket.current.emit('send_message', message); // Gửi tin nhắn qua socket
+        socket.current.emit('send_message', message);
         setMessages((prevMessages) => [...prevMessages, message]);
         setNewMessage('');
       }
     }
-  };
+  };  
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -65,11 +71,21 @@ const UserChatbox = () => {
     }
   };
 
+  const handleChatboxToggle = () => {
+    setIsOpen((prevIsOpen) => {
+      if (!prevIsOpen) setNewMessageCount(0);
+      return !prevIsOpen;
+    });
+  };
+
+  if (roleId !== 1) return null; // Ẩn chatbox nếu role_id khác 1
+
   return (
     <div className="floating-chatbox">
       {!isOpen && (
-        <div className="chatbox-bubble" onClick={() => setIsOpen(true)}>
+        <div className="chatbox-bubble" onClick={handleChatboxToggle}>
           <i className="bi bi-chat-dots"></i>
+          {newMessageCount > 0 && <span className="new-message-count">{newMessageCount}</span>}
         </div>
       )}
 
@@ -77,7 +93,7 @@ const UserChatbox = () => {
         <div className="chatbox-window">
           <div className="chatbox-header">
             <span>Chat with Admin</span>
-            <Button variant="link" onClick={() => setIsOpen(false)} className="close-btn">×</Button>
+            <Button variant="link" onClick={handleChatboxToggle} className="close-btn">×</Button>
           </div>
 
           <div className="chatbox-messages">
