@@ -28,7 +28,7 @@ function CartPage() {
   const subtotal = calculateSubtotal();
   const total = (subtotal + shippingFee - discount) * (1 - 10 / 1000);
   // const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
-  const total = subtotal + shippingFee - discount;
+  // const total = subtotal + shippingFee - discount;
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
@@ -125,8 +125,8 @@ function CartPage() {
     // }
     // fix here
     try {
-      const orderResponse = await axiosClient.post(`orders/`, cartRequest);
-      console.log('Order created: ', orderResponse);
+      // const orderResponse = await axiosClient.post(`orders/`, cartRequest);
+      // console.log('Order created: ', orderResponse);
 
       navigate('/payment', { state: { cartRequest } });
     } catch (error) {

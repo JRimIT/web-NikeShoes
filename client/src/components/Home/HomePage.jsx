@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Button } from "react-bootstrap";
 import "./HomePage.scss";
 import HomePageContent from "./HomePageContent";
 import Footer from "./footer/Footer";
@@ -30,7 +30,7 @@ const HomePage = () => {
             <Button href="/products-men/Running" className="shop-button">
               Shop
             </Button>
-                <button className="btn">Shop</button>
+                
               </div>
               <div className="content">
                 <HomePageContent></HomePageContent>
@@ -40,8 +40,8 @@ const HomePage = () => {
           </div>
         </>
       )}
-    </>
-  );
-};
+    
+  
+
 
 export default HomePage;

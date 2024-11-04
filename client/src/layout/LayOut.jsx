@@ -50,7 +50,6 @@ import UserProfile from "../components/UserMenu/UserProfile";
 import NotFound from "../pages/NotFoundPages/NotFound";
 import DenyAccess from "../pages/NotFoundPages/DenyAccess";
 import ErrorPage from "../pages/NotFoundPages/errorPage";
-import HelpPage from "../components/Home/Help/HelpPage";
 import BlackList from "../pages/admin/manageBlackList";
 import BanedPage from "../pages/NotFoundPages/BanedPage";
 
