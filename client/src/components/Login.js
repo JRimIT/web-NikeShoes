@@ -6,7 +6,6 @@ import { validateEmail, validatePassword } from "../utils/validation";
 import { toast } from "react-toastify";
 
 const Login = () => {
-
   useEffect(() => {
     // Remember
     const savedEmail = localStorage.getItem("email");
@@ -73,7 +72,7 @@ const Login = () => {
         if (roleId === 1) {
           navigate("/");
         } else if (roleId === 2) {
-          navigate("/admins");
+          navigate("/");
         } else if (roleId === 3) {
           navigate("/ship");
         } else if (roleId === 4) {

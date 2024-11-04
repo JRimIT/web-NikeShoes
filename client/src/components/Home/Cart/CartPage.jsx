@@ -1,27 +1,34 @@
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Button, Image, Form } from "react-bootstrap";
-import { FaTrashAlt } from "react-icons/fa";
+import React, { useState, useEffect, useContext } from 'react';
+import { Container, Row, Col, Button, Image, Form } from 'react-bootstrap';
+import { FaTrashAlt } from 'react-icons/fa';
+// import axios from 'axios';
+import axiosClient from "../../../api/axiosClient";
 import axios from "../../../utils/axios.customize";
-import "./CartPage.scss";
+import './CartPage.scss';
+import { useNavigate } from 'react-router-dom';
+import { CartContext } from '../../../context/CartContext';
 
 function CartPage() {
+  const { setCartRequest } = useContext(CartContext);
+  const navigate = useNavigate();
   const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(true);
   const [loadingAction, setLoadingAction] = useState(false);
   const [userId, setUserId] = useState(null);
   const shippingFee = 0;
-  const sale = '99.9%';
-  const discount = 200000;
+  const sale = '10%';
+  const discount = 100000;
 
-  const parsePrice = (price) => Number(price.replaceAll(",", ""));
-  const formatPrice = (price) => `${price.toLocaleString("vi-VN")}₫`;
+  const parsePrice = (price) => Number(parseFloat(price.replaceAll(',', '')).toFixed(2));
+  const formatPrice = (price) => `${price.toLocaleString('vi-VN')}₫`;
 
   const calculateSubtotal = () =>
     cart.reduce((acc, item) => acc + parsePrice(item.price) * item.quantity, 0);
 
   const subtotal = calculateSubtotal();
+  const total = (subtotal + shippingFee - discount) * (1 - 10 / 1000);
   // const total = (subtotal + shippingFee - discount) * (1 - 999 / 1000);
-  const total = (subtotal + shippingFee - discount);
+  // const total = subtotal + shippingFee - discount;
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
@@ -37,7 +44,7 @@ function CartPage() {
       try {
         console.log(userId);
         const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
-        setCart(response.data || []); // Handle empty or null data
+        setCart(response.data || []); // Handle empty or null data        
       } catch (error) {
         console.error(
           "Error fetching cart:",
@@ -55,12 +62,14 @@ function CartPage() {
   const handleQuantityChange = async (id, newQuantity) => {
     // if (newQuantity < 1) return;
     if (newQuantity < 1 || newQuantity > 10) {
-      console.warn('Quantity must be between 1 and 10.');
+      console.warn("Quantity must be between 1 and 10.");
       return;
     }
 
     try {
-      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, { quantity: newQuantity });
+      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, {
+        quantity: newQuantity,
+      });
       setCart((prevCart) =>
         prevCart.map((item) =>
           item.cart_item_id === id ? { ...item, quantity: newQuantity } : item
@@ -88,13 +97,41 @@ function CartPage() {
     }
   };
 
-  const handleCheckout = () => {
-    setLoading(true); // Block UI during checkout
-    setTimeout(() => {
-      alert("Checkout successful!");
-      setCart([]); // Clear cart for demo
-      setLoading(false);
-    }, 1500);
+  const handleCheckout = async () => {
+    const cartRequest = {
+      UserId: userId,
+      CartId: cart.length > 0 ? cart[0].cart_id : null,
+      CartItems: cart.map(item => ({        
+        CartItemId: item.cart_item_id,
+        ProductId: item.product_id,
+        Quantity: item.quantity,
+        ProductName: item.name,
+        Price: parsePrice(item.price),
+        CartColor: item.cart_color,
+        CartSize: item.cart_size,
+        Image: item.image,
+        ProductColor: item.available_colors,
+        ProductSize: item.available_sizes,
+        Description: item.description
+      })),
+      TotalAmount: total
+    };
+    setCartRequest(cartRequest);
+    console.log('cartRequest: ', cartRequest);
+    
+    // if (!cartId) {
+    //   console.error('No cartId found to delete.');
+    //   return;
+    // }
+    // fix here
+    try {
+      // const orderResponse = await axiosClient.post(`orders/`, cartRequest);
+      // console.log('Order created: ', orderResponse);
+
+      navigate('/payment', { state: { cartRequest } });
+    } catch (error) {
+      console.error('Error navigating to payment page: ', error);
+    }   
   };
 
   if (loading) return <p>Loading...</p>;
@@ -105,7 +142,7 @@ function CartPage() {
       {cart.length === 0 ? (
         <div className="text-center">
           <h4>Your cart is empty.</h4>
-          <Button variant="primary" href="/products-men/All" className="button">
+          <Button variant="primary" href="/products-men/All">
             Shop Now
           </Button>
         </div>
@@ -139,27 +176,31 @@ function CartPage() {
                   />
                   <FaTrashAlt
                     onClick={() => handleRemove(item.cart_item_id)}
-                    className="remove-button" 
+                    className="remove-button"
                   />
                 </div>
               </div>
             ))}
           </Col>
           <Col md={4} className="order-summary">
-            <h4>Order Summary</h4>
-            <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
-            <p>Shipping: <strong>Free</strong></p>
-            {/* <p>Sale: <strong>{sale}</strong></p> */}
-            <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
-            <h5>Total: <strong>{formatPrice(total)}</strong></h5>
-            <Button
-              variant="dark"
-              className="w-100 mt-3 checkout-button"
-              onClick={handleCheckout}
-              disabled={loading || loadingAction}
-            >
-              {loading ? "Processing..." : "Proceed to Checkout"}
-            </Button>
+            <div className="border p-3 rounded" style={{ backgroundColor: '#f9f9f9' }}>
+              <h4>Order Summary</h4>
+              <p>Subtotal: <strong>{formatPrice(subtotal)}</strong></p>
+              <p>Shipping: <strong>Free</strong></p>
+              <p>Sale: <strong>{sale}</strong></p>
+              <p>Discount: <strong>-{formatPrice(discount)}</strong></p>
+              <h5>Total: <strong>{formatPrice(total)}</strong></h5>
+              {/* <PayPalCheckout total={total}/> */}
+              <Button
+                variant="dark"
+                className="w-100 mt-3 checkout-button"
+                onClick={handleCheckout}
+                disabled={loading || loadingAction}
+                style={{ fontSize: '1.2rem' }}
+              >
+                {loading ? 'Processing...' : 'Proceed to Checkout'}
+              </Button>
+            </div>
           </Col>
         </Row>
       )}

@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './ProductList.scss';
+import axios from "../../../../utils/axios.customize";
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import { IoHeartCircleSharp } from "react-icons/io5";
+import React, { useState, useEffect, forwardRef } from "react";
+import { FixedSizeGrid as Grid } from "react-window";
+import InfiniteLoader from "react-window-infinite-loader";
+
+import "./ProductList.scss";
 
 const ProductList = ({ category, onTotalProductsChange, sortBy, userId }) => {
   const [products, setProducts] = useState([]);
@@ -25,12 +29,13 @@ const ProductList = ({ category, onTotalProductsChange, sortBy, userId }) => {
     }
   };
 
-  // Hàm để lấy giá trị `searchTerm` từ URL
+  // Function to get search term from URL
   const getSearchTermFromURL = () => {
     const params = new URLSearchParams(location.search);
-    return params.get('term') || ''; // Lấy `term` từ query URL, hoặc chuỗi rỗng nếu không có
+    return params.get("term") || "";
   };
 
+  // Function to fetch products
   const fetchProducts = () => {
     const searchTerm = getSearchTermFromURL(); // Lấy từ khóa tìm kiếm từ URL
     let url = `http://localhost:5000/products`;
@@ -46,27 +51,40 @@ const ProductList = ({ category, onTotalProductsChange, sortBy, userId }) => {
       url = `http://localhost:5000/products/search?term=${searchTerm}`;
     }
 
-    axios.get(url)
-      .then(response => {
+    axios
+      .get(url)
+      .then((response) => {
         let fetchedProducts = response.data.products;
 
         // Kiểm tra giá trị sortBy và áp dụng sắp xếp hoặc lọc dữ liệu
-        if (sortBy === 'featured') {
+        if (sortBy === "featured") {
           // Sắp xếp sản phẩm sao cho những sản phẩm có `pro_message_list` lên trước
           fetchedProducts = fetchedProducts.sort((a, b) => {
             if (a.pro_message_list && !b.pro_message_list) return -1;
             if (!a.pro_message_list && b.pro_message_list) return 1;
             return 0; // Nếu cả hai đều có hoặc đều không có, giữ nguyên thứ tự
           });
-        } else if (sortBy === 'price-high-low') {
-          fetchedProducts = fetchedProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
-        } else if (sortBy === 'price-low-high') {
-          fetchedProducts = fetchedProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
-        } else if (sortBy === 'newest') {
+        } else if (sortBy === "price-high-low") {
+          fetchedProducts = fetchedProducts.sort(
+            (a, b) => parseFloat(b.price) - parseFloat(a.price)
+          );
+        } else if (sortBy === "price-low-high") {
+          fetchedProducts = fetchedProducts.sort(
+            (a, b) => parseFloat(a.price) - parseFloat(b.price)
+          );
+        } else if (sortBy === "newest") {
           // Sắp xếp theo newest với ưu tiên các sản phẩm có pro_message_list là "Just In"
           fetchedProducts = fetchedProducts.sort((a, b) => {
-            if (a.pro_message_list === "Just In" && b.pro_message_list !== "Just In") return -1;
-            if (a.pro_message_list !== "Just In" && b.pro_message_list === "Just In") return 1;
+            if (
+              a.pro_message_list === "Just In" &&
+              b.pro_message_list !== "Just In"
+            )
+              return -1;
+            if (
+              a.pro_message_list !== "Just In" &&
+              b.pro_message_list === "Just In"
+            )
+              return 1;
 
             // Nếu không phải "Just In", sắp xếp theo release_date (mới nhất trước)
 
@@ -76,11 +94,22 @@ const ProductList = ({ category, onTotalProductsChange, sortBy, userId }) => {
         setProducts(fetchedProducts);
         onTotalProductsChange(response.data.totalCount);
       })
-      .catch(error => {
-        console.error('There was an error fetching the products!', error);
+      .catch((error) => {
+        console.error("There was an error fetching the products!", error);
       });
   };
 
+  // Function to check if an item is loaded
+  const isItemLoaded = (index) => index < products.length;
+
+  // Function to load more items
+  const loadMoreItems = (startIndex, stopIndex) => {
+    return new Promise((resolve) => {
+      fetchProducts(startIndex, stopIndex).then(resolve);
+    });
+  };
+
+  // Effect to handle initial fetch and resize
   useEffect(() => {
     fetchProducts();
     fetchWishlist();

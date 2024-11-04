@@ -9,7 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LayOut from './layout/LayOut';
 import { Provider } from 'react-redux';
-import store from './redux/revenue/storeRevenue';
+import store from './redux/store/store';
 import ScrollToTop from './layout/ScrollToTop';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

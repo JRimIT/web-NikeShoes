@@ -51,7 +51,7 @@ const ProductDetailPage = () => {
 
   const checkLoginAndNavigate = (userId, navigate) => {
     if (userId === 0) {
-      toast.info('Please log in to continue.');
+      toast.info("Please log in to continue.");
       navigate("/login");
       return false;
     }
@@ -62,6 +62,7 @@ const ProductDetailPage = () => {
     if (!checkLoginAndNavigate(userId, navigate)) return;
 
     if (!product) {
+      toast.error("Product details not available.");
       toast.error("Product details not available.");
       return;
     }
@@ -138,7 +139,7 @@ const ProductDetailPage = () => {
           toast.error(errorMessage);
         }
       } else {
-        toast.error('An error occurred. Please try again.');
+        toast.error("An error occurred. Please try again.");
       }
     }
   };
@@ -179,6 +180,30 @@ const ProductDetailPage = () => {
           "Failed to add product to Wishlist";
         toast.error(`Failed to add product to Wishlist: ${errorMessage}`);
       }
+      return;
+    }
+
+    if (!selectedSize) {
+      toast.error("Please select size.");
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(
+        "http://localhost:5000/add-to-wishlist",
+        {
+          userId: userId,
+          productId: product.product_id,
+          size: selectedSize,
+          color: selectedColor || product.primary_image,
+          quantity,
+        }
+      );
+      toast.success(data.message);
+    } catch (error) {
+      console.error("Error adding to wishlist:", error.response?.data || error);
+      toast.error(`Failed to add product to Wishlist!`);
+      // navigate(`/login`);
     }
   };
 
@@ -201,7 +226,12 @@ const ProductDetailPage = () => {
         onClose={() => setIsCartOpen(false)}
       />
       <div className="product-detail-container">
-        <ToastContainer position="top-right" autoClose={1500} hideProgressBar={false} closeOnClick={true} />
+        <ToastContainer
+          position="top-right"
+          autoClose={1500}
+          hideProgressBar={false}
+          closeOnClick={true}
+        />
         <div className="image-gallery">
           <div className="main-image">
             <img

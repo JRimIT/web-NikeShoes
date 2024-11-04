@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import ProductList from "../Product/ProductList";
 import { useParams } from "react-router-dom";
-import '../Product/ProductListPage.scss';
+import "../Product/ProductListPage.scss";
 import CategoryBar from "../Product/CategoryBar";
 import SidebarMen from "./SidebarMen";
 
 function ProductListPageMen() {
   const { category: urlCategory } = useParams(); // Get category from URL
-  const [category, setCategory] = useState(urlCategory || ''); // State to hold the selected category
+  const [category, setCategory] = useState(urlCategory || ""); // State to hold the selected category
   const [totalProducts, setTotalProducts] = useState(0); // State to hold total products count
   const [filtersVisible, setFiltersVisible] = useState(true); // State for filters visibility
   const [sortBy, setSortBy] = useState('featured');
@@ -55,8 +55,11 @@ function ProductListPageMen() {
             category={category}
             onTotalProductsChange={setTotalProducts} // Pass function to update total products
             sortBy={sortBy}
+            filtersVisible={filtersVisible} // Truyền trạng thái của filters
             userId={userId} // Pass userId down to ProductList
           />
+            
+          
         </div>
       </div>
     </>

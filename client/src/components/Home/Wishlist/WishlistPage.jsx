@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import axios from "../../../utils/axios.customize";
-import { FaShoppingCart, FaTrashAlt } from "react-icons/fa"; // Import icons
+import { FaShoppingCart, FaTrashAlt } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./WishlistPage.scss";
@@ -20,7 +20,9 @@ const WishlistPage = () => {
       // if (!userId) return;
       try {
         console.log(userId);
-        const response = await axios.get(`http://localhost:5000/api/wishlist/${userId}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/wishlist/${userId}`
+        );
         setWishlist(response.data || []);
       } catch (err) {
         console.error("Error fetching wishlist:", err.message);
@@ -47,7 +49,7 @@ const WishlistPage = () => {
     setOperationLoading(true); // Start loading
 
     try {
-      const { data } = await axios.post('http://localhost:5000/move-to-cart', {
+      const { data } = await axios.post("http://localhost:5000/move-to-cart", {
         userId: userId,
         productId: product.product_id,
         size: product.size,

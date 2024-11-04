@@ -6,7 +6,7 @@ let adminSocketId = null; // Lưu socketId của admin
 
 const handleSocket = (io) => {
   io.use((socket, next) => {
-    const token = socket.handshake.auth.token;
+    const token = socket.handshake.auth.token; 
 
     if (!token) {
       return next(new Error('Authentication error: No token provided'));
@@ -19,35 +19,47 @@ const handleSocket = (io) => {
 
       const userId = decoded.id;
 
-      db.query('SELECT user_id, username, role_id FROM Users WHERE user_id = ?', [userId], (err, result) => {
-        if (err || result.length === 0) {
-          return next(new Error('User not found or server error'));
-        }
-
-        const { user_id, username, role_id } = result[0];
-        
-
-        if (role_id === 2) { // Admin
-          socket.userId = user_id;
-          socket.username = username;
-          socket.isAdmin = true;
-          socket.role = role_id;
-          adminSocketId = socket.id;
-          next();
-        } else if (role_id === 1) { // User
-          socket.userId = user_id;
-          socket.username = username;
-          socket.isAdmin = false;
-          socket.role = role_id; // Thêm role vào socket
+      db.query(
+        'SELECT user_id, username, role_id, user_image FROM Users WHERE user_id = ?',
+        [userId],
+        (err, result) => {
+          if (err || result.length === 0) {
+            return next(new Error('User not found or server error'));
+          }
+      
+          const { user_id, username, role_id, user_image } = result[0];
           
-          
-          // Lưu đầy đủ thông tin user vào onlineUsers
-          onlineUsers[user_id] = { userId: user_id, socketId: socket.id, username: username };
-          next();
-        } else {
-          return next(new Error('Permission denied: Invalid role'));
+      
+          if (role_id === 2) { // Admin
+            socket.userId = user_id;
+            socket.username = username;
+            socket.userImage = user_image; // thêm user_image vào socket
+            socket.isAdmin = true;
+            socket.role = role_id;
+            adminSocketId = socket.id;
+            next();
+          } else if (role_id === 1) { // User
+            socket.userId = user_id;
+            socket.username = username;
+            socket.userImage = user_image; // thêm user_image vào socket
+            socket.isAdmin = false;
+            socket.role = role_id;
+            
+            // Lưu đầy đủ thông tin user vào onlineUsers
+            onlineUsers[user_id] = {
+              userId: user_id,
+              socketId: socket.id,
+              username: username,
+              userImage: user_image // Thêm user_image vào onlineUsers
+            };
+            console.log("User added to onlineUsers:", onlineUsers[user_id]); // Kiểm tra dữ liệu trong onlineUsers
+            next();
+          } else {
+            return next(new Error('Permission denied: Invalid role'));
+          }
         }
-      });
+      );
+      
     });
   });
 
@@ -59,7 +71,7 @@ const handleSocket = (io) => {
       console.log(`User ${socket.username} đã kết nối`);
 
       // Cập nhật danh sách online khi user kết nối (với userId đầy đủ)
-      onlineUsers[socket.userId] = { userId: socket.userId, socketId: socket.id, username: socket.username };
+      onlineUsers[socket.userId] = { userId: socket.userId, socketId: socket.id, username: socket.username, userImage: socket.userImage };
 
       if (adminSocketId) {
         io.to(adminSocketId).emit('online_users', onlineUsers);
@@ -72,15 +84,17 @@ const handleSocket = (io) => {
       const { receiverId, text } = message;
       const senderId = socket.userId;
       const senderName = socket.username;
+      const senderImage = socket.userImage; // Lấy user_image của người gửi
 
-      console.log(`Tin nhắn từ ${senderId} tới ${receiverId}: ${text}`);
+
+      console.log(`Tin nhắn từ ${senderId} tới ${receiverId}: ${text} ${senderImage}`);
 
       if (receiverId === 'admin' && adminSocketId) {
-        io.to(adminSocketId).emit('receive_message', { senderId, senderName, text });
+        io.to(adminSocketId).emit('receive_message', { senderId, senderName, senderImage, text });
         console.log(`Tin nhắn gửi tới admin từ ${senderName}`);
       } 
       else if (socket.isAdmin && onlineUsers[receiverId]) {
-        io.to(onlineUsers[receiverId].socketId).emit('receive_message', { senderId: 'admin', senderName: 'Admin', text });
+        io.to(onlineUsers[receiverId].socketId).emit('receive_message', { senderId: 'admin', senderName: 'Admin', senderImage, text });
         console.log(`Tin nhắn gửi tới user ${receiverId} từ admin`);
       } else {
         console.error('Receiver is not online or does not exist.');

@@ -1,9 +1,11 @@
 import React from "react";
-import { Button } from 'react-bootstrap';
+import { Button } from "react-bootstrap";
 import "./HomePage.scss";
 import HomePageContent from "./HomePageContent";
 import Footer from "./footer/Footer";
-
+import { useState } from "react";
+import { useEffect } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
 const HomePage = () => {
   return (
     <>
@@ -28,15 +30,18 @@ const HomePage = () => {
             <Button href="/products-men/Running" className="shop-button">
               Shop
             </Button>
+                
+              </div>
+              <div className="content">
+                <HomePageContent></HomePageContent>
+              </div>
+            </div>
+            <Footer></Footer>
           </div>
-          <div className="content">
-            <HomePageContent></HomePageContent>
-          </div>
-        </div>
-        <Footer></Footer>
-      </div>
-    </>
-  );
-};
+        </>
+      )}
+    
+  
+
 
 export default HomePage;
