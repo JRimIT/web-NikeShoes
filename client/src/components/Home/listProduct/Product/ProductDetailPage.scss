@@ -1,11 +1,12 @@
+// Variables
 $background-color: #f8f9fa;
 $text-color: #333;
-$primary-color: #6c757d; // Softer grey for better aesthetics
+$primary-color: black; 
 $secondary-color: #f1f3f5;
-$hover-color: #495057; // Darker shade for a smoother hover effect
-$accent-color: #d33918; // Accent color for key elements like notifications
-$border-radius: 16px; // Increased border radius for a modern feel
-$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); // Slightly deeper shadow for better elevation
+$hover-color: grey; 
+$accent-color: #d33918; 
+$border-radius: 16px; 
+$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1); 
 $transition: all 0.3s ease-in-out;
 
 // Mixins
@@ -26,10 +27,10 @@ $transition: all 0.3s ease-in-out;
 // Product detail container
 .product-detail-container {
   display: flex;
-  gap: 40px;
-  padding: 40px;
+  gap: 30px;
+  padding: 30px;
   max-width: 1200px;
-  margin: 40px auto;
+  margin: 30px auto;
   background-color: #ffffff;
   border-radius: $border-radius;
   box-shadow: $box-shadow;
@@ -37,7 +38,7 @@ $transition: all 0.3s ease-in-out;
 
   @media (max-width: 768px) {
     flex-direction: column;
-    padding: 20px;
+    padding: 15px;
   }
 }
 
@@ -54,7 +55,7 @@ $transition: all 0.3s ease-in-out;
     border-radius: $border-radius;
     overflow: hidden;
     box-shadow: $box-shadow;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     @include hover-effect;
 
     img {
@@ -70,11 +71,9 @@ $transition: all 0.3s ease-in-out;
 
   .thumbnail-images {
     display: flex;
-    gap: 15px;
+    gap: 10px; 
     overflow-x: auto;
-    padding: 10px;
-    scrollbar-width: thin;
-    scrollbar-color: $primary-color $secondary-color;
+    padding: 8px;
 
     &::-webkit-scrollbar {
       height: 6px;
@@ -114,69 +113,75 @@ $transition: all 0.3s ease-in-out;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
 
-  h1 {
-    font-size: 2.8rem;
-    margin: 0;
+  h2 {
+    font-size: 2.2rem;
+    margin: 0; 
     color: $text-color;
     font-weight: bold;
   }
 
   h4 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: $accent-color;
     margin: 0;
     font-style: italic;
   }
 
   h5 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: black;
     margin: 0;
     font-weight: 500;
   }
 
-  .price {
-    font-size: 1.2rem;
-    color: $primary-color;
-    font-weight: bold;
-    margin: 10px 0;
+  .category {
+    color: grey;
   }
 
-  .product-description, .product-description-country {
-    color: black;
-    line-height: 1.8;
+  .price {
     font-size: 1.1rem;
+    color: $primary-color;
+    font-weight: bold;
+    margin: 3px 0;
+  }
+
+  .product-description,
+  .product-description-country {
+    color: black;
+    line-height: 1.6;
+    font-size: 0.9rem;
     text-align: justify;
     font-family: 'Georgia', serif;
+    margin: 0;
   }
 
   h3 {
-    margin: 20px 0 10px;
-    font-size: 1.6rem;
+    margin: 10px 0 5px; 
+    font-size: 1.4rem; 
     color: $text-color;
   }
 
   .size-selection {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-    gap: 10px;
-    margin-top: 10px;
+    gap: 6px;
+    margin-top: 5px;
   }
 
   .size-box {
     border: 1px solid #ddd;
-    padding: 12px;
+    padding: 8px;
     border-radius: 12px;
     cursor: pointer;
     transition: $transition;
     text-align: center;
-    font-size: 1rem;
+    font-size: 0.9rem;
     background: none;
     width: 100%;
     height: 100%;
-    min-height: 44px;
+    min-height: 35px;
 
     &:hover {
       background-color: $secondary-color;
@@ -191,13 +196,13 @@ $transition: all 0.3s ease-in-out;
 
   .color-selection {
     display: flex;
-    gap: 15px;
+    gap: 8px;
     flex-wrap: wrap;
   }
 
   .color-swatch {
-    width: 50px;
-    height: 50px;
+    width: 45px; 
+    height: 45px;
     border-radius: 50%;
     border: 2px solid transparent;
     cursor: pointer;
@@ -214,16 +219,17 @@ $transition: all 0.3s ease-in-out;
     }
   }
 
-  .add-to-cart, .wishlist {
+  .add-to-cart,
+  .wishlist {
     background-color: $primary-color;
     color: white;
     border: none;
-    padding: 15px 30px;
+    padding: 10px 20px;
     border-radius: 12px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: $transition;
-    margin-top: 20px;
+    margin-top: 10px;
     @include hover-effect;
 
     &:hover {
@@ -232,7 +238,7 @@ $transition: all 0.3s ease-in-out;
   }
 
   .icon {
-    margin-left: 8px;
+    margin-left: 5px;
   }
 }
 
@@ -250,7 +256,11 @@ $transition: all 0.3s ease-in-out;
     font-size: 2.2rem;
   }
 
+  .product-info h4 {
+    font-size: 1.1rem;
+  }
+
   .product-info .price {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
   }
 }

@@ -8,12 +8,19 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import LayOut from './layout/LayOut';
+import { Provider } from 'react-redux';
+import store from './redux/revenue/storeRevenue';
+import ScrollToTop from './layout/ScrollToTop';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter>
-    <LayOut></LayOut>
-  </BrowserRouter>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <ScrollToTop></ScrollToTop>
+      <LayOut></LayOut>
+    </BrowserRouter>
+
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function

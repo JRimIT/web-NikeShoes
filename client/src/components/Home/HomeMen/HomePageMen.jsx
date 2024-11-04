@@ -5,6 +5,7 @@ import Footer from "../footer/Footer";
 import HomePageMenContent from "./HomePageMenContent";
 import "./HomePageMen.scss";
 import Slider from "react-slick";
+import { Button } from "react-bootstrap";
 
 function HomePageMen() {
   const settings = {
@@ -54,7 +55,9 @@ function HomePageMen() {
             </p>
 
             <div className="list-for-men pt-2">
-              <span>Choose your shoes </span>
+              <Button href="/products-men/Football" className="button">
+              Choose your shoes
+              </Button>
             </div>
           </div>
           <div className="content">

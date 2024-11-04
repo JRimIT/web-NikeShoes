@@ -6,12 +6,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 100; /* Set a z-index lower than the dropdown but higher than the cart */
+  z-index: 100;
 
   h1 {
     margin: 0;
     margin-left: 20px;
-    font-size: 1.5rem; /* Keeping the original size as per your request */
+    font-size: 1.5rem;
     color: #333;
   }
 
@@ -30,7 +30,7 @@
       transition: color 0.3s;
 
       &:hover {
-        color: #007bff; /* Color on hover */
+        color: #007bff;
       }
     }
 
@@ -47,32 +47,32 @@
         align-items: center;
 
         .arrow {
-          margin-left: 5px; /* Spacing between text and arrow */
+          margin-left: 5px;
         }
       }
 
       .dropdown-options {
         position: absolute;
-        top: 100%; /* Position the dropdown below the button */
-        right: 0; /* Align to the right of the button */
+        top: 100%;
+        right: 0;
         background-color: white;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border-radius: 4px;
-        z-index: 200; /* Ensure dropdown stays on top of category-navbar */
+        z-index: 200;
         padding: 5px 0;
-        min-width: 150px; /* Minimum width for the dropdown */
-        max-width: 100%; /* Prevent dropdown from exceeding the button width */
+        min-width: 150px; 
+        max-width: 100%;
         overflow: hidden; 
         white-space: nowrap;
       }
 
       div {
-        padding: 10px 15px; /* Increased padding for better spacing */
+        padding: 10px 15px;
         cursor: pointer;
         color: #000;
 
         &:hover {
-          background-color: #f0f0f0; /* Background color on hover */
+          background-color: #f0f0f0;
         }
       }
     }

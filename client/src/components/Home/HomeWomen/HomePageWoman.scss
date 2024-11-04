@@ -1,0 +1,26 @@
+.app-container{
+    .main-container{
+        .app-content{
+            .list-for-women{
+                font-size: 20px;
+                font-weight: 500;
+                display: flex;
+                justify-content: center;
+                padding-bottom: 20px;
+                .button{
+                    border: 1px solid black;
+                    background-color: black;
+                    padding: 10px;
+                    border-radius: 20px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    &:hover{
+                        background-color: grey;
+                        color: white;
+                        transition: all 1s;
+                    }
+                }
+            }
+        }
+    }
+}
