@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import './UserChatbox.scss';
 
 const UserChatbox = () => {
-  const { userId } = useParams(); 
+  const { userId, userImage, senderImage } = useParams(); 
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -56,7 +56,7 @@ const UserChatbox = () => {
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
-      const message = { receiverId: 'admin', text: newMessage, senderId: userId };
+      const message = { receiverId: 'admin', text: newMessage, senderId: userId, senderImage };
       if (socket.current) {
         socket.current.emit('send_message', message);
         setMessages((prevMessages) => [...prevMessages, message]);
@@ -97,11 +97,15 @@ const UserChatbox = () => {
           </div>
 
           <div className="chatbox-messages">
-            {messages.map((msg, index) => (
-              <div key={index} className={`chat-bubble ${msg.senderId === userId ? 'user-message' : 'admin-message'}`}>
-                {msg.text}
-              </div>
-            ))}
+          {messages.map((msg, index) => (
+            <div key={index} className={`chat-bubble ${msg.senderId === userId ? 'user-message' : 'admin-message'}`}>
+              {msg.senderId == 'admin' && (
+          <img src={msg.senderImage || '/default-avatar.png'} alt="avatar" className="message-avatar" />
+        )}
+              {msg.text}
+            </div>
+          ))}
+
             <div ref={messagesEndRef} />
           </div>
 

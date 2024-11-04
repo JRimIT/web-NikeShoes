@@ -2,6 +2,11 @@ import axios from "../../../../utils/axios.customize";
 
 import { useNavigate, useLocation } from "react-router-dom";
 import { IoHeartCircleSharp } from "react-icons/io5";
+import React, { useState, useEffect, forwardRef } from "react";
+import { FixedSizeGrid as Grid } from "react-window";
+import InfiniteLoader from "react-window-infinite-loader";
+
+import "./ProductList.scss";
 
 const ProductList = ({ category, onTotalProductsChange, sortBy, userId }) => {
   const [products, setProducts] = useState([]);

@@ -64,6 +64,7 @@ const ProductSearch = () => {
             onTotalProductsChange={setTotalProducts} // Pass function to update total products
             sortBy={sortBy} // Truyền giá trị sắp xếp xuống ProductList
             userId={userId}
+            filtersVisible={filtersVisible}
           />
         </div>
       </div>

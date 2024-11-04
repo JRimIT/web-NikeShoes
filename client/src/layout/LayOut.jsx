@@ -6,11 +6,16 @@ import HomePageWoman from "../components/Home/HomeWomen/HomePageWoman";
 import ProductListPageMen from "../components/Home/listProduct/men/ProductListPageMen";
 import ProductListPageWomen from "../components/Home/listProduct/women/ProductListPageWomen";
 import ProductDetailPage from "../components/Home/listProduct/Product/ProductDetailPage";
+import Orders from "../components/orders/Orders";
+import OrderItems from "../components/orders/OrderItems";
+import Payment from "../components/payment/Payment";
+import Success from "../components/payment/Success";
 import ProductFeaturedPage from "../components/Home/listProduct/featured/ProductFeaturedPage";
 
 import ProductSearch from "../components/Home/listProduct/Product/ProductSearch";
 import CartPage from "../components/Home/Cart/CartPage";
 import WishlistPage from "../components/Home/Wishlist/WishlistPage";
+import { CartProvider } from "../context/CartContext";
 
 import Admin from "../pages/admin/Admin";
 import Team from "../pages/admin/team";
@@ -38,27 +43,28 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import ForgotPass from "../components/ForgotPass";
+import HelpPage from "../components/Home/Help/HelpPage";
 
 import UserDashboard from "../components/UserMenu/UserDashboard";
 import UserProfile from "../components/UserMenu/UserProfile";
 import NotFound from "../pages/NotFoundPages/NotFound";
 import DenyAccess from "../pages/NotFoundPages/DenyAccess";
 import ErrorPage from "../pages/NotFoundPages/errorPage";
-import HelpPage from "../components/Home/Help/HelpPage";
 import BlackList from "../pages/admin/manageBlackList";
 import BanedPage from "../pages/NotFoundPages/BanedPage";
 
 const LayOut = () => {
   return (
     <>
+    <CartProvider>
       <UserChatbox />
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot" element={<ForgotPass />} />
-        {/*Route nested: Cha con lồng nhau  */}
-        <Route path="/" element={<App />}>
-          <Route index element={<HomePage />}></Route>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/forgot" element={<ForgotPass />} />
+              {/*Route nested: Cha con lồng nhau  */}
+              <Route path="/" element={<App />}>
+                <Route index element={<HomePage />}></Route>
           <Route path="/men" element={<HomePageMen />}></Route>
           <Route path="/women" element={<HomePageWoman />}></Route>
           <Route path="/products-men" element={<ProductListPageMen />}></Route>
@@ -87,45 +93,49 @@ const LayOut = () => {
             element={<ProductFeaturedPage />}
           ></Route>
           <Route index element={<HomePage />}></Route>
-          <Route path="/men" element={<HomePageMen />}></Route>
-          <Route path="/women" element={<HomePageWoman />}></Route>
-          <Route path="/products-men" element={<ProductListPageMen />}></Route>
-          <Route
-            path="products-men/:category"
-            element={<ProductListPageMen />}
-          />
-          <Route
-            path="/products-featured"
-            element={<ProductFeaturedPage />}
-          ></Route>
-          <Route
-            path="/products-men-featured/:featured"
-            element={<ProductFeaturedPage />}
-          ></Route>
-          <Route
-            path="/products-women"
-            element={<ProductListPageWomen />}
-          ></Route>
-          <Route
-            path="products-women/:category"
-            element={<ProductListPageWomen />}
-          />
-          <Route
-            path="/products-women-featured/:featured"
-            element={<ProductFeaturedPage />}
-          ></Route>
-          <Route path="/products/search" element={<ProductSearch />} />
-          <Route path="/products/:id" element={<ProductDetailPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
-          <Route path="/help" element={<HelpPage />} />
-        </Route>
+                <Route path="/men" element={<HomePageMen />}></Route>
+                <Route path="/women" element={<HomePageWoman />}></Route>
+                <Route path="/products-men" element={<ProductListPageMen />}></Route>
+                <Route
+                  path="products-men/:category"
+                  element={<ProductListPageMen />}
+                />
+                <Route
+                  path="/products-featured"
+                  element={<ProductFeaturedPage />}
+                ></Route>
+                <Route
+                  path="/products-men-featured/:featured"
+                  element={<ProductFeaturedPage />}
+                ></Route>
+                <Route
+                  path="/products-women"
+                  element={<ProductListPageWomen />}
+                ></Route>
+                <Route
+                  path="products-women/:category"
+                  element={<ProductListPageWomen />}
+                />
+                <Route
+                  path="/products-women-featured/:featured"
+                  element={<ProductFeaturedPage />}
+                ></Route>
+                <Route path="/products/search" element={<ProductSearch />} />
+                <Route path="/products/:id" element={<ProductDetailPage />} />
+                <Route path="/orders" element={<Orders/>}></Route>
+                <Route path="/order-items/:id" element={<OrderItems/>}></Route>
+                <Route path="/payment" element={<Payment></Payment>}></Route>
+                <Route path="/success" element={<Success/>}/>
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
+                <Route path="/help" element={<HelpPage />} />
+              </Route>
 
-        {/* Dynamic route for User with userId */}
-        {/* <Route path="/user/:userId" element={<UserChatbox />} /> */}
+              {/* Dynamic route for User with userId */}
+              {/* <Route path="/user/:userId" element={<UserChatbox />} /> */}
 
-        {/* Admin route */}
-        {/* <Route path="/admin" element={<AdminChatbox userId="admin" />} /> */}
+              {/* Admin route */}
+              {/* <Route path="/admin" element={<AdminChatbox userId="admin" />} /> */}
 
         <Route path="admins" element={<Admin />}>
           <Route index element={<DashBoard />} />
@@ -150,7 +160,8 @@ const LayOut = () => {
           {/* <Route path="/geography" element={<Geography />} /> */}
         </Route>
 
-        {/* Dynamic route for User with userId */}
+              {/* Dynamic route for User with userId */}
+              
 
         {/* Admin route */}
 
@@ -167,8 +178,10 @@ const LayOut = () => {
         <Route path="/errorPage" element={<ErrorPage></ErrorPage>}></Route>
         <Route path="/banedPage" element={<BanedPage></BanedPage>}></Route>
 
-        <Route path="*" element={<NotFound />}></Route>
-      </Routes>
+            <Route path="*" element={<NotFound />}></Route>
+          </Routes>
+      </CartProvider>
+
       <ToastContainer
         position="top-right"
         autoClose={3000}
