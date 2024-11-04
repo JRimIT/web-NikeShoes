@@ -1,29 +1,33 @@
 import axios from "../../../../utils/axios.customize";
 
 import { useNavigate, useLocation } from 'react-router-dom';
+import { IoHeartCircleSharp } from "react-icons/io5";
 import React, { useState, useEffect, forwardRef } from "react";
 import { FixedSizeGrid as Grid } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
 
 import "./ProductList.scss";
 
-const ProductList = ({
-  category,
-  onTotalProductsChange,
-  sortBy,
-  filtersVisible,
-}) => {
-  const GUTTER_SIZE = 5;
-  const COLUMN_WIDTH = filtersVisible ? 450 : 410;
-  const ROW_HEIGHT = 620;
-
+const ProductList = ({ category, onTotalProductsChange, sortBy, userId }) => {
   const [products, setProducts] = useState([]);
-  const [gridSize, setGridSize] = useState({
-    width: window.innerWidth - 300, // Adjust for sidebar width (example: 300px)
-    height: window.innerHeight,
-  });
+  const [wishlist, setWishlist] = useState([]);
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); // Lấy thông tin URL hiện tại
+
+  // Fetch the wishlist for the user
+  const fetchWishlist = async () => {
+    try {
+      const token = localStorage.getItem('token'); // or however you retrieve the token
+      const response = await axios.get(`http://localhost:5000/api/wishlist/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setWishlist(response.data.map(item => item.product_id));
+    } catch (error) {
+      console.error('Error fetching wishlist:', error);
+    }
+  };
 
   // Function to get search term from URL
   const getSearchTermFromURL = () => {
@@ -83,6 +87,7 @@ const ProductList = ({
               return 1;
 
             // Nếu không phải "Just In", sắp xếp theo release_date (mới nhất trước)
+
           });
         }
 
@@ -107,101 +112,38 @@ const ProductList = ({
   // Effect to handle initial fetch and resize
   useEffect(() => {
     fetchProducts();
+    fetchWishlist();
+  }, [category, location.search, sortBy, userId]); // Gọi lại khi có thay đổi trong category, searchTerm hoặc sortBy
 
-    const handleResize = () => {
-      setGridSize({
-        width: window.innerWidth - 300, // Adjust for sidebar width (example: 300px)
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [category, location.search, sortBy]);
-
-  // Cell component for rendering individual product items
-  const Cell = ({ columnIndex, rowIndex, style }) => {
-    const index = rowIndex * 3 + columnIndex;
-    const product = products[index];
-    console.log(product);
-
-    return (
-      <div
-        className="product-card"
-        style={{
-          ...style,
-          left: style.left + GUTTER_SIZE,
-          top: style.top + GUTTER_SIZE,
-          width: style.width - GUTTER_SIZE,
-          height: style.height - GUTTER_SIZE,
-        }}
-        onClick={() => product && navigate(`/products/${product.product_id}`)}
-      >
-        {product ? (
-          <>
-            <img
-              src={product.primary_image}
-              alt={product.name}
-              className="product-image"
-            />
-            <h5 className="product-featured">{product.pro_message_list}</h5>
-            <h6 className="product-name">{product.name}</h6>
-            <h6 className="product-category">{product.category}</h6>
-            <h6 className="product-color">{product.color}</h6>
-            <p className="product-price">
-              {product.price
-                ? new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(parseFloat(product.price.replace(/,/g, "")))
-                : "Price not available"}
-            </p>
-          </>
-        ) : (
-          "Loading..."
-        )}
-      </div>
-    );
-  };
+  const isProductInWishlist = (productId) => wishlist.includes(productId);
 
   return (
-    <InfiniteLoader
-      isItemLoaded={isItemLoaded}
-      itemCount={products.length + 1} // Add 1 to trigger load more at the end
-      loadMoreItems={loadMoreItems}
-    >
-      {({ onItemsRendered, ref }) => (
-        <Grid
-          className="Grid"
-          columnCount={filtersVisible ? 3 : 4}
-          columnWidth={COLUMN_WIDTH + GUTTER_SIZE}
-          height={filtersVisible ? gridSize.height : window.innerHeight}
-          innerElementType={forwardRef(({ style, ...rest }, ref) => (
-            <div
-              ref={ref}
-              style={{
-                ...style,
-                paddingLeft: GUTTER_SIZE,
-                paddingTop: GUTTER_SIZE,
-              }}
-              {...rest}
-            />
-          ))}
-          rowCount={Math.ceil(products.length / 3) + 1} // +1 to account for loading items
-          rowHeight={ROW_HEIGHT + GUTTER_SIZE}
-          width={filtersVisible ? gridSize.width : window.innerWidth}
-          onItemsRendered={({ overscanStartIndex, overscanStopIndex }) =>
-            onItemsRendered({
-              overscanStartIndex,
-              overscanStopIndex,
-            })
-          }
-          ref={ref}
+    <div className="product-container">
+      {products.map(product => (
+        <div
+          className="product-card"
+          key={product.product_id}
+          onClick={() => navigate(`/products/${product.product_id}`)}
         >
-          {Cell}
-        </Grid>
-      )}
-    </InfiniteLoader>
+          {isProductInWishlist(product.product_id) && (
+            <span className="wishlist-icon">
+              <IoHeartCircleSharp className="h-5 w-5" />
+            </span>
+          )}
+          <img src={product.primary_image} alt={product.name} className="product-image" />
+          <h5 className="product-featured">{product.pro_message_list}</h5>
+          <h6 className="product-name">{product.name}</h6>
+          <h6 className="product-category">{product.category}</h6>
+          <h6 className="product-color">{product.color}</h6>
+          <p className="product-price">
+            {product.price
+              ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+                .format(parseFloat(product.price.replace(/,/g, '')))
+              : 'Price not available'}
+          </p>
+        </div>
+      ))}
+    </div>
   );
 };
 
