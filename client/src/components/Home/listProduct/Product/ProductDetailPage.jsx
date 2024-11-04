@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "../../../../utils/axios.customize";
+import MiniCartPopup from "../notification/MiniCartPopup";
 import "./ProductDetailPage.scss";
 import { FaHeart } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "../../footer/Footer";
 import Review from "../review/Review";
-import { useNavigate } from "react-router-dom";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -16,9 +16,11 @@ const ProductDetailPage = () => {
   const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity] = useState(1);
   const [userId, setUserId] = useState(0); // Initialize userId as null
   const navigate = useNavigate();
+  const [cartItems, setCartItems] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   //fetch id for product
   useEffect(() => {
@@ -71,19 +73,71 @@ const ProductDetailPage = () => {
     }
 
     try {
+      // Call the API to get the current quantity in the cart
+      const response = await axios.get(
+        "http://localhost:5000/api/cart/product-quantity-in-cart",
+        {
+          params: {
+            userId,
+            productId: product.product_id,
+            size: selectedSize,
+            color: selectedColor || product.primary_image,
+          },
+        }
+      );
+
+      const quantityInCart = response.data?.quantityInCart ?? 0;
+      const newQuantity = quantityInCart + quantity;
+
+      if (newQuantity > 10) {
+        toast.error("You cannot add more than 10 of this product.");
+        return;
+      }
+
+      // Proceed to add the product to the cart
       const { data } = await axios.post("http://localhost:5000/add-to-cart", {
-        userId: userId,
+        userId,
         productId: product.product_id,
         size: selectedSize,
         color: selectedColor || product.primary_image,
         quantity,
       });
 
-      toast.success(data.message); // Display success message
+      const newItem = {
+        name: product.name,
+        size: selectedSize,
+        color: selectedColor || product.primary_image, // Ensure correct color is used
+        price: product.price,
+        quantity: newQuantity, // Updated quantity
+      };
+
+      const existingItem = cartItems.find(
+        (item) =>
+          item.name === product.name &&
+          item.size === selectedSize &&
+          item.color === newItem.color // Check for color
+      );
+
+      if (existingItem) {
+        // Update the existing item's quantity
+        setCartItems((prevItems) =>
+          prevItems.map((item) =>
+            item.name === newItem.name &&
+            item.size === newItem.size &&
+            item.color === newItem.color
+              ? { ...item, quantity: newQuantity }
+              : item
+          )
+        );
+      } else {
+        // Add the new item to the cart
+        setCartItems((prevItems) => [...prevItems, newItem]);
+      }
+
+      setIsCartOpen(true);
     } catch (error) {
       console.error("Error adding to cart:", error.response?.data || error);
 
-      // Handle quantity limit error
       if (error.response && error.response.status === 400) {
         const errorMessage = error.response.data.message;
 
@@ -115,13 +169,14 @@ const ProductDetailPage = () => {
       const { data } = await axios.post(
         "http://localhost:5000/add-to-wishlist",
         {
-          userId: userId,
+          userId,
           productId: product.product_id,
           size: selectedSize,
           color: selectedColor || product.primary_image,
           quantity,
         }
       );
+
       toast.success(data.message);
     } catch (error) {
       console.error("Error adding to wishlist:", error.response?.data || error);
@@ -143,6 +198,11 @@ const ProductDetailPage = () => {
 
   return (
     <>
+      <MiniCartPopup
+        cartItems={cartItems}
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+      />
       <div className="product-detail-container">
         <ToastContainer
           position="top-right"

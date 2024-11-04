@@ -13,6 +13,14 @@ const ProductSearch = () => {
   const [filtersVisible, setFiltersVisible] = useState(true); // State cho visibility của filter
   const [sortBy, setSortBy] = useState("featured"); // State để lưu giá trị sắp xếp
   const location = useLocation();
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+    if (userData && userData.user_id) {
+      setUserId(userData.user_id); // Set userId from userData
+    }
+  }, []);
 
   const onCategoryChange = (selectedCategory) => {
     setCategory(selectedCategory); // Update the category state
@@ -55,7 +63,7 @@ const ProductSearch = () => {
             category={category}
             onTotalProductsChange={setTotalProducts} // Pass function to update total products
             sortBy={sortBy} // Truyền giá trị sắp xếp xuống ProductList
-            filtersVisible={filtersVisible}
+            userId={userId}
           />
         </div>
       </div>

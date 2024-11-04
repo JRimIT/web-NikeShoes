@@ -68,6 +68,7 @@ const WishlistPage = () => {
         "Error moving product to cart:",
         error.response?.data || error
       );
+      console.log(error);
       toast.error("Failed to add product to cart.");
     } finally {
       setOperationLoading(false); // Stop loading
