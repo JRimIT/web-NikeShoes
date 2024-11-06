@@ -11,7 +11,8 @@ const PayPalCheckout = () => {
     // const { cartRequest } = useContext(CartContext);
     const location = useLocation();
     const { cartRequest } = location.state || {};
-    const { id } = location.state || {};
+    const { orderId } = useContext(CartContext);
+    const { orders } = useContext(CartContext);
     const navigate = useNavigate();    
     
     useEffect(() => {
@@ -33,16 +34,18 @@ const PayPalCheckout = () => {
                         try {
                             const total = parseFloat((cartRequest.TotalAmount / 25405).toFixed(2)).toString();
                             const response = await axiosClient.post(`paypal/order?amount=${total}`);
+                            
+                            const orderResponse = await axiosClient.post(`orders/`, cartRequest);
+                            console.log('Order created: ', orderResponse);
+
                             if (response.id) {
                                 const orderID = response.id;
-                                console.log(orderID);
                                 return orderID;
                             } 
                             else 
                             {
                                 throw new Error("Order ID not found in response");
-                            }
-                            
+                            }  
                         } 
                         catch (error)
                         {
@@ -53,17 +56,22 @@ const PayPalCheckout = () => {
                     onApprove: async (data) => {
                         try {
                             const approvedOrderId = data.orderID;
-                            console.log(approvedOrderId);
                             if (!approvedOrderId) {
                                 throw new Error("No order ID found.");
                             }
                             const captureResponse = await axiosClient.post(`paypal/capture?orderId=${approvedOrderId}`);
                             
                             if (captureResponse.status === 200) {
-                                // navigate(`/success`, { state: { id } });
-                                return captureResponse;
+                                console.log("Capture successful, proceeding with patch and delete...");  
                             }
-                            console.log("Capture successful, proceeding with patch and delete...");
+                            await axiosClient.delete(`carts/${cartRequest.CartId}`);
+                            console.log(`Cart ${cartRequest.CartId} deleted successfully`);
+
+                            // console.log(orderId);
+                            // await axiosClient.patch(`orders/${orderId}`, { orderStatus: "processing"});
+                            // console.log("Order status updated successfully");
+
+                            navigate(`/success`);
                         }
                         catch (error) {
                             console.error("Error capturing data or handling subsequent requests: ", error);
@@ -72,20 +80,6 @@ const PayPalCheckout = () => {
                 }).render('#paypal-button-container');
             }
             document.body.appendChild(script);
-            // 
-            
-            // try {
-            //     console.log(id.data);
-            //     await axiosClient.patch(`orders/${id}`, { orderStatus: "processing"});
-            //     console.log("Order status updated successfully");
-                
-            //     await axiosClient.delete(`carts/${cartRequest.CartId}`);
-            //     console.log(`Cart ${cartRequest.CartId} deleted successfully`);
-
-            // }
-            // catch (error) {
-            //     console.error("Error patch data: ", error);
-            // }
         };
         fetchData();
         return () => {
@@ -94,7 +88,7 @@ const PayPalCheckout = () => {
                 paypalButtonsContainer.innerHTML = ''; // Clean up the buttons
             }
         };
-    }, [payPalClientId, cartRequest, navigate, id]);
+    }, [payPalClientId, cartRequest, navigate, orderId]);
 
     return (
         <div className="checkout-container">
@@ -109,81 +103,3 @@ const PayPalCheckout = () => {
 };
 
 export default PayPalCheckout;
-
-
-// import React, { useContext, useEffect, useState } from 'react';
-// import './Payment.scss';
-// import axios from 'axios';
-// import { CartContext } from '../../context/CartContext';
-
-// const PayPalCheckout = () => {
-//     const [payPalClientId] = useState("AY4dA0xUDuJJp3NHKXFexARyfmqx5VdovdVJMuJbKTHhZujK39081EiUS1P-a5Bqb4fcEnOwDQfNk433");
-//     const { cartRequest } = useContext(CartContext);
-//     const [orderId, setOrderId] = useState(null);
-
-//     useEffect(() => {
-//         const loadPayPalScript = async () => {
-//             // Load PayPal SDK script
-//             const script = document.createElement('script');
-//             script.src = `https://www.paypal.com/sdk/js?client-id=AY4dA0xUDuJJp3NHKXFexARyfmqx5VdovdVJMuJbKTHhZujK39081EiUS1P-a5Bqb4fcEnOwDQfNk433&currency=USD`;
-//             script.async = true;
-
-//             script.onload = async () => {
-//                 window.paypal.Buttons({
-//                     style: {
-//                         layout: 'vertical',
-//                         color: 'silver',
-//                         tagline: 'false'
-//                     },
-//                     createOrder: async () => {
-//                         try {
-//                             // Call your CreateOrder API endpoint to get the orderId
-//                             const orderResponse = await axios.post(`https://localhost:7167/api/paypal/order?amount=500`);
-//                             setOrderId(orderResponse.data.orderId);
-//                             console.log("Create orderId: ", orderResponse.data.orderId);
-//                         } catch (error) {
-//                             console.error("Error creating order:", error);
-//                             alert("Failed to create PayPal order.");
-//                         }
-//                     },
-//                     onApprove: async () => {
-//                         try {
-//                             // Capture order by calling Capture API with the approved orderId
-//                             const captureResponse = await axios.post(`http://localhost:7167/api/paypal/capture?orderId=${orderId.id}`);
-                            
-//                             if (captureResponse.status === 200) {
-//                                 window.location.href = '/success';
-//                             } else {
-//                                 alert("Capture failed");
-//                             }
-//                         } catch (error) {
-//                             console.error("Capture error:", error);
-//                             alert("Error capturing order.");
-//                         }
-//                     }
-//                 }).render('#paypal-button-container');
-//             };
-
-//             document.body.appendChild(script);
-
-//             return () => {
-//                 const paypalButtonsContainer = document.querySelector('#paypal-button-container');
-//                 if (paypalButtonsContainer) {
-//                     paypalButtonsContainer.innerHTML = ''; // Clean up PayPal buttons on unmount
-//                 }
-//             };
-//         };
-
-//         loadPayPalScript();
-//     }, [payPalClientId, cartRequest.TotalAmount]);
-
-//     return (
-//         <div className="checkout-container">
-//             <h4>Order Summary</h4>
-//             <p>Amount: <strong>{cartRequest.TotalAmount} USD</strong></p>
-//             <div id="paypal-button-container" className="paypal_button"></div>
-//         </div>
-//     );
-// };
-
-// export default PayPalCheckout;

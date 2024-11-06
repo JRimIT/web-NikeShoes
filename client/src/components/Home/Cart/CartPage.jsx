@@ -117,15 +117,7 @@ function CartPage() {
     setCartRequest(cartRequest);
     console.log('cartRequest: ', cartRequest);
     
-    // if (!cartId) {
-    //   console.error('No cartId found to delete.');
-    //   return;
-    // }
-    // fix here
     try {
-      const orderResponse = await axiosClient.post(`orders/`, cartRequest);
-      console.log('Order created: ', orderResponse);
-
       navigate('/payment', { state: { cartRequest } });
     } catch (error) {
       console.error('Error navigating to payment page: ', error);

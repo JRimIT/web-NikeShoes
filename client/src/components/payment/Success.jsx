@@ -13,18 +13,18 @@ const Success = () => {
     const { id } = location.state || {};
 
     const handleBackToHome = async () => {
-        try {
-            console.log(id.data);
-            await axiosClient.patch(`orders/${id}`, { orderStatus: "processing"});
-            console.log("Order status updated successfully");
+        // try {
+        //     console.log(id.data);
+        //     await axiosClient.patch(`orders/${id}`, { orderStatus: "processing"});
+        //     console.log("Order status updated successfully");
 
-            await axiosClient.delete(`carts/${cartRequest.CartId}`);
-            console.log(`Cart ${cartRequest.CartId} deleted successfully`);
-            // logic here
-        }
-        catch (error) {
-            console.error("Error patch or delete data: ", error);
-        }
+        //     await axiosClient.delete(`carts/${cartRequest.CartId}`);
+        //     console.log(`Cart ${cartRequest.CartId} deleted successfully`);
+        //     // logic here
+        // }
+        // catch (error) {
+        //     console.error("Error patch or delete data: ", error);
+        // }
         navigate('/cart'); // Chuyển hướng về trang chủ
     };
 

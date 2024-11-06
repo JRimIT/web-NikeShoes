@@ -235,7 +235,7 @@ const Header = () => {
 
   return (
     <>
-      {isLoading ? (
+      { isLoading ? (
         <div className="Loading-PageLogOut">
           <ClipLoader cssOverride={override} color={"#000000"} loading={isLoading} size={50} aria-label="Loading Spinner" data-testid="loader" />
         </div>
@@ -414,7 +414,7 @@ const Header = () => {
             </Container>
           </Navbar>
         </>
-      )};
+      ) };
     </>
   );
 };

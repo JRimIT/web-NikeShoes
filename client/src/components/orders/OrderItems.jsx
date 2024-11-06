@@ -59,6 +59,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
 import "./OrderItems.scss";
 import { CartContext } from "../../context/CartContext";
+import axios from "axios";
 
 const OrderItem = () => {
     const { id } = useParams();
@@ -66,32 +67,45 @@ const OrderItem = () => {
     const [orderItem, setOrderItem] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [userId, setUserId] = useState(null);
+    const { cartRequest } = useContext(CartContext);
 
     const END_POINT = {
+        CARTS: "carts",
         ORDERS: "orders",
         ORDER_ITEMS: "order-items"
     }
 
-    const fetchOrderItem = async () => {
-        try {
-            const response = await axiosClient.get(`${END_POINT.ORDER_ITEMS}/${id}`);
-            setOrderItem(response);
-        } catch (error) {
-            setError("Error fetching order item details");
-            console.error("Error fetching order item", error);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
+        if (userData && userData.user_id) {
+          setUserId(userData.user_id); // Set userId from userData
+          console.log(userData.user_id);
         }
-    };
+    }, []);
 
     useEffect(() => {
+        const fetchOrderItem = async () => {
+            try {
+                const response = await axiosClient.get(`${END_POINT.ORDER_ITEMS}/${id}`);
+                setOrderItem(response);
+            } catch (error) {
+                setError("Error fetching order item details");
+                console.error("Error fetching order item", error);
+            } finally {
+                setLoading(false);
+            }
+        };
         fetchOrderItem();
     }, [id]);
 
     const handlePayment = async () => {
-        const response = await axiosClient.delete(`${END_POINT.ORDERS}/${id}`);
-        console.log(response);
-        // cap nhat lai cart
+        // const response = await axiosClient.delete(`${END_POINT.ORDERS}/${id}`);
+        // console.log(response);
+
+        const cartResponse = await axiosClient.get(`${END_POINT.CARTS}/${userId}`)
+        console.log(cartResponse);
+        
         if (orderItem && orderItem.order.orderStatus === 'pending') {
             navigate("/cart");
         }
