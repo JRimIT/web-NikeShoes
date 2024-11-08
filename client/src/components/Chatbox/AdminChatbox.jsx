@@ -2,8 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ListGroup, Form, Button } from 'react-bootstrap';
 import { io } from 'socket.io-client';
 import './AdminChatbox.scss';
+import { useParams } from 'react-router-dom';
 
 const AdminChatbox = () => {
+  const {userImage} = useParams();
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState({});
@@ -29,10 +31,10 @@ const AdminChatbox = () => {
       });
   
       socket.current.on('receive_message', (message) => {
-        const { senderId, senderName, text } = message;
+        const { senderId, senderName, text, senderImage } = message;
         setMessages((prev) => ({
           ...prev,
-          [senderId]: [...(prev[senderId] || []), { senderId, senderName, text }],
+          [senderId]: [...(prev[senderId] || []), { senderId, senderName, text, senderImage }],
         }));
       });
   
@@ -52,7 +54,7 @@ const AdminChatbox = () => {
 
   const handleSendMessage = () => {
     if (newMessage.trim() && selectedUser) {
-      const message = { receiverId: selectedUser.userId, text: newMessage, senderId: 'admin' };
+      const message = { receiverId: selectedUser.userId, text: newMessage, senderId: 'admin', senderImage: userImage };
       if (socket.current) {
         socket.current.emit('send_message', message);
         setMessages((prev) => ({
@@ -63,7 +65,7 @@ const AdminChatbox = () => {
       }
     }
   };
-
+ 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') handleSendMessage();
   };
@@ -77,15 +79,17 @@ const AdminChatbox = () => {
         <ListGroup variant="flush">
           {onlineUsers.map((user) => (
             <ListGroup.Item
-              key={user.userId}
-              active={selectedUser?.userId === user.userId}
-              onClick={() => {
-                console.log("User được chọn:", user); // Log để kiểm tra thông tin user được chọn
-                setSelectedUser(user); // Đảm bảo selectedUser có chứa userId của user
-              }}
-            >
-              {user.username}
-            </ListGroup.Item>
+            key={user.userId}
+            active={selectedUser?.userId === user.userId}
+            onClick={() => {
+              console.log("User được chọn:", user);
+              setSelectedUser(user);
+            }}
+          >
+            <img src={user.userImage || '/default-avatar.png'} alt="avatar" className="user-avatar" /> {/* Hiển thị link ảnh từ user_image */}
+            {user.username}
+          </ListGroup.Item>
+          
           ))}
         </ListGroup>
       </div>
@@ -93,16 +97,19 @@ const AdminChatbox = () => {
       {selectedUser && (
         <div className="chat-section">
           <div className="chat-messages">
-            {(messages[selectedUser.userId] || []).map((msg, index) => (
-              <div
-                key={index}
-                className={`chat-bubble ${msg.senderId === 'admin' ? 'admin-message' : 'user-message'}`}
-              >
-                {msg.text}
-              </div>
-            ))}
-            <div ref={chatEndRef} />
-          </div>
+    {(messages[selectedUser.userId] || []).map((msg, index) => (
+      <div
+        key={index}
+        className={`chat-bubble ${msg.senderId === 'admin' ? 'admin-message' : 'user-message'}`}
+      >
+        {msg.senderId !== 'admin' && (
+          <img src={msg.senderImage || '/default-avatar.png'} alt="avatar" className="message-avatar" />
+        )}
+        {msg.text}
+      </div>
+    ))}
+    <div ref={chatEndRef} />
+  </div>
 
           <div className="chat-input">
             <Form.Control

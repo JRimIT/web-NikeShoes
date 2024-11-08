@@ -28,6 +28,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
+
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -206,8 +207,11 @@ const Header = () => {
       const res = await getUserByToken();
       // console.log(res.data);
       setUser(res.data);
+      console.log("USer: ", user);
       dispatch(UserSlice.actions.setUser(res.data));
     } catch (error) {
+      console.log("USer: ", "DEo co");
+
       console.log(error.response ? error.response.data.message : error.message);
     }
   };
@@ -237,7 +241,14 @@ const Header = () => {
     <>
       { isLoading ? (
         <div className="Loading-PageLogOut">
-          <ClipLoader cssOverride={override} color={"#000000"} loading={isLoading} size={50} aria-label="Loading Spinner" data-testid="loader" />
+          <ClipLoader
+            cssOverride={override}
+            color={"#000000"}
+            loading={isLoading}
+            size={50}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
         </div>
       ) : (
         <>

@@ -20,7 +20,9 @@ const WishlistPage = () => {
       // if (!userId) return;
       try {
         console.log(userId);
-        const response = await axios.get(`http://localhost:5000/api/wishlist/${userId}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/wishlist/${userId}`
+        );
         setWishlist(response.data || []);
       } catch (err) {
         console.error("Error fetching wishlist:", err.message);
@@ -47,7 +49,7 @@ const WishlistPage = () => {
     setOperationLoading(true); // Start loading
 
     try {
-      const { data } = await axios.post('http://localhost:5000/move-to-cart', {
+      const { data } = await axios.post("http://localhost:5000/move-to-cart", {
         userId: userId,
         productId: product.product_id,
         size: product.size,
@@ -66,6 +68,7 @@ const WishlistPage = () => {
         "Error moving product to cart:",
         error.response?.data || error
       );
+      console.log(error);
       toast.error("Failed to add product to cart.");
     } finally {
       setOperationLoading(false); // Stop loading
@@ -93,13 +96,18 @@ const WishlistPage = () => {
 
   return (
     <div className="wishlist-container">
-      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} closeOnClick={true}/>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        closeOnClick={true}
+      />
       <h2>Favourites</h2>
 
       {wishlist.length === 0 ? (
         <div className="text-center">
           <h4>No products in favourite.</h4>
-          <Button variant="primary" href="/products-men/All">
+          <Button variant="primary" href="/products-men/All" className="button">
             Shop Now
           </Button>
         </div>

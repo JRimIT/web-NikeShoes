@@ -1,34 +1,48 @@
-const express = require("express");
-const router = express.Router();
+const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
+dotenv.config();
 
-router.post("/send-reset-code", async (req, res) => {
-  const { email } = req.body;
+// Tạo transporter cho việc gửi email
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: false, // true cho 465, false cho các cổng khác
+  auth: {
+    user: process.env.SMTP_MAIL, // Địa chỉ email của bạn
+    pass: process.env.SMTP_PASSWORD, // Mật khẩu email của bạn
+  },
+});
 
-  const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+// Hàm tạo mã reset ngẫu nhiên gồm 6 chữ số
+const generateResetCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+// Hàm gửi mã reset qua email
+const sendResetCode = async (email) => {
+  if (!email) {
+    throw new Error("Email is required to send reset code.");
+  }
+  const resetCode = generateResetCode(); // Tạo mã reset
+
+  const subject = "Password Reset Code";
+  const message = `<p>Your password reset code is: <strong>${resetCode}</strong></p>`;
 
   const mailOptions = {
-    from: process.env.EMAIL_USER,
+    from: process.env.SMTP_MAIL,
     to: email,
-    subject: "Reset your password",
-    text: `Your reset code is: ${resetCode}`,
+    subject: subject,
+    html: message,
   };
 
   try {
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ code: resetCode });
+    await transporter.sendMail(mailOptions); // Gửi email
+    console.log("Reset code email sent successfully!");
+    return resetCode; // Trả về mã đã tạo để sử dụng sau
   } catch (error) {
     console.error("Error sending email:", error);
-    res.status(500).json({ error: "Failed to send reset code" });
+    throw new Error("Failed to send reset code.");
   }
-});
+};
 
-module.exports = router;
+module.exports = sendResetCode;

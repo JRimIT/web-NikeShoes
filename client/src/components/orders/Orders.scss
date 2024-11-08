@@ -1,111 +1,92 @@
-.order-container {
+.orders-container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  background-color: #f7f7f7;
 
-  .title {
-    text-align: center;
+  h2 {
+    font-weight: bold;
     font-size: 2rem;
+    margin-bottom: 30px;
     color: #333;
-    margin-bottom: 20px;
-  }
-
-  .no-orders {
-    text-align: center;
-    color: #999;
-    font-size: 1.2rem;
   }
 
   .orders-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
+    padding-bottom: 40px;
   }
 
-  .order-card {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .button{
+    border: 1px solid black;
+    background-color: black;
+    padding: 10px;
+    border-radius: 20px;
     cursor: pointer;
-    
+    text-decoration: none;
+    &:hover{
+        background-color: grey;
+        color: white;
+        transition: all 1s;
+    }
+  }
+
+  .order-item {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+
     &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
     }
 
     .order-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-
-      h3 {
+      h4 {
+        font-weight: bold;
         font-size: 1.2rem;
-        margin: 0;
       }
-
       .status {
-        padding: 5px 10px;
-        border-radius: 20px;
-        color: black;
-        font-size: 0.9rem;
-
-        &.shipped {
-          background-color: #28a745;
+        &.Pending {
+          color: orange;
         }
-
-        &.delivered {
-            background-color: aqua;
+        &.Shipped {
+          color: green;
         }
-
-        &.pending {
-          background-color: #ffc107;
-        }
-
-        &.processing {
-            background-color: blueviolet;
-        }
-
-        &.canceled {
-          background-color: #dc3545;
+        &.Cancelled {
+          color: red;
         }
       }
     }
 
     .order-details {
-      margin-top: 10px;
+      font-size: 1rem;
+      color: #555;
+      margin: 10px 0;
+    }
 
-      p {
-        margin: 5px 0;
+    .button-group {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+
+      .icon-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
         font-size: 1rem;
-
-        .amount {
-          font-weight: bold;
-          color: #000;
-        }
       }
     }
   }
 }
-.order-popup {
-  position: absolute; // Position the popup relative to the orders container
-  background-color: white; // Background color for the popup
-  border: 1px solid #ccc; // Optional: border for the popup
-  padding: 10px; // Padding inside the popup
-  border-radius: 5px; // Rounded corners
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); // Optional: shadow effect
-  z-index: 1000; // Ensure it's above other elements
-}
-
-// Adjust the positioning of the popup
-.orders-grid {
-  position: relative; // Needed to position the popup
-}
-
-.order-card {
-  position: relative; // Needed for absolute positioning of the popup
-  cursor: pointer; // Change cursor to pointer on hover
-}
-
-// You can add more styles as needed for the popup
-

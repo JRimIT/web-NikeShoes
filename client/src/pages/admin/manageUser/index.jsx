@@ -15,7 +15,7 @@ import InputBase from "@mui/material/InputBase";
 import SearchTag from "./tag/SearchTag";
 import { useEffect } from "react";
 import {
-  getAllOrderOfUser,
+  getOrderOfUser,
   getAllUser,
   getUserById,
 } from "../../../data/api/apiService";
@@ -59,7 +59,7 @@ const ManagerUser = () => {
   };
 
   const handleClickDetailBtn = async (id) => {
-    const res = await getAllOrderOfUser(id);
+    const res = await getOrderOfUser(id);
     const orderByUser = res.data.map((order) => ({
       id: order.order_id,
       ...order,

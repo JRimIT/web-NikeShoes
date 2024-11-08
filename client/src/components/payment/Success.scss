@@ -2,30 +2,39 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f0f8ff;
+    justify-content: flex-start; // Aligns content towards the top
+    min-height: 100vh;
+    background-color: #ffffff;
     text-align: center;
-}
+    padding: 40px 20px; // Adds padding for spacing from the top
 
-h1 {
-    color: #4caf50; /* Màu xanh lá cây cho thông báo thành công */
-}
+    h1 {
+        color: #333333;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
 
-p {
-    margin: 20px 0;
-}
+    p {
+        color: #555555;
+        margin: 15px 0;
+        font-size: 1.1rem;
+    }
 
-.back-home-button {
-    padding: 10px 20px;
-    background-color: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    .back-home-button {
+        padding: 10px 20px;
+        background-color: black;
+        color: white;
+        border: 1px solid black;
+        border-radius: 20px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s ease-in-out;
 
-    &:hover {
-        background-color: #45a049; /* Màu xanh đậm hơn khi hover */
+        &:hover {
+            background-color: grey;
+            color: white;
+            transition: all 1s;
+        }
     }
 }

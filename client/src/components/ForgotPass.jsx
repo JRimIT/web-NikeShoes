@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "../assets/styles/ForgotPass.css";
 import { validatePassword } from "../utils/validation";
 import axios from "axios";
+import { sendEmailResetPass } from "../data/api/apiService";
 
 const ForgotPass = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const ForgotPass = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isEditingEmail, setIsEditingEmail] = useState(false);
   const [generatedCode, setGeneratedCode] = useState("");
+  const [isCodeSent, setIsCodeSent] = useState(false);
 
   // Set background
   useEffect(() => {
@@ -25,21 +27,30 @@ const ForgotPass = () => {
   }, []);
 
   const handleSendCode = async () => {
+    if (isCodeSent) return;
+    if (!email) {
+      setErrorMessage("Please enter an email address.");
+      return;
+    }
     try {
       const response = await axios.post(
-        "http://localhost:5000/send-reset-code",
+        "http://localhost:5000/auth/email/sendResetCode",
         { email }
       );
-      setGeneratedCode(response.data.code);
+      setGeneratedCode(response.data.resetCode);
       setSuccessMessage("Code has been sent to your email!");
       setErrorMessage("");
+      setIsCodeSent(true); // Set to true after sending
     } catch (error) {
-      setErrorMessage("Failed to send the code. Please check your email.");
+      setErrorMessage(
+        error.response?.data?.message ||
+          "Failed to send the code. Please check your email."
+      );
       setSuccessMessage("");
     }
   };
 
-  // Gọi send code khi email thay đổi
+  // Call send code when edit email
   useEffect(() => {
     if (email) handleSendCode();
   }, [email]);
@@ -56,8 +67,9 @@ const ForgotPass = () => {
       return;
     }
     try {
-      await axios.post("http://localhost:5000/reset-password", {
+      await axios.post("http://localhost:5000/auth/reset-password", {
         email,
+        code,
         newPassword,
       });
       alert("Password has been successfully updated!");
@@ -67,7 +79,11 @@ const ForgotPass = () => {
     }
   };
 
-  const handleEditEmail = () => setIsEditingEmail(true);
+  // Reset isCodeSent when editing email
+  const handleEditEmail = () => {
+    setIsEditingEmail(true);
+    setIsCodeSent(false); // Allow to send code again
+  };
   const handleCancelEditEmail = () => {
     setIsEditingEmail(false);
     setEmail(initialEmail);

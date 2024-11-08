@@ -8,17 +8,23 @@ const bodyParser = require("body-parser");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
 const { registerUser, loginUser } = require("./controller/authController");
-const sendResetPassword = require("./controller/sendResetCode");
+const authRoutes = require("./routes/auth");
+
 const db = require("./config/db");
-const productRoutes = require("./routes/products"); // Import đúng router
+const productRoutes = require("./routes/products");
 const handleSocket = require("./sockets/chatSocket");
 const cartRoutes = require("./routes/cart");
 const wishlistRoutes = require("./routes/wishlist");
 const reviewRoutes = require("./routes/review");
 const adminRoutes = require("./routes/admin");
-const userRoutes = require("./routes/user");;
-const { authenticateJWT, checkRole } = require("./middlewares/authMiddlewares");
-
+const userRoutes = require("./routes/user");
+const {
+  authenticateJWT,
+  checkRole,
+  checkBlacklist,
+} = require("./middlewares/authMiddlewares");
+const cron = require("node-cron");
+const axios = require("axios");
 const routerAPI = express.Router();
 
 const app = express();
@@ -53,25 +59,29 @@ const io = new Server(server, {
 handleSocket(io);
 
 // Routes cho sản phẩm và các routes khác
-
+app.get("/", (req, res) => {
+  res.json("Hello This is Backend");
+});
 app.use("/products", productRoutes);
 app.post("/register", upload.single("user_image"), registerUser);
 app.post("/login", loginUser);
+
 // app.get("/products/:id", getProductById);
-app.use(sendResetPassword); // Route cho reset password
+// app.use(sendResetPassword); // Route cho reset password
 // Sử dụng routes cho sản phẩm (middleware đúng)
 // app.use("/', cartRoutes);
-// // app.use('/", cartRoutes); 
+// // app.use('/", cartRoutes);
 // app.use('/', wishlistRoutes);
 // app.use("/", reviewRoutes);
+app.use("/auth", authRoutes);
 
 // app.use('/', adminRoutes);
-
+app.use("/", authenticateJWT, checkBlacklist);
 app.use("/", authenticateJWT, cartRoutes); // Cart routes require authentication
-app.use("/", authenticateJWT, wishlistRoutes);  // Wishlist routes require authentication
-app.use("/", authenticateJWT, reviewRoutes);  // Review routes require authentication
-app.use("/api/user", authenticateJWT, userRoutes);  // Review routes require authentication
-app.use('/', authenticateJWT, checkRole('2'), adminRoutes);  // Admin routes require authentication
+app.use("/", authenticateJWT, wishlistRoutes); // Wishlist routes require authentication
+app.use("/", authenticateJWT, reviewRoutes); // Review routes require authentication
+app.use("/api/user", authenticateJWT, userRoutes); // Review routes require authentication
+app.use("/", authenticateJWT, checkRole("2"), adminRoutes); // Admin routes require authentication
 
 // app.use("/api/user", userRoutes);
 

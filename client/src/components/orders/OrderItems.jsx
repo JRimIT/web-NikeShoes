@@ -1,112 +1,40 @@
-// // src/components/OrderItem/OrderItem.jsx
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-// import axiosClient from "../../api/axiosClient";
-// import "./OrderItems.scss";
-
-// const OrderItem = () => {
-//     const { id } = useParams();
-//     const [orderItem, setOrderItem] = useState(null);
-//     const [loading, setLoading] = useState(true);
-//     const [error, setError] = useState(null);
-
-//     const END_POINT = {
-//         ORDER_ITEMS: "order-items"
-//     }
-
-//     const fetchOrderItem = async () => {
-//         try {
-//             const response = await axiosClient.get(`${END_POINT.ORDER_ITEMS}/${id}`);
-//             setOrderItem(response);
-//         } catch (error) {
-//             setError("Error fetching order item details");
-//             console.error("Error fetching order item", error);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     useEffect(() => {
-//         fetchOrderItem();
-//     }, [id]);
-
-//     if (loading) return <p>Loading order details...</p>;
-//     if (error) return <p className="error-message">{error}</p>;
-
-//     return (
-//         <div className="order-item-container">
-//             <h2>Order Item Details</h2>
-//             {orderItem ? (
-//                 <div className="order-item-details">
-//                     <p><strong>Order ID:</strong> {orderItem.orderId}</p>
-//                     <p><strong>Product Name:</strong> {orderItem.product.name}</p>
-//                     <p><strong>Quantity:</strong> {orderItem.quantity}</p>
-//                     <p><strong>Price:</strong> ${orderItem.price}</p>
-//                     <p><strong>Total:</strong> ${orderItem.order.totalAmount}</p>
-//                     <p><strong>Status:</strong> {orderItem.order.orderStatus}</p>
-//                 </div>
-//             ) : (
-//                 <p>Order details not found.</p>
-//             )}
-//         </div>
-//     );
-// };
-
-// export default OrderItem;
-
+// src/components/OrderItem/OrderItem.jsx
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axiosClient from "../../api/axiosClient";
 import "./OrderItems.scss";
 import { CartContext } from "../../context/CartContext";
-import axios from "axios";
 
 const OrderItem = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const [orderItem, setOrderItem] = useState(null);
+    const [orderItems, setOrderItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [userId, setUserId] = useState(null);
     const { cartRequest } = useContext(CartContext);
 
     const END_POINT = {
-        CARTS: "carts",
-        ORDERS: "orders",
         ORDER_ITEMS: "order-items"
-    }
+    };
 
     useEffect(() => {
-        const userData = JSON.parse(localStorage.getItem("user")); // Get user data from localStorage
-        if (userData && userData.user_id) {
-          setUserId(userData.user_id); // Set userId from userData
-          console.log(userData.user_id);
-        }
-    }, []);
-
-    useEffect(() => {
-        const fetchOrderItem = async () => {
+        const fetchOrderItems = async () => {
             try {
                 const response = await axiosClient.get(`${END_POINT.ORDER_ITEMS}/${id}`);
-                setOrderItem(response);
+                setOrderItems(response); // Assuming response is an array of order items
             } catch (error) {
-                setError("Error fetching order item details");
-                console.error("Error fetching order item", error);
+                setError("Error fetching order items");
+                console.error("Error fetching order items", error);
             } finally {
                 setLoading(false);
             }
         };
-        fetchOrderItem();
+        fetchOrderItems();
     }, [id]);
 
     const handlePayment = async () => {
-        // const response = await axiosClient.delete(`${END_POINT.ORDERS}/${id}`);
-        // console.log(response);
-
-        const cartResponse = await axiosClient.get(`${END_POINT.CARTS}/${userId}`)
-        console.log(cartResponse);
-        
-        if (orderItem && orderItem.order.orderStatus === 'pending') {
+        const pendingOrder = orderItems.find(item => item.order.orderStatus === "pending");
+        if (pendingOrder) {
             navigate("/cart");
         }
     };
@@ -116,25 +44,26 @@ const OrderItem = () => {
 
     return (
         <div className="order-item-container">
-            <h2>Order Item Details</h2>
-            {orderItem ? (
-                <div className="order-item-details">
-                    <p><strong>Order ID:</strong> {orderItem.orderId}</p>
-                    <p><strong>Product Name:</strong> {orderItem.product.name}</p>
-                    <p><strong>Quantity:</strong> {orderItem.quantity}</p>
-                    <p><strong>Price:</strong> ${orderItem.price}</p>
-                    <p><strong>Total:</strong> ${orderItem.order.totalAmount}</p>
-                    <p><strong>Status:</strong> {orderItem.order.orderStatus}</p>
-                    {orderItem.order.orderStatus === 'pending' && (
-                        <button onClick={handlePayment}>Continue to Payment</button>
-                    )}
-                </div>
+            <h2>Order Items</h2>
+            {orderItems.length > 0 ? (
+                orderItems.map(item => (
+                    <div key={item.orderItemId} className="order-item-details">
+                        <p><strong>Order ID:</strong> {item.orderId}</p>
+                        <p><strong>Product Name:</strong> {item.product.name}</p>
+                        <p><strong>Quantity:</strong> {item.quantity}</p>
+                        <p><strong>Price:</strong> ${item.price}</p>
+                        <p><strong>Total:</strong> ${item.order.totalAmount}</p>
+                        <p><strong>Status:</strong> {item.order.orderStatus}</p>
+                    </div>
+                ))
             ) : (
-                <p>Order details not found.</p>
+                <p>Order items not found.</p>
+            )}
+            {orderItems.some(item => item.order.orderStatus === "pending") && (
+                <button onClick={handlePayment}>Continue to Payment</button>
             )}
         </div>
     );
 };
 
 export default OrderItem;
-

@@ -54,6 +54,8 @@ instance.interceptors.response.use(
         window.location.href = "/DenyAccess";
       } else if (message === "Invalid token.") {
         window.location.href = "/DenyAccess";
+      } else if (message === "BANED ,You can not access this website!") {
+        window.location.href = "/banedPage";
       }
     }
 

@@ -49,7 +49,7 @@ router.get('/api/wishlist/:userId', (req, res) => {
   const { userId } = req.params;
 
   if (!userId) {
-      return res.status(400).json({ message: 'User ID is required.' });
+    return res.status(400).json({ message: 'User ID is required.' });
   }
 
   const query = `
@@ -64,12 +64,12 @@ router.get('/api/wishlist/:userId', (req, res) => {
   `;
 
   db.query(query, [userId], (err, rows) => {
-      if (err) {
-          console.error('Error fetching wishlist items:', err);
-          return res.status(500).json({ message: 'Error fetching wishlist items.' });
-      }
+    if (err) {
+      console.error('Error fetching wishlist items:', err);
+      return res.status(500).json({ message: 'Error fetching wishlist items.' });
+    }
 
-      res.json(rows);
+    res.json(rows);
   });
 });
 
