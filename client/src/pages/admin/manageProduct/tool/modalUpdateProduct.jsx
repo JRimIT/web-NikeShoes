@@ -14,7 +14,7 @@ const ModalUpdateProduct = (props) => {
     <>
       <Modal show={show} onHide={handleClose} size="xl">
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Update</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <FormForUpdate
