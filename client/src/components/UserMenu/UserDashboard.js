@@ -7,32 +7,31 @@ import Header from "../header/Header";
 function UserDashboard() {
   return (
     <>
-      {/* Phần Header */}
+      {/*  Header */}
       <Box
         sx={{
           position: "fixed",
           top: 0,
           left: 0,
           width: "100%",
-          height: "60px", // Chiều cao cố định của Header
+          height: "60px",
           zIndex: 10,
-          backgroundColor: "#ffffff", // Màu nền cho Header
-          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)", // Đổ bóng nhẹ cho Header
+          backgroundColor: "#ffffff",
+          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
         }}
       >
         <Header />
       </Box>
-
-      {/* Phần bố cục chính */}
+      {/* Main */}
       <Box sx={{ display: "flex" }}>
-        {/* Sidebar bên trái */}
+        {/* Sidebar*/}
         <Box
           sx={{
             position: "fixed",
-            top: "60px", // Bên dưới Header
+            top: "60px",
             left: 0,
-            width: "200px", // Chiều rộng Sidebar
-            height: "calc(100vh - 60px)", // Chiều cao trừ phần Header
+            width: "200px",
+            height: "calc(100vh - 60px)",
             overflowY: "auto",
             backgroundColor: "#f4f4f4",
             zIndex: 5,
@@ -41,14 +40,14 @@ function UserDashboard() {
           <SidebarUser />
         </Box>
 
-        {/* Phần nội dung chính bên phải */}
+        {/* Content */}
         <Box
           sx={{
-            marginLeft: "200px", // Để phần nội dung bên cạnh Sidebar
+            marginLeft: "200px",
             padding: "20px",
-            paddingTop: "130px", // Tạo khoảng cách cho Header
+            paddingTop: "130px",
             flexGrow: 1,
-            maxWidth: "calc(100% - 200px)", // Chiếm hết phần trống còn lại
+            maxWidth: "calc(100% - 200px)",
           }}
         >
           <Outlet />

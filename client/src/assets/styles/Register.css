@@ -165,41 +165,75 @@ i {
   transition: 0.3s;
 }
 .login-container {
-  display: flex; /* Sử dụng flexbox để sắp xếp các phần tử trên cùng một hàng */
-  justify-content: space-between; /* Tạo khoảng cách giữa các phần tử */
-  align-items: center; /* Căn giữa theo chiều dọc */
-  margin-top: 10px; /* Thêm khoảng cách phía trên nếu cần */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .login {
-  text-align: right; /* Căn phải cho link */
-  margin-left: 10px; /* Thêm khoảng cách giữa text và link */
+  text-align: right;
+  margin-left: 10px;
 }
 
 .login a {
   font-weight: 500;
-  text-decoration: none; /* Nếu bạn muốn bỏ gạch chân */
+  text-decoration: none;
 }
 
 /* Avatar */
 .img-preview-container {
-  border: 2px dashed #ccc; /* Đường viền cho khung preview */
-  border-radius: 5px; /* Bo góc */
-  padding: 10px; /* Khoảng cách giữa ảnh và đường viền */
-  margin: 10px 0; /* Khoảng cách giữa khung preview và các phần tử khác */
-  height: 200px; /* Đặt chiều cao cho khung */
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden; /* Ẩn phần ảnh bị tràn */
+  overflow: hidden;
 }
 
 .img-preview {
-  width: 100%; /* Đặt chiều rộng của ảnh bằng chiều rộng khung */
-  height: 100%; /* Đặt chiều cao của ảnh bằng chiều cao khung */
-  object-fit: cover; /* Đảm bảo ảnh bao phủ khung mà không bị biến dạng */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .preview-text {
   color: #888; /* Màu chữ khi không có ảnh */
+}
+/* Alert */
+/* styles for custom alert */
+.custom-alert {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+
+/* styles for success alert */
+.success-alert {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Close button */
+.alert-close {
+  margin-left: auto;
+  cursor: pointer;
+  font-weight: bold;
 }

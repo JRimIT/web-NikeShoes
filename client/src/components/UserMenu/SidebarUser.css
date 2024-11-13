@@ -1,14 +1,14 @@
 .sidebarUser {
-  width: 200px; /* Kích thước chiều rộng thanh sidebar */
-  background-color: #f5f5f5; /* Màu nền */
-  padding: 20px; /* Padding cho thanh sidebar */
-  border-right: 1px solid #ddd; /* Đường viền bên phải */
-  position: fixed; /* Giữ vị trí cố định */
-  height: calc(100% - 64px); /* Chiều cao bằng 100% trừ chiều cao của header */
-  top: 125px; /* Đặt ở phía dưới header (giả sử header cao 64px) */
-  left: 0; /* Đặt ở phía bên trái */
-  z-index: 1000; /* Đặt z-index để hiển thị phía trên các thành phần khác */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Đổ bóng cho thanh sidebar */
+  width: 200px;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  position: fixed;
+  height: calc(100% - 64px);
+  top: 125px;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebarUser h2 {
@@ -17,27 +17,27 @@
 }
 
 .sidebarUser ul {
-  list-style: none; /* Không có dấu đầu dòng */
-  padding: 0; /* Không có padding */
+  list-style: none;
+  padding: 0;
 }
 
 .sidebarUser li {
-  margin-bottom: 20px; /* Khoảng cách giữa các mục */
-  display: flex; /* Sử dụng flexbox để căn chỉnh icon và chữ */
-  align-items: center; /* Căn giữa theo chiều dọc */
-  cursor: pointer; /* Hiển thị con trỏ như một button */
-  padding: 10px; /* Thêm padding xung quanh mỗi mục */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền */
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px;
+  transition: background-color 0.3s;
 }
 .sidebarUser li svg {
-  font-size: 24px; /* Kích thước biểu tượng (tăng lên) */
-  margin-right: 10px; /* Khoảng cách giữa biểu tượng và chữ */
+  font-size: 24px;
+  margin-right: 10px;
 }
 
 .sidebarUser li:hover {
-  background-color: #e0e0e0; /* Màu nền khi hover */
+  background-color: #e0e0e0;
 }
 
 .sidebarUser li span {
-  margin-left: 15px; /* Khoảng cách giữa icon và chữ */
+  margin-left: 15px;
 }

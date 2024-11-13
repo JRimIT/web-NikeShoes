@@ -19,7 +19,7 @@ import {
 } from "../../../utils/validation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import axios from "../../../utils/axios.customize";
 
 function AdminProfile() {
   const [user, setUser] = useState(null);
