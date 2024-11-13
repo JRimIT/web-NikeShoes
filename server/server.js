@@ -9,7 +9,7 @@ const multer = require("multer");
 const bcrypt = require("bcryptjs");
 const { registerUser, loginUser } = require("./controller/authController");
 const authRoutes = require("./routes/auth");
-
+const discountRoutes = require('./routes/discounts');
 const db = require("./config/db");
 const productRoutes = require("./routes/products");
 const handleSocket = require("./sockets/chatSocket");
@@ -65,6 +65,7 @@ app.get("/", (req, res) => {
 app.use("/products", productRoutes);
 app.post("/register", upload.single("user_image"), registerUser);
 app.post("/login", loginUser);
+app.use('/api/discount', discountRoutes);
 
 // app.get("/products/:id", getProductById);
 // app.use(sendResetPassword); // Route cho reset password

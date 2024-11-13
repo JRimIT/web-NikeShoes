@@ -30,19 +30,25 @@ const Register = () => {
   const [user_image, setUserImage] = useState(null);
   const [role_id] = useState(1); // Default 1
   const [errorMessage, setErrorMessage] = useState("");
-  const [previewImage, setPreviewImage] = useState(null); // Thêm state cho preview
+  // const [previewImage, setPreviewImage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const handlePreviewImage = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setUserImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result); // Lưu trữ ảnh đã preview
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleCloseAlert = () => {
+    setErrorMessage("");
+    setSuccessMessage("");
   };
+
+  // const handlePreviewImage = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setUserImage(file);
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setPreviewImage(reader.result); // Lưu trữ ảnh đã preview
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -103,7 +109,19 @@ const Register = () => {
         <div className="login-header">
           <span>SIGN UP</span>
         </div>
-        {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+        {(errorMessage || successMessage) && (
+          <div
+            className={`custom-alert ${
+              errorMessage ? "error-alert" : "success-alert"
+            }`}
+          >
+            {errorMessage || successMessage}
+            <span className="alert-close" onClick={handleCloseAlert}>
+              &times;
+            </span>
+          </div>
+        )}
+        {/* {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>} */}
         <form onSubmit={handleRegister}>
           <div className="input_box">
             <input
@@ -114,7 +132,7 @@ const Register = () => {
               required
             />
             <label htmlFor="username" className="label">
-              Username
+              Username*
             </label>
           </div>
           <div className="input_box">
@@ -126,7 +144,7 @@ const Register = () => {
               required
             />
             <label htmlFor="email" className="label">
-              Email
+              Email*
             </label>
           </div>
           <div className="input_box">
@@ -138,7 +156,7 @@ const Register = () => {
               required
             />
             <label htmlFor="password" className="label">
-              Password
+              Password*
             </label>
           </div>
           <div className="input_box">
@@ -150,7 +168,7 @@ const Register = () => {
               required
             />
             <label htmlFor="phone" className="label">
-              Phone
+              Phone*
             </label>
           </div>
           {/* Address */}

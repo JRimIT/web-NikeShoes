@@ -2,7 +2,7 @@ const db = require("../config/db");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const upload = require("../middlewares/multer"); // Import cấu hình multer
-// Function Login
+// Function Register
 const registerUser = (req, res) => {
   console.log("Received registration data:", req.body);
 
@@ -108,13 +108,11 @@ const loginUser = (req, res) => {
         // expiresIn: 5,
         expiresIn: "1h",
       });
-      console.log('Token nhận từ header:', token);
+      console.log("Token nhận từ header:", token);
 
       res.send({ message: "Login successful!", user, token });
     });
   });
-
-
 };
 
 module.exports = { registerUser, loginUser };
