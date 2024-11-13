@@ -12,7 +12,7 @@ const PayPalCheckout = () => {
     const location = useLocation();
     const { cartRequest } = location.state || {};
     const { orderId } = useContext(CartContext);
-    const { orders } = useContext(CartContext);
+    const { setCaptureId } = useContext(CartContext);
     const navigate = useNavigate();    
     
     useEffect(() => {
@@ -34,9 +34,6 @@ const PayPalCheckout = () => {
                         try {
                             const total = parseFloat((cartRequest.TotalAmount / 25405).toFixed(2)).toString();
                             const response = await axiosClient.post(`paypal/order?amount=${total}`);
-                            
-                            const orderResponse = await axiosClient.post(`orders/`, cartRequest);
-                            console.log('Order created: ', orderResponse);
 
                             if (response.id) {
                                 const orderID = response.id;
@@ -60,10 +57,35 @@ const PayPalCheckout = () => {
                                 throw new Error("No order ID found.");
                             }
                             const captureResponse = await axiosClient.post(`paypal/capture?orderId=${approvedOrderId}`);
-                            
+                            // console.log(captureResponse);
+                            // console.log(captureResponse.purchase_units);
+                            // Assuming `response` is the object from the API response
+                            if (captureResponse.purchase_units && captureResponse.purchase_units.length > 0) {
+                                // Accessing the first purchase unit
+                                const firstPurchaseUnit = captureResponse.purchase_units[0];
+
+                                // Check if `payments` and `captures` exist and have data
+                                if (firstPurchaseUnit.payments && firstPurchaseUnit.payments.captures && firstPurchaseUnit.payments.captures.length > 0) {
+                                    // Accessing the `id` from the first capture in `captures`
+                                    const captureId = firstPurchaseUnit.payments.captures[0].id;
+
+                                    console.log('Capture ID:', captureId);
+                                    setCaptureId(captureId);
+                                } else {
+                                    console.log('No captures found in the purchase units.');
+                                }
+                            } else {
+                                console.log('No purchase units found.');
+                            }
+
                             if (captureResponse.status === 200) {
                                 console.log("Capture successful, proceeding with patch and delete...");  
+                                console.log(captureResponse.status);
                             }
+
+                            const orderResponse = await axiosClient.post(`orders/`, cartRequest);
+                            console.log('Order created: ', orderResponse);
+
                             await axiosClient.delete(`carts/${cartRequest.CartId}`);
                             console.log(`Cart ${cartRequest.CartId} deleted successfully`);
 

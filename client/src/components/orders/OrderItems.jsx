@@ -54,6 +54,7 @@ const OrderItem = () => {
                         <p><strong>Price:</strong> ${item.price}</p>
                         <p><strong>Total:</strong> ${item.order.totalAmount}</p>
                         <p><strong>Status:</strong> {item.order.orderStatus}</p>
+                        <img src={item.product.primaryImage}/>
                     </div>
                 ))
             ) : (
