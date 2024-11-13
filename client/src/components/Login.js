@@ -26,7 +26,6 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
 
-
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -113,8 +112,9 @@ const Login = () => {
         </div>
         {(errorMessage || successMessage) && (
           <div
-            className={`custom-alert ${errorMessage ? "error-alert" : "success-alert"
-              }`}
+            className={`custom-alert ${
+              errorMessage ? "error-alert" : "success-alert"
+            }`}
           >
             {errorMessage || successMessage}
             <span className="alert-close" onClick={handleCloseAlert}>

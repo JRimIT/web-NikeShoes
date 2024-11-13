@@ -133,17 +133,22 @@ const Orders = () => {
         const fetchData = async () => {
             if (userId) {
                 try {
-                const response = await axiosClient.get(`${END_POINT.ORDERS}/${userId}`);
-                setOrders(response);
+                    const response = await axiosClient.get(`${END_POINT.ORDERS}/${userId}`);
+                    setOrders(response);
+                    console.log(response);
+                    // Extract orderId values and store them in localStorage
+                    // const orderIds = response.map(order => order.orderId);
+                    localStorage.setItem('orderIds', JSON.stringify(orders));
+    
                 } catch (error) {
-                console.error("Error fetching data", error);
+                    console.error("Error fetching data", error);
                 }
             }
         };
-
+    
         fetchData();
     }, [userId]);
-
+    
     // View order details
     const handleViewOrder = (orderId) => {
         navigate(`/order-items/${orderId}`);

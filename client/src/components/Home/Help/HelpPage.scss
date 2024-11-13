@@ -447,8 +447,8 @@ body {
 
     .contact-options {
       display: flex;
-      justify-content: space-between;
-      gap: 1rem;
+      justify-content: center;
+      gap: 7rem;
 
       .contact-option {
         @include button-reset;

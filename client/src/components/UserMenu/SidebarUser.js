@@ -12,7 +12,8 @@ const SidebarUser = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    // localStorage.removeItem("user");
+    localStorage.clear();
     navigate("/");
   };
 
@@ -24,10 +25,14 @@ const SidebarUser = () => {
           <FiUser />
           <span>Profile</span>
         </li>
-        <li onClick={() => navigate("/dashboard/history")}>
+        <li onClick={() => navigate("/dashboard/order")}>
+          <IoBagCheckOutline />
+          <span>Orders</span>
+        </li>
+        {/* <li onClick={() => navigate("/dashboard/history")}>
           <IoBagCheckOutline />
           <span>Transaction history</span>
-        </li>
+        </li> */}
         <li onClick={() => navigate("/dashboard/cart")}>
           <BsCartCheck /> <span>Shopping cart</span>
         </li>
@@ -35,14 +40,14 @@ const SidebarUser = () => {
           <IoBagHandleOutline />
           <span>Favourites</span>
         </li>
-        <li onClick={() => navigate("/dashboard/inbox")}>
+        {/* <li onClick={() => navigate("/dashboard/inbox")}>
           <HiOutlineChatAlt2 />
           <span>Inbox</span>
         </li>
         <li onClick={() => navigate("/dashboard/settings")}>
           <IoSettingsOutline />
           <span>Settings</span>
-        </li>
+        </li> */}
         <li onClick={handleLogout}>
           <FiLogOut />
           <span>Log out</span>

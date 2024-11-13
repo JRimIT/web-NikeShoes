@@ -270,10 +270,10 @@ const HelpPage = () => {
               <Phone aria-hidden="true" />
               <span>Call Us</span>
             </button>
-            <button className="quick-help-option" onClick={() => setShowEmailForm(true)}>
+            {/* <button className="quick-help-option" onClick={() => setShowEmailForm(true)}>
               <Mail aria-hidden="true" />
               <span>Email Support</span>
-            </button>
+            </button> */}
             <button className="quick-help-option" onClick={() => setShowMap(true)}>
               <MapPin aria-hidden="true" />
               <span>Find Us</span>
@@ -327,12 +327,12 @@ const HelpPage = () => {
             <div className="contact-options">
               <button className="contact-option" onClick={() => setShowCallModal(true)}>
                 <Phone aria-hidden="true" />
-                <span>Call Us</span>
+                <span>Phone Call </span>
               </button>
-              <button className="contact-option" onClick={() => setShowEmailForm(true)}>
+              {/* <button className="contact-option" onClick={() => setShowEmailForm(true)}>
                 <Mail aria-hidden="true" />
-                <span>Email  Support</span>
-              </button>
+                <span>Email Support</span>
+              </button> */}
               <button className="contact-option" onClick={() => setShowMap(true)}>
                 <MapPin aria-hidden="true" />
                 <span>Visit Store</span>
@@ -366,7 +366,7 @@ const HelpPage = () => {
         </div>
       )}
 
-      {showEmailForm && (
+      {/* {showEmailForm && (
         <div className="modal-overlay" onClick={() => setShowEmailForm(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <button className="close-button" onClick={() => setShowEmailForm(false)} aria-label="Close">
@@ -393,7 +393,7 @@ const HelpPage = () => {
             </form>
           </div>
         </div>
-      )}
+      )} */}
 
       {showCallModal && (
         <div className="modal-overlay" onClick={() => callStatus === 'idle' && setShowCallModal(false)}>
@@ -407,7 +407,7 @@ const HelpPage = () => {
             <p>Our customer support team is available to assist you:</p>
             <p className="phone-number">0905890604</p>
             <p>Hours of operation: Monday-Sunday, 8AM-8PM</p>
-            <div className="call-status">
+            {/* <div className="call-status">
               {callStatus === 'idle' && (
                 <button className="action-button" onClick={handleCallButtonClick}>
                   Start Call
@@ -435,12 +435,12 @@ const HelpPage = () => {
                   <p>Duration: {formatCallDuration(callDuration)}</p>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       )}
 
-      {showScrollToTop && (
+      {/* {showScrollToTop && (
         <button 
           className="scroll-to-top" 
           onClick={scrollToTop}
@@ -448,7 +448,7 @@ const HelpPage = () => {
         >
           <ArrowUp />
         </button>
-      )}
+      )} */}
     </div>
   );
 };

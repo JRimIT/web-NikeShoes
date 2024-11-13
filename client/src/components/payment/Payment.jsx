@@ -11,19 +11,26 @@ const PayPalCheckout = () => {
     // const { cartRequest } = useContext(CartContext);
     const location = useLocation();
     const { cartRequest } = location.state || {};
-    const { orderId } = useContext(CartContext);
+    // const { orderId } = useContext(CartContext);
+    const orderId = localStorage.getItem('orderId');
     const { setCaptureId } = useContext(CartContext);
-    const navigate = useNavigate();    
+    const navigate = useNavigate();
+    const [total, setTotal] = useState("");
     
     useEffect(() => {
         const fetchData = async () => {
-            
+            const currencyResponse = await fetch('https://api.exchangerate-api.com/v4/latest/VND');
+            const data = await currencyResponse.json();
+            const rate = data.rates.USD; // Conversion rate for VND to USD
+            const total = parseFloat((cartRequest.TotalAmount * rate).toFixed(2)).toString();
+            setTotal(total);
+
             const script = document.createElement('script');
             script.src = `https://www.paypal.com/sdk/js?client-id=${payPalClientId}&currency=USD`;
             script.async = true;
            
             script.onload = async () => {
-                 // Render PayPal button
+                // Render PayPal button
                 window.paypal.Buttons({
                     style: {
                         layout: 'vertical',
@@ -32,7 +39,6 @@ const PayPalCheckout = () => {
                     },
                     createOrder: async () => {
                         try {
-                            const total = parseFloat((cartRequest.TotalAmount / 25405).toFixed(2)).toString();
                             const response = await axiosClient.post(`paypal/order?amount=${total}`);
 
                             if (response.id) {
@@ -89,6 +95,10 @@ const PayPalCheckout = () => {
                             await axiosClient.delete(`carts/${cartRequest.CartId}`);
                             console.log(`Cart ${cartRequest.CartId} deleted successfully`);
 
+                            const storedOrderIds = JSON.parse(localStorage.getItem('orderIds'));
+                            console.log(storedOrderIds);
+
+                            // chua fix
                             // console.log(orderId);
                             // await axiosClient.patch(`orders/${orderId}`, { orderStatus: "processing"});
                             // console.log("Order status updated successfully");
@@ -110,12 +120,12 @@ const PayPalCheckout = () => {
                 paypalButtonsContainer.innerHTML = ''; // Clean up the buttons
             }
         };
-    }, [payPalClientId, cartRequest, navigate, orderId]);
+    }, [payPalClientId, cartRequest, navigate, orderId, setTotal]);
 
     return (
         <div className="checkout-container">
             <h4>Order Summary</h4>
-            <p>Amount: <strong>{(cartRequest.TotalAmount / 25405).toFixed(2)} USD</strong></p>
+            <p>Amount: <strong>{total} USD</strong></p>
             <div id="paypal-button-container" className="paypal_button" ></div>
             <button className="return-cart-button" onClick={() => navigate('/cart')}>
                 Return to Cart

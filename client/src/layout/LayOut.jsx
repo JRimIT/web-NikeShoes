@@ -170,6 +170,7 @@ const LayOut = () => {
           <Route path="profile" element={<UserProfile />} />
           <Route path="cart" element={<CartPage />} />
           <Route path="wishlist" element={<WishlistPage />} />
+          <Route path="order" element={<Orders></Orders>} />
           {/* <Route path="history" element={<HistoryPage />} />
           <Route path="setting" element={<SettingPage />} /> */}
         </Route>

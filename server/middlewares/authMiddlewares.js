@@ -63,6 +63,14 @@ const authenticateJWT = (req, res, next) => {
   if (req.originalUrl.startsWith('/api/reviews') && token === "null") {
     return next();
   }
+  
+  if (req.originalUrl.startsWith('/api/wishlist')) {
+    return next();
+  }
+
+  if (req.originalUrl.startsWith('/api/cart')) {
+    return next();
+  }
 
   // Check if authHeader exists and contains a valid token format
   if (authHeader && authHeader.startsWith("Bearer ")) {

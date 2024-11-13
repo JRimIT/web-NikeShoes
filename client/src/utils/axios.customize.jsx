@@ -40,6 +40,12 @@ instance.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       const message = error.response.data?.message;
 
+      if (message === "Invalid access token!") {
+        // Clear the token from local storage and redirect to the login page
+        localStorage.clear();
+        window.location.href = "/DenyAccess"; // Redirect to login
+      }
+
       if (message === "Token expired. Please login again.") {
         alert(message);
         // Clear the token from local storage and redirect to the login page
@@ -47,6 +53,8 @@ instance.interceptors.response.use(
         window.location.href = "/login"; // Redirect to login
       }
     }
+
+    
 
     if (error.response && error.response.status === 403) {
       const message = error.response.data?.message;
