@@ -11,17 +11,21 @@
     color: #333;
   }
 
-  .button{
+  .button {
     border: 1px solid black;
     background-color: black;
     padding: 10px;
     border-radius: 20px;
     cursor: pointer;
     text-decoration: none;
-    &:hover{
-        background-color: grey;
-        color: white;
-        transition: all 1s;
+    color: white;
+    display: inline-block;
+    text-align: center;
+
+    &:hover {
+      background-color: grey;
+      color: white;
+      transition: all 0.3s ease;
     }
   }
 
@@ -44,7 +48,7 @@
       width: 80px;
       height: 80px;
       border-radius: 4px;
-      object-fit: cover; // Ensure images fit nicely
+      object-fit: cover;
     }
 
     .item-details {
@@ -52,7 +56,7 @@
       margin-left: 15px;
 
       h5 {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         font-weight: 600;
         margin: 0 0 5px;
       }
@@ -69,14 +73,19 @@
       align-items: center;
 
       .quantity-control {
-        width: 60px; // Reduced width for a better fit
-        margin-right: 10px; // Space between quantity and delete button
+        width: 60px;
+        margin-right: 10px;
       }
 
       .remove-button {
         cursor: pointer;
-        color: #dc3545; // Bootstrap danger color
+        color: #dc3545;
         font-size: 1.5rem;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: #c82333;
+        }
       }
     }
   }
@@ -86,32 +95,94 @@
     border-radius: 8px;
     padding: 20px;
     background-color: #f9f9f9;
-    max-height: 400px; // Optional: Set a max height to avoid it growing too tall
-    overflow: hidden; // Hide overflow if content exceeds max height
     display: flex;
-    flex-direction: column; // Ensure items stack vertically
-    justify-content: flex-start; // Align items at the top
-  
+    flex-direction: column;
+    justify-content: flex-start;
+
     h4 {
       margin-bottom: 15px;
       font-weight: bold;
       font-size: 1.5rem;
     }
-  
+
     p {
       margin: 5px 0;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
+      display: flex;
+      justify-content: space-between;
+
+      strong {
+        font-weight: bold;
+        color: #333;
+      }
     }
-  
+
     h5 {
       margin-top: 15px;
       font-weight: bold;
       font-size: 1.5rem;
+      color: #333;
+      display: flex;
+      justify-content: space-between;
     }
-  
+
     .checkout-button {
       font-size: 1.2rem;
-      margin-top: auto;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: #555;
+      }
+    }
+
+    .discount-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .discount-input-group {
+        display: flex;
+        align-items: center;
+
+        input {
+          flex-grow: 1;
+          border: 1px solid #ddd;
+          padding: 5px 10px;
+          border-radius: 4px;
+        }
+
+        .apply-button {
+          margin-left: 10px;
+          padding: 5px 15px;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: #0056b3;
+          }
+        }
+      }
+
+      .discount-error {
+        margin-top: 10px;
+        color: #dc3545;
+        font-size: 0.9rem;
+      }
     }
   }
 }
