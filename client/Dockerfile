@@ -13,6 +13,10 @@ COPY . .
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
+# Thêm cấu hình tối ưu cho máy RAM thấp
+ENV GENERATE_SOURCEMAP=false
+ENV NODE_OPTIONS=--max-old-space-size=1536
+
 RUN npm run build
 
 # Stage 2: Serve with Nginx
