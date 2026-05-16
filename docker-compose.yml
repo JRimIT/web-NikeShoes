@@ -5,8 +5,8 @@ services:
     image: mysql:8.0
     restart: always
     environment:
-      MYSQL_DATABASE: Nike
-      MYSQL_ROOT_PASSWORD: "02111109"
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
@@ -19,19 +19,19 @@ services:
       - "5000:5000"
     environment:
       - DB_HOST=db
-      - DB_USER=root
-      - DB_PASSWORD="02111109"
-      - DB_NAME=Nike
-      - PORT=5000
-      - CORS_ORIGIN=http://103.216.119.220:3000
-      - JWT_SECRET=44RIMb8tam27^%@3@JR
-      - SALT_ROUND=10
-      - EMAIL_USER=nikevnofficial@gmail.com
-      - EMAIL_PASS=dglkptwlmrlwbmzp
-      - SMTP_HOST=smtp.gmail.com
-      - SMTP_PORT=587
-      - SMTP_MAIL=nikevnofficial@gmail.com
-      - SMTP_PASSWORD=dglkptwlmrlwbmzp
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - PORT=${PORT}
+      - CORS_ORIGIN=http://${VPS_IP}:3000
+      - JWT_SECRET=${JWT_SECRET}
+      - SALT_ROUND=${SALT_ROUND}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_MAIL=${SMTP_MAIL}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
     depends_on:
       - db
     volumes:
@@ -41,7 +41,7 @@ services:
     build:
       context: ./client
       args:
-        - REACT_APP_API_URL=http://103.216.119.220:5000
+        - REACT_APP_API_URL=http://${VPS_IP}:${PORT}
     restart: always
     ports:
       - "3000:80"
