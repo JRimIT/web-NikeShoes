@@ -1,0 +1,27 @@
+name: Dockerized App Deployment
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: 24700
+          script: |
+            cd web-NikeShoes
+            git fetch origin
+            git checkout main
+            git pull origin main
+            
+            # Sử dụng docker-compose để build và chạy tất cả dịch vụ (Client, Server, DB)
+            # --build sẽ đảm bảo Dockerfile được build lại nếu có thay đổi code
+            docker-compose up --build -d
+            
+            # Dọn dẹp các image cũ không dùng đến (dangling images) để tránh đầy ổ cứng VPS
+            docker image prune -f
