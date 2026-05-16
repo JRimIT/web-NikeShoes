@@ -49,7 +49,7 @@ const createOrder = async (req, res) => {
         });
 
         // Trả về ID của order theo yêu cầu của Client
-        res.json(response.data.id);
+        res.json({ id: response.data.id });
     } catch (error) {
         console.error('Error creating PayPal order:', error.response ? error.response.data : error.message);
         res.status(500).json({ error: 'Failed to create PayPal order' });
