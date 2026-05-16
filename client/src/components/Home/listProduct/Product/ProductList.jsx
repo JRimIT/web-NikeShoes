@@ -19,7 +19,7 @@ const ProductList = ({ category, onTotalProductsChange, sortBy, userId }) => {
     try {
       const token = localStorage.getItem("token"); // or however you retrieve the token
       const response = await axios.get(
-        `http://localhost:5000/api/wishlist/${userId}`,
+        `/api/wishlist/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -41,17 +41,17 @@ const ProductList = ({ category, onTotalProductsChange, sortBy, userId }) => {
   // Function to fetch products
   const fetchProducts = () => {
     const searchTerm = getSearchTermFromURL(); // Lấy từ khóa tìm kiếm từ URL
-    let url = `http://localhost:5000/products`;
+    let url = `/products`;
 
     // Nếu có cả category và searchTerm, truyền cả hai
     if (category && searchTerm) {
-      url = `http://localhost:5000/products?category=${category}&term=${searchTerm}`;
+      url = `/products?category=${category}&term=${searchTerm}`;
     } else if (category) {
       // Chỉ lọc theo category
-      url = `http://localhost:5000/products?category=${category}`;
+      url = `/products?category=${category}`;
     } else if (searchTerm) {
       // Chỉ tìm kiếm theo searchTerm
-      url = `http://localhost:5000/products/search?term=${searchTerm}`;
+      url = `/products/search?term=${searchTerm}`;
     }
 
     axios

@@ -43,7 +43,7 @@
 //       // if (!userId) return; // Don't fetch if userId is not set
 //       try {
 //         console.log(userId);
-//         const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
+//         const response = await axios.get(`/api/cart/${userId}`);
 //         setCart(response.data || []); // Handle empty or null data        
 //       } catch (error) {
 //         console.error(
@@ -67,7 +67,7 @@
 //     }
 
 //     try {
-//       await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, {
+//       await axios.put(`/api/cart/${userId}/${id}`, {
 //         quantity: newQuantity,
 //       });
 //       setCart((prevCart) =>
@@ -84,7 +84,7 @@
 
 //   const handleRemove = async (id) => {
 //     try {
-//       await axios.delete(`http://localhost:5000/api/cart/${userId}/${id}`);
+//       await axios.delete(`/api/cart/${userId}/${id}`);
 //       setCart((prevCart) =>
 //         prevCart.filter((item) => item.cart_item_id !== id)
 //       );
@@ -250,7 +250,7 @@ function CartPage() {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/cart/${userId}`);
+        const response = await axios.get(`/api/cart/${userId}`);
         setCart(response.data || []);
       } catch (error) {
         console.error("Error fetching cart:", error.message, error.response?.data);
@@ -270,7 +270,7 @@ function CartPage() {
 
     try {
       setLoadingAction(true);
-      await axios.put(`http://localhost:5000/api/cart/${userId}/${id}`, {
+      await axios.put(`/api/cart/${userId}/${id}`, {
         quantity: newQuantity,
       });
       setCart((prevCart) =>
@@ -288,7 +288,7 @@ function CartPage() {
   const handleRemove = async (id) => {
     try {
       setLoadingAction(true);
-      await axios.delete(`http://localhost:5000/api/cart/${userId}/${id}`);
+      await axios.delete(`/api/cart/${userId}/${id}`);
       setCart((prevCart) =>
         prevCart.filter((item) => item.cart_item_id !== id)
       );
@@ -307,7 +307,7 @@ function CartPage() {
     }
   
     try {
-      const response = await axios.post('http://localhost:5000/api/discount/verify', {
+      const response = await axios.post('/api/discount/verify', {
         code: discountCode, // Gửi `code` theo đúng yêu cầu
       });
       const { discount } = response.data;

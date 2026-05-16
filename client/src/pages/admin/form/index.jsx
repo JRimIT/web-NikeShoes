@@ -94,7 +94,7 @@ const Form = () => {
         console.log("Submit form: ", updateInfoUser_Image);
 
         const res = await axios.post(
-          "http://localhost:5000/api/user",
+          "/api/user",
           updateInfoUser_Image
         );
         toast.success(res.data.message);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../utils/axios.customize";
 import "../assets/styles/Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword } from "../utils/validation";
@@ -42,7 +42,7 @@ const Login = () => {
     // }
 
     try {
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post("/login", {
         email,
         password,
       });

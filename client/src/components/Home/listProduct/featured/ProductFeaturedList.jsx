@@ -25,8 +25,8 @@ const ProductFeaturedList = ({
   // Hàm fetch sản phẩm từ API
   const fetchProducts = () => {
     const url = featured
-      ? `http://localhost:5000/products?pro_message_list=${featured}`
-      : `http://localhost:5000/products`;
+      ? `/products?pro_message_list=${featured}`
+      : `/products`;
 
     axios
       .get(url)

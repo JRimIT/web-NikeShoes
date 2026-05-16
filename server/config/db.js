@@ -2,17 +2,17 @@
 const mysql = require("mysql2");
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "12345",
-  database: "Nike",
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "02111109",
+  database: process.env.DB_NAME || "Nike",
 });
 
 db.connect((err) => {
   if (err) {
-    console.error("Error connecting to MySQL database:", err);
+    console.error(`Error connecting to MySQL database at ${process.env.DB_HOST || "localhost"}:`, err);
   } else {
-    console.log("Connected to MySQL database.");
+    console.log(`Connected to MySQL database at ${process.env.DB_HOST || "localhost"}.`);
   }
 });
 

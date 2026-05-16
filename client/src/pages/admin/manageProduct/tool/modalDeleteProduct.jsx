@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../../../utils/axios.customize";
 import React from "react";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";

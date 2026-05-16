@@ -28,7 +28,13 @@ const axios = require("axios");
 const routerAPI = express.Router();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
+app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,7 +54,7 @@ const upload = multer({ storage: storage });
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -86,15 +92,6 @@ app.use("/", authenticateJWT, checkRole("2"), adminRoutes); // Admin routes requ
 
 // app.use("/api/user", userRoutes);
 
-// Cấu hình cors
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
 app.options("*", cors()); // Cho phép tất cả các OPTIONS
 
 // Lắng nghe server

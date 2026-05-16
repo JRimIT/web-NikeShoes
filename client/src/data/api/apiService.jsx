@@ -34,7 +34,7 @@ export const deleteProduct = async (id) => {
 
 export const getProductById = async (id) => {
   try {
-    const res = await axios.get(`http://localhost:5000/products/${id}`);
+    const res = await axios.get(`/products/${id}`);
     return res;
   } catch (error) {
     console.log(error);
@@ -45,7 +45,7 @@ export const getProductById = async (id) => {
 export const updateProductById = async (id, body) => {
   try {
     const res = await axios.put(
-      `http://localhost:5000/api/products/${id}`,
+      `/api/products/${id}`,
       body
     );
     return res;

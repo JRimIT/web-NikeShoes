@@ -19,7 +19,7 @@ const AdminChatbox = () => {
     const token = localStorage.getItem('token'); 
   
     if (token) {
-      socket.current = io('http://localhost:5000', { auth: { token } });
+      socket.current = io('', { auth: { token } });
       
       socket.current.on('connect', () => {
         console.log('Admin socket connected!');

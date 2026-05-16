@@ -34,7 +34,7 @@ const ForgotPass = () => {
     }
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/email/sendResetCode",
+        "/auth/email/sendResetCode",
         { email }
       );
       setGeneratedCode(response.data.resetCode);
@@ -67,7 +67,7 @@ const ForgotPass = () => {
       return;
     }
     try {
-      await axios.post("http://localhost:5000/auth/reset-password", {
+      await axios.post("/auth/reset-password", {
         email,
         code,
         newPassword,

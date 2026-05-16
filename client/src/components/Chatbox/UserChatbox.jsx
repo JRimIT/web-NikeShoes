@@ -18,7 +18,7 @@ const UserChatbox = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      socket.current = io('http://localhost:5000', {
+      socket.current = io('', {
         auth: { token }
       });
 
