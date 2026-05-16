@@ -52,12 +52,18 @@ const db = require('../config/db');
 // };
 const authenticateJWT = (req, res, next) => {
   const white_lists = ["/", "/register", "/login"];
-  const authHeader = req.headers.authorization;
-  const token = authHeader.split(' ')[1];
-  // Allow access to whitelisted routes
-  if (white_lists.includes(req.originalUrl)) {
+  
+  // Cho phép truy cập các route trong danh sách trắng hoặc paypal
+  if (white_lists.includes(req.originalUrl) || req.originalUrl.startsWith('/paypal')) {
     return next();
   }
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ message: "No access token provided!" });
+  }
+
+  const token = authHeader.split(' ')[1];
 
   // Allow guest access to /api/reviews if no token is provided
   if (req.originalUrl.startsWith('/api/reviews') && token === "null") {
