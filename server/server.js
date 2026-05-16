@@ -18,6 +18,7 @@ const wishlistRoutes = require("./routes/wishlist");
 const reviewRoutes = require("./routes/review");
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
+const paypalRoutes = require("./routes/paypal");
 const {
   authenticateJWT,
   checkRole,
@@ -72,6 +73,7 @@ app.use("/products", productRoutes);
 app.post("/register", upload.single("user_image"), registerUser);
 app.post("/login", loginUser);
 app.use('/api/discount', discountRoutes);
+app.use('/paypal', paypalRoutes);
 
 // app.get("/products/:id", getProductById);
 // app.use(sendResetPassword); // Route cho reset password
