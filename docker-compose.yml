@@ -26,6 +26,12 @@ services:
       - CORS_ORIGIN=http://103.216.119.220:3000
       - JWT_SECRET=44RIMb8tam27^%@3@JR
       - SALT_ROUND=10
+      - EMAIL_USER=nikevnofficial@gmail.com
+      - EMAIL_PASS=dglkptwlmrlwbmzp
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_MAIL=nikevnofficial@gmail.com
+      - SMTP_PASSWORD=dglkptwlmrlwbmzp
     depends_on:
       - db
     volumes:
