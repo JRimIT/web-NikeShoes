@@ -1,8 +1,14 @@
+.env
+*.env
+node_modules/
+dist/
+build/
+.DS_Store
 
+# Server specific
 /server/node_modules
-/server/node_modules/.bin
+/server/uploads
+
+# Client specific
 /client/node_modules
-/client/package.json
-/client/package-lock.json
-/server/package.json
-/server/package-lock.json
+/client/build
