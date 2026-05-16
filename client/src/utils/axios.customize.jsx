@@ -2,9 +2,7 @@ import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000/",
-  // timeout: 1000,
-  // headers: { 'X-Custom-Header': 'foobar' }
+  baseURL: process.env.REACT_APP_API_URL || "",
 });
 
 // Add a request interceptor

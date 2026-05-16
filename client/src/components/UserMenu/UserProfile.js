@@ -66,7 +66,7 @@ function UserProfile() {
       const fetchAddress = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5000/api/user/address/${userData.user_id}`
+            `/api/user/address/${userData.user_id}`
           );
           setAddress({
             addressLine: response.data.address_line,
@@ -125,7 +125,7 @@ function UserProfile() {
       localStorage.setItem("user", JSON.stringify(updatedUser));
       setUser(updatedUser);
       const userId = user?.user_id;
-      await axios.put(`http://localhost:5000/api/user/avatar/${userId}`, {
+      await axios.put(`/api/user/avatar/${userId}`, {
         user_image: imageUrl,
       });
     } catch (error) {
@@ -147,7 +147,7 @@ function UserProfile() {
     //   localStorage.setItem("user", JSON.stringify(updatedUser));
     //   setUser(updatedUser);
     //   const userId = user?.user_id;
-    //   await axios.put(`http://localhost:5000/api/user/avatar/${userId}`, {
+    //   await axios.put(`/api/user/avatar/${userId}`, {
     //     user_image: imageUrl,
     //   });
     // } catch (err) {
@@ -180,7 +180,7 @@ function UserProfile() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/user/address/update/${userId}`,
+        `/api/user/address/update/${userId}`,
         address
       );
       toast.success("Delivery address updated successfully!");
@@ -201,7 +201,7 @@ function UserProfile() {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/user/username/${user?.user_id}`,
+        `/api/user/username/${user?.user_id}`,
         { username: userInfo.username }
       );
 
@@ -246,7 +246,7 @@ function UserProfile() {
 
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/user/phone/${user?.user_id}`,
+        `/api/user/phone/${user?.user_id}`,
         { phone: userInfo.phone }
       );
 
@@ -310,7 +310,7 @@ function UserProfile() {
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/user/checkPassword/${user?.user_id}`,
+        `/api/user/checkPassword/${user?.user_id}`,
         { currentPassword }
       );
 
@@ -325,7 +325,7 @@ function UserProfile() {
 
       // If current password verification is successful
       await axios.put(
-        `http://localhost:5000/api/user/password/update/${user?.user_id}`,
+        `/api/user/password/update/${user?.user_id}`,
         { currentPassword, newPassword } // Send both current and new passwords
       );
       toast.success("Password updated successfully!");

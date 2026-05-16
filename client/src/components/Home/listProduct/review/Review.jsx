@@ -39,7 +39,7 @@ const Review = ({ productId, userId }) => {
   const fetchReviews = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/reviews/${productId}`
+        `/api/reviews/${productId}`
       );
       setReviews(response.data);
     } catch {
@@ -72,7 +72,7 @@ const Review = ({ productId, userId }) => {
     }
 
     try {
-      const { data } = await axios.post("http://localhost:5000/add-review", {
+      const { data } = await axios.post("/add-review", {
         userId: userId,
         productId,
         rating,

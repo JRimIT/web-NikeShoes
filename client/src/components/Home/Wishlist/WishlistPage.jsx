@@ -21,7 +21,7 @@ const WishlistPage = () => {
       try {
         console.log(userId);
         const response = await axios.get(
-          `http://localhost:5000/api/wishlist/${userId}`
+          `/api/wishlist/${userId}`
         );
         setWishlist(response.data || []);
       } catch (err) {
@@ -49,7 +49,7 @@ const WishlistPage = () => {
     setOperationLoading(true); // Start loading
 
     try {
-      const { data } = await axios.post("http://localhost:5000/move-to-cart", {
+      const { data } = await axios.post("/move-to-cart", {
         userId: userId,
         productId: product.product_id,
         size: product.size,
@@ -79,7 +79,7 @@ const WishlistPage = () => {
   const handleRemove = async (wishlistId) => {
     try {
       await axios.delete(
-        `http://localhost:5000/api/wishlist/${userId}/${wishlistId}`
+        `/api/wishlist/${userId}/${wishlistId}`
       );
       setWishlist((prevWishlist) =>
         prevWishlist.filter((item) => item.wishlist_id !== wishlistId)

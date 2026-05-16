@@ -27,7 +27,7 @@ const ProductDetailPage = () => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/products/${id}`
+          `/products/${id}`
         );
         setProduct(response.data);
       } catch (err) {
@@ -75,7 +75,7 @@ const ProductDetailPage = () => {
     try {
       // Call the API to get the current quantity in the cart
       const response = await axios.get(
-        "http://localhost:5000/api/cart/product-quantity-in-cart",
+        "/api/cart/product-quantity-in-cart",
         {
           params: {
             userId,
@@ -95,7 +95,7 @@ const ProductDetailPage = () => {
       }
 
       // Proceed to add the product to the cart
-      const { data } = await axios.post("http://localhost:5000/add-to-cart", {
+      const { data } = await axios.post("/add-to-cart", {
         userId,
         productId: product.product_id,
         size: selectedSize,
@@ -167,7 +167,7 @@ const ProductDetailPage = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/add-to-wishlist",
+        "/add-to-wishlist",
         {
           userId,
           productId: product.product_id,

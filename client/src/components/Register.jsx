@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../utils/axios.customize";
 import "../assets/styles/Register.css";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -87,7 +87,7 @@ const Register = () => {
       console.log("Form data to be sent:", formData); // Debugging
 
       const response = await axios.post(
-        "http://localhost:5000/register",
+        "/register",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

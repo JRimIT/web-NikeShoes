@@ -28,7 +28,7 @@ const Team = () => {
 
   const fetchAllAdmin = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/allAdmin");
+      const res = await axios.get("/api/allAdmin");
       // console.log(res.data);
       let data = res.data.map((user) => {
         return {
