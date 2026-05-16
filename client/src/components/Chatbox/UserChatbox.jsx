@@ -17,19 +17,22 @@ const UserChatbox = () => {
   
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const socketUrl = process.env.REACT_APP_API_URL || ''; // Lấy URL từ .env hoặc mặc định
+    
     if (token) {
-      socket.current = io('', {
+      socket.current = io(socketUrl, {
         auth: { token }
       });
 
       socket.current.on('connect', () => {
-        console.log('Socket connected!');
+        console.log('Socket connected to:', socketUrl || 'current host');
         setIsAuthenticated(true); 
         socket.current.emit('user_login', { userId });
       });
 
       // Nhận role_id từ server
       socket.current.on('user_role', ({ role_id }) => {
+        console.log('User role received:', role_id);
         setRoleId(role_id); // Lưu role_id vào state
       });
 
@@ -41,7 +44,7 @@ const UserChatbox = () => {
       });
 
       return () => {
-        socket.current.disconnect();
+        if (socket.current) socket.current.disconnect();
       };
     } else {
       setIsAuthenticated(false); 
@@ -78,7 +81,8 @@ const UserChatbox = () => {
     });
   };
 
-  if (roleId !== 1) return null; // Ẩn chatbox nếu role_id khác 1
+  // Chỉ hiện chatbox nếu đã đăng nhập và không phải Admin (hoặc roleId chưa load xong thì cứ hiện nếu có token)
+  if (!isAuthenticated || roleId === 2) return null; 
 
   return (
     <div className="floating-chatbox">
