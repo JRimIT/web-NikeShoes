@@ -24,7 +24,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
       - PORT=${PORT}
-      - CORS_ORIGIN=http://${VPS_IP}:3000
+      - CORS_ORIGIN=${CORS_ORIGIN}
       - JWT_SECRET=${JWT_SECRET}
       - SALT_ROUND=${SALT_ROUND}
       - EMAIL_USER=${EMAIL_USER}
